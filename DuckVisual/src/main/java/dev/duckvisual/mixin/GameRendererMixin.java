@@ -25,6 +25,29 @@ public class GameRendererMixin {
         Animation.updateFrame();
     }
 
+    @Inject(method = "render", at = @At(value = "INVOKE",
+            target = "Lnet/minecraft/client/render/GameRenderer;renderWorld(Lnet/minecraft/client/render/RenderTickCounter;)V", shift = At.Shift.AFTER))
+    private void duck$motionBlur(RenderTickCounter counter, boolean tick, CallbackInfo ci) {
+        var mb = DuckVisual.modules().get(dev.duckvisual.module.impl.visual.MotionBlur.class);
+        if (mb.isEnabled()) mb.apply();
+    }
+
+    @Inject(method = "renderHand", at = @At("HEAD"))
+    private void duck$handTintStart(Camera camera, float tickDelta, org.joml.Matrix4f matrix, CallbackInfo ci) {
+        var ht = DuckVisual.modules().get(dev.duckvisual.module.impl.visual.HandTint.class);
+        if (ht.isEnabled()) {
+            float[] c = ht.color();
+            com.mojang.blaze3d.systems.RenderSystem.setShaderColor(c[0], c[1], c[2], c[3]);
+        }
+    }
+
+    @Inject(method = "renderHand", at = @At("TAIL"))
+    private void duck$handTintEnd(Camera camera, float tickDelta, org.joml.Matrix4f matrix, CallbackInfo ci) {
+        if (DuckVisual.modules().get(dev.duckvisual.module.impl.visual.HandTint.class).isEnabled()) {
+            com.mojang.blaze3d.systems.RenderSystem.setShaderColor(1, 1, 1, 1);
+        }
+    }
+
     @Inject(method = "tiltViewWhenHurt", at = @At("HEAD"), cancellable = true)
     private void duck$noHurtCam(MatrixStack matrices, float tickDelta, CallbackInfo ci) {
         if (NoRender.active(nr -> nr.hurtCam)) ci.cancel();

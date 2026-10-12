@@ -21,6 +21,8 @@ public final class EventHooks {
         if (ci.isEnabled()) ci.onHit(crit);
         var di = DuckVisual.modules().get(dev.duckvisual.module.impl.visual.DamageIndicators.class);
         if (di.isEnabled()) di.markHit(entity, crit);
+        var hm = DuckVisual.modules().get(dev.duckvisual.module.impl.visual.Hitmarker.class);
+        if (hm.isEnabled()) hm.onHit(crit);
         var combat = DuckVisual.modules().get(dev.duckvisual.module.impl.hud.CombatInfo.class);
         if (combat.isEnabled()) combat.onAttack(entity);
         if (entity instanceof LivingEntity living) {

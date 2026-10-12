@@ -62,6 +62,11 @@ public class ClickGuiScreen extends Screen {
     private Module binding;
     private BindSetting bindingSetting;
     private static boolean paletteTab;
+    private static boolean configsTab;
+    private String configName = "";
+    private boolean configFocused;
+    private String configStatus = "";
+    private float configsAnim;
     private float paletteAnim;
     private boolean draggingWindow;
     private float dragX, dragY;
@@ -221,7 +226,7 @@ public class ClickGuiScreen extends Screen {
 
         float ty = y + 46;
         for (Category c : Category.values()) {
-            boolean sel = c == current && search.isEmpty() && !paletteTab;
+            boolean sel = c == current && search.isEmpty() && !paletteTab && !configsTab;
             boolean hov = mx >= x + 6 && mx <= x + SIDEBAR - 6 && my >= ty && my <= ty + 22;
             float a = Animation.approach(tabAnim.getOrDefault(c, 0f), sel ? 1 : hov ? 0.4f : 0, 12);
             tabAnim.put(c, a);
@@ -240,6 +245,7 @@ public class ClickGuiScreen extends Screen {
                 scroll.put(current, scrollAnim);
                 current = c;
                 paletteTab = false;
+                configsTab = false;
                 search = "";
                 scrollAnim = scroll.getOrDefault(c, 0f);
             }));
@@ -248,7 +254,7 @@ public class ClickGuiScreen extends Screen {
 
         // palette tab
         {
-            boolean sel = paletteTab && search.isEmpty();
+            boolean sel = paletteTab && !configsTab && search.isEmpty();
             boolean hov = mx >= x + 6 && mx <= x + SIDEBAR - 6 && my >= ty && my <= ty + 22;
             paletteAnim = Animation.approach(paletteAnim, sel ? 1 : hov ? 0.4f : 0, 12);
             float a = paletteAnim;
@@ -262,6 +268,28 @@ public class ClickGuiScreen extends Screen {
             Render2D.text(ctx, cnt, x + SIDEBAR - 14 - Render2D.width(cnt), ty + 7, ColorUtil.withAlpha(SUBTEXT, 160));
             hits.add(new Hit(x + 6, ty, SIDEBAR - 12, 22, b -> {
                 paletteTab = true;
+                configsTab = false;
+                search = "";
+            }));
+        }
+        ty += 26;
+
+        // configs tab
+        {
+            boolean sel = configsTab && search.isEmpty();
+            boolean hov = mx >= x + 6 && mx <= x + SIDEBAR - 6 && my >= ty && my <= ty + 22;
+            configsAnim = Animation.approach(configsAnim, sel ? 1 : hov ? 0.4f : 0, 12);
+            float a = configsAnim;
+            if (a > 0.01f) {
+                Render2D.roundedRect(ctx, x + 6, ty, SIDEBAR - 12, 22, 5, ColorUtil.withAlpha(ColorUtil.theme(), (int) (40 * a)));
+                Render2D.roundedRect(ctx, x + 6, ty + 5, 2, 12, 1, ColorUtil.fade(ColorUtil.theme(), a));
+            }
+            Render2D.roundedRect(ctx, x + 14, ty + 4, 14, 14, 4, sel ? ColorUtil.theme() : 0xFF24242D);
+            Render2D.centeredText(ctx, "C", x + 21.5f, ty + 7, sel ? 0xFF111111 : SUBTEXT);
+            Render2D.text(ctx, "Configs", x + 34, ty + 7, ColorUtil.lerp(SUBTEXT, TEXT, a));
+            hits.add(new Hit(x + 6, ty, SIDEBAR - 12, 22, b -> {
+                configsTab = true;
+                paletteTab = false;
                 search = "";
             }));
         }
@@ -279,6 +307,10 @@ public class ClickGuiScreen extends Screen {
     // ------------------------------------------------------------------ content
 
     private void renderContent(DrawContext ctx, float x, float y, float w, float h, float mx, float my) {
+        if (configsTab && search.isEmpty()) {
+            renderConfigs(ctx, x, y, w, h, mx, my);
+            return;
+        }
         if (paletteTab && search.isEmpty()) {
             renderPalette(ctx, x, y, w, h, mx, my);
             return;
@@ -321,6 +353,56 @@ public class ClickGuiScreen extends Screen {
             float barH = viewH * viewH / contentHeight;
             float barY = top + (-scrollAnim / (contentHeight - viewH)) * (viewH - barH);
             Render2D.roundedRect(ctx, x + w + 3, barY, 2, barH, 1, ColorUtil.withAlpha(ColorUtil.theme(), 150));
+        }
+    }
+
+    /** Save / load / delete named config profiles (config/duckvisual/<name>.json). */
+    private void renderConfigs(DrawContext ctx, float x, float y, float w, float h, float mx, float my) {
+        var cfg = DuckVisual.config();
+        Render2D.text(ctx, "Configs", x + 2, y + 3, TEXT);
+        float fy = y + 18;
+        float bw = 46, fw = w - bw - 6;
+        Render2D.roundedRect(ctx, x, fy, fw, 20, 5, configFocused ? 0xFF22222B : 0xFF1A1A21);
+        if (configFocused) Render2D.rect(ctx, x + 4, fy + 19, fw - 8, 1, ColorUtil.theme());
+        String shown = configName.isEmpty() && !configFocused ? "Config name..." : configName
+                + ((configFocused && System.currentTimeMillis() / 500 % 2 == 0) ? "_" : "");
+        Render2D.text(ctx, shown, x + 7, fy + 6, configName.isEmpty() && !configFocused ? SUBTEXT : TEXT);
+        hits.add(new Hit(x, fy, fw, 20, b -> configFocused = true));
+        boolean hovSave = mx >= x + fw + 6 && mx <= x + w && my >= fy && my <= fy + 20;
+        Render2D.roundedGradient(ctx, x + fw + 6, fy, bw, 20, 5, ColorUtil.theme(0), ColorUtil.theme(8), ColorUtil.theme(8), ColorUtil.theme(0));
+        if (hovSave) Render2D.roundedRect(ctx, x + fw + 6, fy, bw, 20, 5, 0x30FFFFFF);
+        Render2D.centeredText(ctx, "Save", x + fw + 6 + bw / 2, fy + 6, 0xFF111111);
+        hits.add(new Hit(x + fw + 6, fy, bw, 20, b -> {
+            if (cfg.saveProfile(configName)) configStatus = "Saved '" + configName + "'";
+            else configStatus = "Name: letters, digits, _ and -";
+        }));
+        if (!configStatus.isEmpty()) {
+            ctx.getMatrices().push();
+            ctx.getMatrices().translate(x + 2, fy + 24, 0);
+            ctx.getMatrices().scale(0.75f, 0.75f, 1);
+            Render2D.text(ctx, configStatus, 0, 0, ColorUtil.theme());
+            ctx.getMatrices().pop();
+        }
+        float ly = fy + 36;
+        List<String> list = cfg.listProfiles();
+        if (list.isEmpty()) Render2D.text(ctx, "No saved configs yet", x + 2, ly, SUBTEXT);
+        for (String name : list) {
+            boolean hov = mx >= x && mx <= x + w && my >= ly && my <= ly + 22;
+            Render2D.roundedRect(ctx, x, ly, w, 22, 5, hov ? CARD_HOVER : CARD);
+            Render2D.text(ctx, name, x + 8, ly + 7, TEXT);
+            float lx = x + w - 104;
+            Render2D.roundedRect(ctx, lx, ly + 3, 48, 16, 4, ColorUtil.withAlpha(ColorUtil.theme(), 70));
+            Render2D.centeredText(ctx, "Load", lx + 24, ly + 7, TEXT);
+            hits.add(new Hit(lx, ly + 3, 48, 16, b -> configStatus = cfg.loadProfile(name) ? "Loaded '" + name + "'" : "Failed to load"));
+            float dx = x + w - 52;
+            Render2D.roundedRect(ctx, dx, ly + 3, 48, 16, 4, 0x50FF4545);
+            Render2D.centeredText(ctx, "Delete", dx + 24, ly + 7, TEXT);
+            hits.add(new Hit(dx, ly + 3, 48, 16, b -> {
+                if (b == 1) configStatus = cfg.deleteProfile(name) ? "Deleted '" + name + "'" : "Failed";
+                else configStatus = "Right-click Delete to confirm";
+            }));
+            ly += 26;
+            if (ly > y + h - 22) break;
         }
     }
 
@@ -593,6 +675,12 @@ public class ClickGuiScreen extends Screen {
             }
         }
         if (!hitSearch) searchFocused = false;
+        if (configsTab) {
+            // the field keeps focus only when it (or Save) was clicked
+            double[] q = p;
+            boolean onField = q[1] >= windowY + 8 + 18 && q[1] <= windowY + 8 + 38 && q[0] >= windowX + SIDEBAR + 8;
+            if (!onField) configFocused = false;
+        }
         return true;
     }
 
@@ -650,6 +738,14 @@ public class ClickGuiScreen extends Screen {
             bindingSetting = null;
             return true;
         }
+        if (configFocused) {
+            if (keyCode == GLFW.GLFW_KEY_BACKSPACE && !configName.isEmpty()) {
+                configName = configName.substring(0, configName.length() - 1);
+            } else if (keyCode == GLFW.GLFW_KEY_ENTER || keyCode == GLFW.GLFW_KEY_ESCAPE) {
+                configFocused = false;
+            }
+            return true;
+        }
         if (searchFocused) {
             if (keyCode == GLFW.GLFW_KEY_BACKSPACE && !search.isEmpty()) {
                 search = search.substring(0, search.length() - 1);
@@ -671,6 +767,10 @@ public class ClickGuiScreen extends Screen {
 
     @Override
     public boolean charTyped(char chr, int modifiers) {
+        if (configFocused) {
+            if (configName.length() < 24 && (Character.isLetterOrDigit(chr) || chr == '_' || chr == '-') && chr < 128) configName += chr;
+            return true;
+        }
         if (searchFocused && search.length() < 16 && chr >= ' ') {
             search += chr;
             scroll.put(current, 0f);

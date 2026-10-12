@@ -42,6 +42,10 @@ public class ModuleManager {
         add(new Nametags());
         add(new TotemCounter());
         add(new ItemPhysics());
+        add(new MotionBlur());
+        add(new HandTint());
+        add(new Hitmarker());
+        add(new TargetCircle());
         // Hud
         add(new Watermark());
         add(new ArrayListHud());
@@ -56,6 +60,7 @@ public class ModuleManager {
         add(new LowHealth());
         add(new CombatInfo());
         add(new TabList());
+        add(new ScoreboardHud());
         // World
         add(new Fullbright());
         add(new TimeChanger());

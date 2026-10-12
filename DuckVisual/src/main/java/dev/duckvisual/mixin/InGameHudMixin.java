@@ -34,7 +34,15 @@ public class InGameHudMixin {
     @Inject(method = "renderScoreboardSidebar(Lnet/minecraft/client/gui/DrawContext;Lnet/minecraft/scoreboard/ScoreboardObjective;)V",
             at = @At("HEAD"), cancellable = true)
     private void duck$scoreboard(DrawContext ctx, ScoreboardObjective objective, CallbackInfo ci) {
-        if (NoRender.active(nr -> nr.scoreboard)) ci.cancel();
+        if (NoRender.active(nr -> nr.scoreboard)) {
+            ci.cancel();
+            return;
+        }
+        var hud = DuckVisual.modules().get(dev.duckvisual.module.impl.hud.ScoreboardHud.class);
+        if (hud.isEnabled()) {
+            hud.render(ctx, objective);
+            ci.cancel();
+        }
     }
 
     @Inject(method = "renderOverlay", at = @At("HEAD"), cancellable = true)
