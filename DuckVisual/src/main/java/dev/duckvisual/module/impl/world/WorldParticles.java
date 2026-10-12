@@ -77,6 +77,9 @@ public class WorldParticles extends Module {
             float t = p.age / (float) p.maxAge;
             float fade = (float) Math.sin(Math.min(1, t) * Math.PI);
             Vec3d pos = r.rel(p.prev.lerp(p.pos, r.tickDelta()));
+            // fade out particles right in front of the camera so they don't cover the screen
+            fade *= (float) Math.min(1, Math.max(0, (pos.length() - 1.5) / 2.5));
+            if (fade <= 0.01f) continue;
             int c = mode.is("Snow") ? 0xFFFFFFFF : ColorUtil.theme(p.color);
             Render3D.orb(r, pos, 0.12f * size.getFloat(), ColorUtil.fade(c, fade * 0.9f));
         }

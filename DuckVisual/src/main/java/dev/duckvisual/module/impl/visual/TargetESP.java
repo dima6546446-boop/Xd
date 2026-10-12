@@ -81,7 +81,7 @@ public class TargetESP extends Module {
                 double x = Math.cos(t) * radius;
                 double z = Math.sin(t) * radius;
                 float f = 1 - i / (float) length;
-                Render3D.glow(r, pos.add(x, y, z), 0.22f * f + 0.04f, ColorUtil.fade(color(c * 6 + i, hurt), f * 0.9f));
+                Render3D.glow(r, pos.add(x, y, z), (0.14f * f + 0.03f) * size.getFloat(), ColorUtil.fade(color(c * 6 + i, hurt), f * 0.6f));
             }
         }
         Render3D.additive(false);

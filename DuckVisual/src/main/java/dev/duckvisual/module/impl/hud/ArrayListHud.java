@@ -33,7 +33,7 @@ public class ArrayListHud extends HudModule {
     @Override
     public void onRender2D(DrawContext ctx, float td) {
         int sw = ctx.getScaledWindowWidth();
-        if (getX() < 0) x.set((double) sw - 105);
+        if (getX() < 0) x.set((double) sw - width - 3);
         List<Module> list = DuckVisual.modules().getModules().stream()
                 .filter(m -> !m.isHidden() && m.animation > 0.01f)
                 .sorted(Comparator.comparingInt(m -> -Render2D.width(label(m))))
@@ -43,7 +43,10 @@ public class ArrayListHud extends HudModule {
         boolean right = getX() + width / 2 > sw / 2f;
         float maxW = 0;
         for (Module m : list) maxW = Math.max(maxW, Render2D.width(label(m)) + 8);
+        float oldW = width;
         width = Math.max(60, maxW);
+        // right-anchored: grow towards the left so the list never leaves the screen
+        if (right) x.set((double) Math.min(sw - width - 3, getX() + oldW - width));
         float yy = getY();
         int i = 0;
         for (Module m : list) {

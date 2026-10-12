@@ -69,3 +69,11 @@ ClickGUI, HUD, China Hat, Jump Circles, Trails, Target ESP, Hit Particles, ка�
 ```
 
 Готовый мод: `build/libs/duck-visual-1.0.0.jar`.
+
+Готовая сборка лежит в [`release/duck-visual-1.0.0.jar`](release/duck-visual-1.0.0.jar).
+
+## Скриншоты
+
+![Меню](release/screenshot_gui.png)
+![TargetESP + TargetHud](release/screenshot_target.png)
+![ChinaHat + JumpCircles](release/screenshot_third.png)
