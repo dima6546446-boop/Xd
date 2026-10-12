@@ -1,0 +1,18 @@
+# path	url	sha256 (files downloaded by start.bat/start.sh when missing)
+paper-1.21.11-132.jar	https://fill-data.papermc.io/v1/objects/5ffef465eeeb5f2a3c23a24419d97c51afd7dbb4923ff42df9a3f58bba1ccfba/paper-1.21.11-132.jar	5ffef465eeeb5f2a3c23a24419d97c51afd7dbb4923ff42df9a3f58bba1ccfba
+plugins/LuckPerms-Bukkit-5.5.71.jar	https://cdn.modrinth.com/data/Vebnzrzj/versions/b0mk8uS6/LuckPerms-Bukkit-5.5.71.jar	49cecb66fa1fd22a133039a490e9c1e5095a238e7cd66eb9d2a16fe6c897550d
+plugins/EssentialsX-2.22.0.jar	https://cdn.modrinth.com/data/hXiIvTyT/versions/nY6VN1XH/EssentialsX-2.22.0.jar	bda4685105977fca2e209820a9f0ad24275bd103390a03236f38e59bfdac58e6
+plugins/EssentialsXChat-2.22.0.jar	https://cdn.modrinth.com/data/2qgyQbO1/versions/2k7YvKOk/EssentialsXChat-2.22.0.jar	e5b0211f98af1eaba712d9294997639a39209db1fc842394a0923820073ec65a
+plugins/EssentialsXSpawn-2.22.0.jar	https://cdn.modrinth.com/data/sYpvDxGJ/versions/lc5JHiNJ/EssentialsXSpawn-2.22.0.jar	dd5377c4c921b9b67814209f4f6646ffbb959729003e721ec5e63c47c7c010b8
+plugins/worldedit-bukkit-7.4.2.jar	https://cdn.modrinth.com/data/1u6JkXh5/versions/p8T2aZ8U/worldedit-bukkit-7.4.2.jar	0ee152b1be5dfb51500505e2bf5a8c9d66f09c7fa484bf9aea384d7e7b459b06
+plugins/worldguard-bukkit-7.0.17.jar	https://cdn.modrinth.com/data/DKY9btbd/versions/pI4UHLJL/worldguard-bukkit-7.0.17.jar	3f14562509bf01e7680571b6f56932239157ff938f257c3226df3b4088ae54f2
+plugins/GriefPrevention-16.18.7.jar	https://cdn.modrinth.com/data/O4o4mKaq/versions/dGfCZHqk/GriefPrevention.jar	45e9907c61222e559ed2e099ffee0ede706a21243a31d7db549baf678708fdf0
+plugins/QuickShop-Hikari-6.3.0.3.jar	https://cdn.modrinth.com/data/ijC5dDkD/versions/OxlW1jL5/QuickShop-Hikari-6.3.0.3.jar	eb65b63d803b2c61be6827f803572ba71f56bbad9f1cd5959b9b746df0669c3a
+plugins/PlaceholderAPI-2.12.3.jar	https://cdn.modrinth.com/data/lKEzGugV/versions/pIvQcXW8/PlaceholderAPI-2.12.3.jar	fde03259f5af6938f3c33eeb4d814000a1adabf1d2304ce14970be81f609a437
+plugins/DeluxeMenus-1.14.1-Release.jar	https://cdn.modrinth.com/data/kKZkPgJ7/versions/PNKQ6RMs/DeluxeMenus-1.14.1-Release.jar	ec10a1317152aa57d76eec8cb3e1e7dc7f52e45c7a5d742c0baa1e394496ec20
+plugins/FancyNpcs-2.9.2.jar	https://cdn.modrinth.com/data/EeyAn23L/versions/aBqGwA1m/FancyNpcs-2.9.2.jar	ca8e05b60f2364667cbf14fd1cd4e1e790e10ff6cbbb65067452ef036bef61d3
+plugins/CoreProtect-CE-24.1.jar	https://cdn.modrinth.com/data/Lu3KuzdV/versions/3sehX6Sg/CoreProtect-CE-24.1.jar	a2acef7c06ef201355cef07d591a6055dfed358ad768faaaaaf4e276865ecc97
+plugins/TAB-v6.2.0.jar	https://cdn.modrinth.com/data/gG7VFbG0/versions/OzomWbbH/TAB%20v6.2.0.jar	f94331947134242efa478b9b9bf04b29e37861721dee58c32b7ea57779aa735e
+plugins/Chunky-Bukkit-1.4.40.jar	https://cdn.modrinth.com/data/fALzjamp/versions/P3y2MXnd/Chunky-Bukkit-1.4.40.jar	2a5477fc80f71012e15ade1ce34dbeb836e17623b28db112492c0f1443c09721
+optional-plugins/tebex-bukkit-2.4.2-19b0f2a.jar	https://cdn.modrinth.com/data/nRA0jiJt/versions/QNEQAxcY/tebex-bukkit-2.4.2-19b0f2a.jar	fbc676c5af4cb8d3e800c47d46c2727ecbdc86a1c2b6f17679d772bf277ec00d
+plugins/Vault.jar	https://github.com/MilkBowl/Vault/releases/download/1.7.3/Vault.jar	a6b5ed97f43a5cf5bbaf00a7c8cd23c5afc9bd003f849875af8b36e6cf77d01d

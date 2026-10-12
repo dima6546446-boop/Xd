@@ -6,6 +6,16 @@ SERVER_JAR="paper-1.21.11-132.jar"
 JAVA_REQUIRED=21
 
 cd "$(dirname "$0")" || exit 1
+# Облегчённая версия архива: докачиваем ядро и плагины с официальных сайтов со сверкой SHA-256
+if [ -f scripts/files.manifest ]; then
+  grep -vE '^\s*(#|$)' scripts/files.manifest | while IFS=$'\t' read -r path url sha; do
+    if [ -f "$path" ] && [ "$(sha256sum "$path" | cut -d' ' -f1)" = "$sha" ]; then continue; fi
+    echo "Скачиваю $path ..."
+    mkdir -p "$(dirname "$path")"
+    curl -fsSL -o "$path.part" "$url" && [ "$(sha256sum "$path.part" | cut -d' ' -f1)" = "$sha" ] \
+      && mv "$path.part" "$path" || { rm -f "$path.part"; echo "[ОШИБКА] не удалось скачать $path"; exit 1; }
+  done || exit 1
+fi
 [ -f "$SERVER_JAR" ] || { echo "[ОШИБКА] Не найден $SERVER_JAR"; exit 1; }
 
 if [ -x runtime/bin/java ]; then JAVA=runtime/bin/java

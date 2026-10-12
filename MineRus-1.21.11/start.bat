@@ -17,6 +17,15 @@ rem --------------------------------------------------------------
 cd /d "%~dp0"
 title MineRus - Paper 1.21.11
 
+rem Облегчённая версия архива: ядро и плагины скачиваются с официальных сайтов (SHA-256 сверяется)
+if not exist "%SERVER_JAR%" if exist "scripts\files.manifest" (
+    echo  Скачиваю ядро Paper и плагины с официальных сайтов ^(около 110 МБ^)...
+    powershell -NoProfile -ExecutionPolicy Bypass -File "%CD%\scripts\download-files.ps1" -Root "%CD%"
+    if errorlevel 1 (
+        echo [ОШИБКА] Не все файлы удалось скачать. Проверьте интернет и запустите start.bat снова.
+        goto :fail
+    )
+)
 if not exist "%SERVER_JAR%" (
     echo [ОШИБКА] Не найден файл %SERVER_JAR% в папке:
     echo          %CD%
