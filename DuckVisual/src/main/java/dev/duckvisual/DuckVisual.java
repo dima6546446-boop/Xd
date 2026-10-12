@@ -51,7 +51,8 @@ public class DuckVisual implements ClientModInitializer {
         if (!configManager.load()) {
             // sensible first-launch defaults
             for (String name : new String[]{"Watermark", "ArrayList", "TargetHud", "Notifications", "Theme",
-                    "JumpCircles", "TargetESP", "HitParticles", "Keybinds", "Potions"}) {
+                    "JumpCircles", "TargetESP", "HitParticles", "Keybinds", "Potions",
+                    "CustomFont", "MainMenu", "TabList", "ChatTweaks", "Nametags", "CritIndicator"}) {
                 Module m = moduleManager.get(name);
                 if (m != null) m.setEnabledSilent(true);
             }
@@ -97,6 +98,14 @@ public class DuckVisual implements ClientModInitializer {
             if (world.isClient) EventHooks.onAttack(entity);
             return ActionResult.PASS;
         });
+
+        net.fabricmc.fabric.api.event.client.player.ClientPlayerBlockBreakEvents.AFTER.register((world, player, pos, state) -> {
+            var be = moduleManager.get(dev.duckvisual.module.impl.world.BreakEffects.class);
+            if (be.isEnabled()) be.onBreak(pos);
+        });
+
+        // CustomFont state must be right before the first frame (title screen) — onTick only runs in a world
+        dev.duckvisual.util.Render2D.customFont = moduleManager.get(dev.duckvisual.module.impl.misc.CustomFont.class).isEnabled();
 
         ClientLifecycleEvents.CLIENT_STOPPING.register(c -> configManager.save());
         LOGGER.info("{} {} loaded with {} modules", NAME, VERSION, moduleManager.getModules().size());

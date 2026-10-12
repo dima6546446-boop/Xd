@@ -15,7 +15,7 @@ import java.util.Random;
 
 /** Ambient glowing particles floating around the player (fireflies / snow). */
 public class WorldParticles extends Module {
-    private final ModeSetting mode = add(new ModeSetting("Mode", "Fireflies", "Fireflies", "Snow", "Rise"));
+    private final ModeSetting mode = add(new ModeSetting("Mode", "Fireflies", "Fireflies", "Snow", "Rise", "Sakura"));
     private final NumberSetting amount = add(new NumberSetting("Amount", 60, 10, 300, 5));
     private final NumberSetting range = add(new NumberSetting("Range", 12, 4, 32, 1));
     private final NumberSetting size = add(new NumberSetting("Size", 1, 0.3, 3, 0.1));
@@ -55,12 +55,17 @@ public class WorldParticles extends Module {
             Vec3d vel = switch (mode.get()) {
                 case "Snow" -> new Vec3d((random.nextDouble() - 0.5) * 0.02, -0.03 - random.nextDouble() * 0.03, (random.nextDouble() - 0.5) * 0.02);
                 case "Rise" -> new Vec3d(0, 0.02 + random.nextDouble() * 0.03, 0);
+                case "Sakura" -> new Vec3d(0.01 + random.nextDouble() * 0.02, -0.02 - random.nextDouble() * 0.02, (random.nextDouble() - 0.5) * 0.02);
                 default -> new Vec3d((random.nextDouble() - 0.5) * 0.04, (random.nextDouble() - 0.5) * 0.02, (random.nextDouble() - 0.5) * 0.04);
             };
             particles.add(new P(pos, vel, 80 + random.nextInt(120), random.nextInt(40)));
         }
         for (P p : particles) {
             p.prev = p.pos;
+            if (mode.is("Sakura")) {
+                // petals sway side to side while falling
+                p.vel = new Vec3d(p.vel.x, p.vel.y, Math.sin((p.age + p.color * 7) * 0.12) * 0.03);
+            }
             if (mode.is("Fireflies")) {
                 p.vel = p.vel.add((random.nextDouble() - 0.5) * 0.01, (random.nextDouble() - 0.5) * 0.006, (random.nextDouble() - 0.5) * 0.01).multiply(0.97);
             }
@@ -80,7 +85,9 @@ public class WorldParticles extends Module {
             // fade out particles right in front of the camera so they don't cover the screen
             fade *= (float) Math.min(1, Math.max(0, (pos.length() - 1.5) / 2.5));
             if (fade <= 0.01f) continue;
-            int c = mode.is("Snow") ? 0xFFFFFFFF : ColorUtil.theme(p.color);
+            int c = mode.is("Snow") ? 0xFFFFFFFF
+                    : mode.is("Sakura") ? (p.color % 3 == 0 ? 0xFFFFB7D5 : p.color % 3 == 1 ? 0xFFFF8FB8 : 0xFFFFD6E8)
+                    : ColorUtil.theme(p.color);
             Render3D.orb(r, pos, 0.12f * size.getFloat(), ColorUtil.fade(c, fade * 0.9f));
         }
         Render3D.additive(false);

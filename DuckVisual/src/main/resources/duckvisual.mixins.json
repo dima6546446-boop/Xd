@@ -21,7 +21,12 @@
     "CameraMixin",
     "MinecraftClientMixin",
     "EntityRendererMixin",
-    "ClientPlayNetworkHandlerMixin"
+    "ClientPlayNetworkHandlerMixin",
+    "PlayerListHudAccessor",
+    "PlayerListHudMixin",
+    "TitleScreenMixin",
+    "ChatHudMixin",
+    "ItemEntityRendererMixin"
   ],
   "injectors": {
     "defaultRequire": 1

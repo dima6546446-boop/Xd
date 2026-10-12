@@ -7,6 +7,7 @@ import dev.duckvisual.setting.BooleanSetting;
 /** Holds the GUI keybind (Right Shift by default) and GUI options. */
 public class ClickGui extends Module {
     public final BooleanSetting blur = add(new BooleanSetting("Dim Background", true));
+    public final BooleanSetting realBlur = add(new BooleanSetting("Blur", true));
     public final BooleanSetting descriptions = add(new BooleanSetting("Descriptions", true));
 
     public ClickGui() {

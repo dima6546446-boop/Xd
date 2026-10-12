@@ -34,6 +34,7 @@ public class Trajectories extends Module {
     private final BooleanSetting held = add(new BooleanSetting("Held Item", true));
     private final BooleanSetting inFlight = add(new BooleanSetting("In-Flight", true));
     private final BooleanSetting landing = add(new BooleanSetting("Landing Marker", true));
+    private final BooleanSetting pearlInfo = add(new BooleanSetting("Pearl Owner + Time", true));
     private final NumberSetting maxTicks = add(new NumberSetting("Max Ticks", 150, 30, 400, 10));
 
     private record Physics(double speed, double gravity, double drag, float pitchOffset) {}
@@ -93,6 +94,12 @@ public class Trajectories extends Module {
                 } else continue;
                 Path path = simulate(e.getLerpedPos(td), e.getVelocity(), gravity, drag, e);
                 draw(r, path, i++ * 6);
+                if (pearlInfo.get() && e instanceof net.minecraft.entity.projectile.thrown.EnderPearlEntity pearl && path.hit != HitResult.Type.MISS) {
+                    String owner = pearl.getOwner() != null ? pearl.getOwner().getName().getString() : "Pearl";
+                    float secs = (path.points.size() - 1) / 20f;
+                    Render3D.text(r, owner + " \u00A77" + String.format("%.1fs", secs), r.rel(path.end).add(0, 0.6, 0), 1.2f,
+                            ColorUtil.theme(), true);
+                }
             }
         }
     }

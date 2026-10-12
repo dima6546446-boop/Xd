@@ -41,6 +41,7 @@ public class ModuleManager {
         add(new GlowESP());
         add(new Nametags());
         add(new TotemCounter());
+        add(new ItemPhysics());
         // Hud
         add(new Watermark());
         add(new ArrayListHud());
@@ -54,14 +55,20 @@ public class ModuleManager {
         add(new CustomHotbar());
         add(new LowHealth());
         add(new CombatInfo());
+        add(new TabList());
         // World
         add(new Fullbright());
         add(new TimeChanger());
         add(new WorldParticles());
         add(new WorldColor());
+        add(new CustomSky());
+        add(new BreakEffects());
         // Misc
         add(new Theme());
         add(new ClickGui());
+        add(new CustomFont());
+        add(new MainMenu());
+        add(new ChatTweaks());
     }
 
     private void add(Module module) {

@@ -101,6 +101,9 @@ public class ClickGuiScreen extends Screen {
 
     @Override
     public void renderBackground(DrawContext ctx, int mouseX, int mouseY, float delta) {
+        if (DuckVisual.modules().get(ClickGui.class).realBlur.get() && openAnim > 0.3f && client != null && client.world != null) {
+            applyBlur();
+        }
         if (DuckVisual.modules().get(ClickGui.class).blur.get()) {
             int a = (int) (140 * openAnim);
             ctx.fillGradient(0, 0, width, height, ColorUtil.withAlpha(0xFF050508, a), ColorUtil.withAlpha(0xFF0A0A10, a));
@@ -134,9 +137,24 @@ public class ClickGuiScreen extends Screen {
             }
         }
         if (draggingHud != null) {
-            draggingHud.x.set((double) (mouseX - dragX));
-            draggingHud.y.set((double) (mouseY - dragY));
+            float nx = mouseX - dragX, ny = mouseY - dragY;
+            float hw = draggingHud.getWidth(), hh = draggingHud.getHeight();
+            // snap to screen center lines and edges (hold Shift to move freely)
+            boolean free = hasShiftDown();
+            boolean snapX = false, snapY = false;
+            if (!free) {
+                if (Math.abs(nx + hw / 2 - width / 2f) < 5) { nx = width / 2f - hw / 2; snapX = true; }
+                if (Math.abs(ny + hh / 2 - height / 2f) < 5) { ny = height / 2f - hh / 2; snapY = true; }
+                if (Math.abs(nx - 4) < 5) nx = 4;
+                if (Math.abs(nx + hw - (width - 4)) < 5) nx = width - 4 - hw;
+                if (Math.abs(ny - 4) < 5) ny = 4;
+                if (Math.abs(ny + hh - (height - 4)) < 5) ny = height - 4 - hh;
+            }
+            draggingHud.x.set((double) nx);
+            draggingHud.y.set((double) ny);
             draggingHud.clamp(width, height);
+            if (snapX) Render2D.rect(ctx, width / 2f - 0.5f, 0, 1, height, ColorUtil.withAlpha(ColorUtil.theme(), 120));
+            if (snapY) Render2D.rect(ctx, 0, height / 2f - 0.5f, width, 1, ColorUtil.withAlpha(ColorUtil.theme(), 120));
         }
         if (draggingWindow) {
             windowX = mouseX - dragX;

@@ -142,8 +142,19 @@ public final class Render2D {
         return MinecraftClient.getInstance().textRenderer;
     }
 
+    /** Montserrat TTF font shipped in assets/duckvisual/font (toggled by the CustomFont module). */
+    public static final net.minecraft.util.Identifier FONT = net.minecraft.util.Identifier.of("duckvisual", "main");
+    public static boolean customFont;
+    public static boolean shadow = true;
+
+    private static final net.minecraft.text.Style STYLE = net.minecraft.text.Style.EMPTY.withFont(FONT);
+
+    private static net.minecraft.text.Text styled(String s) {
+        return net.minecraft.text.Text.literal(s).setStyle(STYLE);
+    }
+
     public static int width(String s) {
-        return font().getWidth(s);
+        return customFont ? font().getWidth(styled(s)) : font().getWidth(s);
     }
 
     public static void text(DrawContext ctx, String s, float x, float y, int color) {
@@ -151,7 +162,8 @@ public final class Render2D {
         if (ColorUtil.alpha(color) < 8) return;
         ctx.getMatrices().push();
         ctx.getMatrices().translate(x, y, 0);
-        ctx.drawText(font(), s, 0, 0, color, true);
+        if (customFont) ctx.drawText(font(), styled(s), 0, 0, color, shadow);
+        else ctx.drawText(font(), s, 0, 0, color, true);
         ctx.getMatrices().pop();
     }
 
