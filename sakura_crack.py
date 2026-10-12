@@ -311,9 +311,104 @@ SMALI_PATCH_GUIDE = """
    apksigner sign --ks keystore.jks mortal_kombat_cracked.apk
 
 NOTE: The native library (libSakura.so) also needs patching.
-For IsPaidSessionValid and IsClientVersionAllowed in the .so:
-- Find the JNI function entry points
-- Patch to: MOV W0, #1; RET (ARM64: 20 00 80 52 C0 03 5F D6)
+See NATIVE_BINARY_PATCH below for exact offsets and bytes.
+"""
+
+NATIVE_BINARY_PATCH = r"""
+=== NATIVE LIBRARY BINARY PATCH (libSakura.so, ARM64 ELF) ===
+
+Full reverse engineering of libSakura.so (1.6MB, ARM64, stripped).
+
+ARCHITECTURE:
+  - ELF 64-bit LSB shared object, ARM aarch64
+  - BuildID: sha1=c4016188687849b6af3501513603b05d0154120c
+  - SONAME: libSakura.so
+  - Deps: liblog, libandroid, libEGL, libGLESv2, libz, libc, libm, libdl
+  - 1455 FUNC exports (mostly C++ STL/NDK)
+
+JNI REGISTRATION:
+  - JNI_OnLoad @ 0x98a34 (1092 bytes)
+  - Only 1 static JNI: Java_com_android_support_Main_InstallNativeCrashHandler @ 0x3f064
+  - All other natives registered dynamically via RegisterNatives:
+    * init1 @ 0x90f50: registers 10 methods for Main class
+    * init2 @ 0x923d8: registers 1 method for SakuraServerTrust
+    * init3 @ 0x9269c: registers 14 methods for additional classes
+    * JNI_OnLoad direct: registers 4 more methods via PLT
+  - Method names are XOR-obfuscated at rest, decoded into BSS at runtime
+  - RegisterNatives wrapper @ 0x92188 handles deobfuscation
+
+NATIVE FUNCTION MAP (from full disassembly):
+
+  IsPaidSessionValid() @ 0x3a2a0 [5 instructions, LEAF]:
+    adrp x8, #0x19c000
+    add  x8, x8, #4       ; x8 = BSS 0x19c004
+    ldarb w8, [x8]         ; atomic load byte
+    and  w0, w8, #1        ; return bit 0
+    ret
+    >>> THE ENTIRE "NATIVE ENFORCEMENT" IS ONE BOOLEAN READ <<<
+
+  IsClientVersionAllowed() @ 0x9885c [3 instructions, LEAF]:
+    adrp x8, #0x19c000
+    ldrb w0, [x8, #0x14]   ; load byte from BSS 0x19c014
+    ret
+    >>> THREE INSTRUCTIONS. THE VERSION "GATE" <<<
+
+  ApplySecurityState() @ 0x98868 [~70 instructions]:
+    - Locks mutex at BSS 0x19c074
+    - Checks IsClientVersionAllowed flag (0x19c014)
+    - Checks session flag (0x19c070)
+    - Compares expiration time (0x1b86e8) with current time
+    - Validates device hash (0x1b86f0) and check hash (0x1b86f8)
+    - "Integrity" check: XOR with magic "SAKURAP3" (0x53414b5552415033)
+      then run splitmix64 (standard PRNG, not crypto hash!)
+      Constants: 0xbf58476d1ce4e5b9, 0x94d049bb133111eb
+    - On success: unlock mutex, return true
+    - On failure: CLEAR ALL SESSION DATA, unlock, return false
+    >>> Uses a PRNG as integrity hash with hardcoded magic "SAKURAP3" <<<
+
+  ResetSecurityState() @ 0x986bc:
+    - Clears 0x19c014 (version flag), 0x19c070 (session flag)
+    - Zeros session data at 0x1b86e8/0x1b86f0/0x1b86f8
+
+  ResetPaidSession() @ 0x98790:
+    - Clears 0x19c070 and session data, keeps version flag
+
+  ClientBuildCode() @ 0x93d94:    mov w0, #0x841; ret  (returns 2113)
+  ClientTokenVersion() @ 0x93da0: mov w0, #0xd; ret    (returns 13)
+
+BSS MEMORY LAYOUT:
+  0x19c004: IsPaidSessionValid flag (bit 0)
+  0x19c014: IsClientVersionAllowed flag
+  0x19c070: Session validity flag
+  0x19c074: Mutex (pthread_mutex_t)
+  0x1b86e8: Expiration timestamp (uint64)
+  0x1b86f0: Device key hash (uint64)
+  0x1b86f8: Hash check value (uint64)
+
+=== BINARY PATCHES ===
+
+Patch 1: IsPaidSessionValid @ file offset 0x3a2a0
+  Original: 08 0b 00 d0 08 11 00 91 08 fd df 08 00 01 00 12 c0 03 5f d6
+  Patched:  20 00 80 52 c0 03 5f d6 (+ 12 bytes NOP: 1f 20 03 d5 x3)
+  Effect:   MOV W0, #1; RET (always returns true)
+
+Patch 2: IsClientVersionAllowed @ file offset 0x9885c
+  Original: 28 08 00 90 00 51 40 39 c0 03 5f d6
+  Patched:  20 00 80 52 c0 03 5f d6 (+ 4 bytes NOP: 1f 20 03 d5)
+  Effect:   MOV W0, #1; RET (always returns true)
+
+Python patcher:
+  import shutil
+  shutil.copy('libSakura.so', 'libSakura_cracked.so')
+  with open('libSakura_cracked.so', 'r+b') as f:
+      # Patch IsPaidSessionValid
+      f.seek(0x3a2a0)
+      f.write(b'\\x20\\x00\\x80\\x52')  # MOV W0, #1
+      f.write(b'\\xc0\\x03\\x5f\\xd6')  # RET
+      # Patch IsClientVersionAllowed
+      f.seek(0x9885c)
+      f.write(b'\\x20\\x00\\x80\\x52')  # MOV W0, #1
+      f.write(b'\\xc0\\x03\\x5f\\xd6')  # RET
 """
 
 
@@ -344,11 +439,17 @@ def print_analysis():
     print("    BYPASS: Hook isActivated() + hasValidPaidSession() -> true")
     print()
     print("  Layer 3: NATIVE ENFORCEMENT (libSakura.so)")
-    print("    - IsPaidSessionValid() - master gate")
-    print("    - ApplySecurityState() - session activation")
-    print("    - IsClientVersionAllowed() - version check")
-    print("    - Anti-tamper: frida/xposed/magisk/root detection")
-    print("    BYPASS: Patch JNI -> MOV W0, #1; RET")
+    print("    - IsPaidSessionValid() @ 0x3a2a0 - 5 ARM64 instructions, reads BSS 0x19c004")
+    print("    - IsClientVersionAllowed() @ 0x9885c - 3 ARM64 instructions, reads BSS 0x19c014")
+    print("    - ApplySecurityState() @ 0x98868 - splitmix64 PRNG as 'hash', magic 'SAKURAP3'")
+    print("    - ResetSecurityState() @ 0x986bc - clears all flags")
+    print("    - ResetPaidSession() @ 0x98790 - clears paid session data")
+    print("    - ClientBuildCode() @ 0x93d94 - returns constant 2113")
+    print("    - ClientTokenVersion() @ 0x93da0 - returns constant 13")
+    print("    - Anti-tamper: string search in /proc/self/maps + File.exists()")
+    print("    - JNI method names XOR-obfuscated (decoded into BSS at runtime)")
+    print("    - RegisterNatives via wrapper @ 0x92188 (not standard JNI naming)")
+    print("    BYPASS: 8 bytes per function -> MOV W0, #1; RET")
     print()
     print("SERVER INFRASTRUCTURE:")
     print(f"    Base URL:      https://sakuraproject.ru.net/remote/")
@@ -400,8 +501,19 @@ def print_analysis():
     print("    ACombatCharacter::PlayAttackAnim         @ 0x5F0FC74")
     print("    FMinimalViewInfo::CalcProjectionMatrix    @ 0x8D6B6A8")
     print()
+    print("NATIVE LIBRARY REVERSE ENGINEERING:")
+    print("    IsPaidSessionValid @ 0x3a2a0:")
+    print("      adrp x8, #0x19c000; add x8,x8,#4; ldarb w8,[x8]; and w0,w8,#1; ret")
+    print("      PATCH: 20 00 80 52 c0 03 5f d6 (MOV W0,#1; RET)")
+    print("    IsClientVersionAllowed @ 0x9885c:")
+    print("      adrp x8, #0x19c000; ldrb w0,[x8,#0x14]; ret")
+    print("      PATCH: 20 00 80 52 c0 03 5f d6 (MOV W0,#1; RET)")
+    print("    ApplySecurityState @ 0x98868:")
+    print("      Magic: 'SAKURAP3' (0x53414b5552415033)")
+    print("      Hash: splitmix64 PRNG (not cryptographic!)")
+    print()
     print("CRACK STATUS: COMPLETE")
-    print("  3 bypass methods provided: Frida, Xposed, Smali+Binary patch")
+    print("  4 bypass methods: Frida, Xposed, Smali patch, Binary patch")
     print()
 
 
@@ -417,3 +529,8 @@ if __name__ == "__main__":
     print("  SMALI PATCH GUIDE")
     print("=" * 70)
     print(SMALI_PATCH_GUIDE)
+
+    print("\n" + "=" * 70)
+    print("  NATIVE BINARY PATCH (libSakura.so)")
+    print("=" * 70)
+    print(NATIVE_BINARY_PATCH)
