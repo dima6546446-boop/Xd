@@ -75,6 +75,7 @@ public class ModuleManager {
         add(new CustomFont());
         add(new MainMenu());
         add(new ChatTweaks());
+        add(new MinecraftUI());
     }
 
     private void add(Module module) {

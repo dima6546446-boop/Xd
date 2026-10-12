@@ -52,7 +52,7 @@ public class DuckVisual implements ClientModInitializer {
             // sensible first-launch defaults
             for (String name : new String[]{"Watermark", "ArrayList", "TargetHud", "Notifications", "Theme",
                     "JumpCircles", "TargetESP", "HitParticles", "Keybinds", "Potions",
-                    "CustomFont", "MainMenu", "TabList", "ChatTweaks", "Nametags", "CritIndicator"}) {
+                    "CustomFont", "MainMenu", "MinecraftUI", "TabList", "ChatTweaks", "Nametags", "CritIndicator"}) {
                 Module m = moduleManager.get(name);
                 if (m != null) m.setEnabledSilent(true);
             }

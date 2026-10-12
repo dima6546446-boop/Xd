@@ -27,7 +27,10 @@
     "TitleScreenMixin",
     "ChatHudMixin",
     "ItemEntityRendererMixin",
-    "WorldRendererMixin"
+    "WorldRendererMixin",
+    "TextRendererMixin",
+    "PressableWidgetMixin",
+    "SliderWidgetMixin"
   ],
   "injectors": {
     "defaultRequire": 1

@@ -97,6 +97,7 @@ ClickGUI, HUD, China Hat, Jump Circles, Trails, Target ESP, Hit Particles, ка�
 - **Theme** — цвета клиента: Gradient / Static / Rainbow, **26 готовых палитр** (Duck, Sunset, Ocean, Purple, Mint, Cherry, Sky, Lime, Pink, Aqua, Fire, Lavender, Blood, Gold, Ice, Neon, Forest, Royal, Peach, Candy, Toxic, Love, Mono, Rose, Coral, Emerald) или свои цвета.
 - **ClickGui** — бинд меню, размытие и затемнение фона, описания.
 - **CustomFont** — плавный шрифт Montserrat для HUD и меню (лицензия SIL OFL 1.1, файл `licenses/Montserrat-OFL.txt`).
+- **MinecraftUI** — весь интерфейс Minecraft в стиле Duck Visual: шрифт Montserrat в меню, кнопках, чате и настройках; тёмные скруглённые кнопки с полоской цвета темы и подсветкой при наведении; слайдеры с заливкой в цвете темы. Текст в мире (таблички, ники) по умолчанию остаётся ванильным (настройка «World Text Font»).
 - **MainMenu** — своё анимированное главное меню Duck Visual.
 - **ChatTweaks** — время у сообщений, склейка повторов «(x3)», длинная история чата.
 
@@ -121,7 +122,7 @@ ClickGUI, HUD, China Hat, Jump Circles, Trails, Target ESP, Hit Particles, ка�
 
 Готовый мод: `build/libs/duck-visual-1.0.0.jar`.
 
-Всего модулей: **59**. Готовая сборка лежит в [`release/duck-visual-1.0.0.jar`](release/duck-visual-1.0.0.jar).
+Всего модулей: **60**. Готовая сборка лежит в [`release/duck-visual-1.0.0.jar`](release/duck-visual-1.0.0.jar).
 
 ## Скриншоты
 

@@ -32,6 +32,16 @@ public class GameRendererMixin {
         if (mb.isEnabled()) mb.apply();
     }
 
+    @Inject(method = "renderWorld", at = @At("HEAD"))
+    private void duck$worldStart(RenderTickCounter counter, CallbackInfo ci) {
+        dev.duckvisual.module.impl.misc.MinecraftUI.inWorld = true;
+    }
+
+    @Inject(method = "renderWorld", at = @At("TAIL"))
+    private void duck$worldEnd(RenderTickCounter counter, CallbackInfo ci) {
+        dev.duckvisual.module.impl.misc.MinecraftUI.inWorld = false;
+    }
+
     @Inject(method = "renderHand", at = @At("HEAD"))
     private void duck$handTintStart(Camera camera, float tickDelta, org.joml.Matrix4f matrix, CallbackInfo ci) {
         var ht = DuckVisual.modules().get(dev.duckvisual.module.impl.visual.HandTint.class);
