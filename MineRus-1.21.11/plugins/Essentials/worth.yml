@@ -1,0 +1,47 @@
+# Цены скупщика (команда /sell и меню /buyer). Сгенерировано из tools/economy.py.
+# Предметы, которых нет в списке, продать нельзя. Изменить цену: /setworth <предмет> <цена>
+worth:
+  acacialog: 1.0
+  amethystshard: 2.0
+  beetroot: 0.4
+  birchlog: 1.0
+  blazerod: 10.0
+  bone: 1.0
+  cactus: 0.5
+  carrot: 0.4
+  cherrylog: 1.0
+  coal: 1.5
+  cocoabeans: 0.5
+  copperingot: 1.0
+  darkoaklog: 1.0
+  diamond: 40.0
+  egg: 0.3
+  emerald: 20.0
+  enderpearl: 15.0
+  feather: 0.5
+  ghasttear: 15.0
+  goldingot: 8.0
+  gunpowder: 3.0
+  ironingot: 6.0
+  junglelog: 1.0
+  lapislazuli: 2.0
+  leather: 2.0
+  mangrovelog: 1.0
+  melonslice: 0.2
+  netheritescrap: 150.0
+  oaklog: 1.0
+  paleoaklog: 1.0
+  phantommembrane: 5.0
+  potato: 0.4
+  pumpkin: 1.0
+  quartz: 1.5
+  redstone: 1.0
+  rottenflesh: 0.5
+  slimeball: 4.0
+  spidereye: 1.0
+  sprucelog: 1.0
+  string: 1.0
+  sugarcane: 0.5
+  sweetberries: 0.3
+  wheat: 0.5
+  whitewool: 1.0

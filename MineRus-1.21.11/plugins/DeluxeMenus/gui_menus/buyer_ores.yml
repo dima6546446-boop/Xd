@@ -1,0 +1,245 @@
+# Меню DeluxeMenus. Сгенерировано tools/menus.py — цены берутся из tools/economy.py
+menu_title: '&8Скупщик » &bРуды и минералы'
+size: 54
+update_interval: 1
+items:
+  filler:
+    material: GRAY_STAINED_GLASS_PANE
+    slots:
+    - 0
+    - 1
+    - 2
+    - 3
+    - 4
+    - 5
+    - 6
+    - 7
+    - 8
+    - 9
+    - 17
+    - 18
+    - 26
+    - 27
+    - 35
+    - 36
+    - 44
+    - 45
+    - 46
+    - 47
+    - 48
+    - 49
+    - 50
+    - 51
+    - 52
+    - 53
+    display_name: '&r'
+    priority: 99
+  coal:
+    material: COAL
+    slot: 10
+    display_name: '&fУголь'
+    lore:
+    - ''
+    - '&7Цена за 1 шт.: &e1.5$'
+    - '&7Цена за 64 шт.: &e96$'
+    - ''
+    - '&aЛКМ &7— продать 1 стак (64 шт.)'
+    - '&aПКМ &7— продать все из инвентаря'
+    left_click_commands:
+    - '[player] sell coal 64'
+    - '[refresh]'
+    right_click_commands:
+    - '[player] sell coal'
+    - '[refresh]'
+  copper_ingot:
+    material: COPPER_INGOT
+    slot: 11
+    display_name: '&fМедный слиток'
+    lore:
+    - ''
+    - '&7Цена за 1 шт.: &e1$'
+    - '&7Цена за 64 шт.: &e64$'
+    - ''
+    - '&aЛКМ &7— продать 1 стак (64 шт.)'
+    - '&aПКМ &7— продать все из инвентаря'
+    left_click_commands:
+    - '[player] sell copper_ingot 64'
+    - '[refresh]'
+    right_click_commands:
+    - '[player] sell copper_ingot'
+    - '[refresh]'
+  iron_ingot:
+    material: IRON_INGOT
+    slot: 12
+    display_name: '&fЖелезный слиток'
+    lore:
+    - ''
+    - '&7Цена за 1 шт.: &e6$'
+    - '&7Цена за 64 шт.: &e384$'
+    - ''
+    - '&aЛКМ &7— продать 1 стак (64 шт.)'
+    - '&aПКМ &7— продать все из инвентаря'
+    left_click_commands:
+    - '[player] sell iron_ingot 64'
+    - '[refresh]'
+    right_click_commands:
+    - '[player] sell iron_ingot'
+    - '[refresh]'
+  gold_ingot:
+    material: GOLD_INGOT
+    slot: 13
+    display_name: '&fЗолотой слиток'
+    lore:
+    - ''
+    - '&7Цена за 1 шт.: &e8$'
+    - '&7Цена за 64 шт.: &e512$'
+    - ''
+    - '&aЛКМ &7— продать 1 стак (64 шт.)'
+    - '&aПКМ &7— продать все из инвентаря'
+    left_click_commands:
+    - '[player] sell gold_ingot 64'
+    - '[refresh]'
+    right_click_commands:
+    - '[player] sell gold_ingot'
+    - '[refresh]'
+  redstone:
+    material: REDSTONE
+    slot: 14
+    display_name: '&fРедстоун'
+    lore:
+    - ''
+    - '&7Цена за 1 шт.: &e1$'
+    - '&7Цена за 64 шт.: &e64$'
+    - ''
+    - '&aЛКМ &7— продать 1 стак (64 шт.)'
+    - '&aПКМ &7— продать все из инвентаря'
+    left_click_commands:
+    - '[player] sell redstone 64'
+    - '[refresh]'
+    right_click_commands:
+    - '[player] sell redstone'
+    - '[refresh]'
+  lapis_lazuli:
+    material: LAPIS_LAZULI
+    slot: 15
+    display_name: '&fЛазурит'
+    lore:
+    - ''
+    - '&7Цена за 1 шт.: &e2$'
+    - '&7Цена за 64 шт.: &e128$'
+    - ''
+    - '&aЛКМ &7— продать 1 стак (64 шт.)'
+    - '&aПКМ &7— продать все из инвентаря'
+    left_click_commands:
+    - '[player] sell lapis_lazuli 64'
+    - '[refresh]'
+    right_click_commands:
+    - '[player] sell lapis_lazuli'
+    - '[refresh]'
+  quartz:
+    material: QUARTZ
+    slot: 16
+    display_name: '&fКварц'
+    lore:
+    - ''
+    - '&7Цена за 1 шт.: &e1.5$'
+    - '&7Цена за 64 шт.: &e96$'
+    - ''
+    - '&aЛКМ &7— продать 1 стак (64 шт.)'
+    - '&aПКМ &7— продать все из инвентаря'
+    left_click_commands:
+    - '[player] sell quartz 64'
+    - '[refresh]'
+    right_click_commands:
+    - '[player] sell quartz'
+    - '[refresh]'
+  amethyst_shard:
+    material: AMETHYST_SHARD
+    slot: 19
+    display_name: '&fОсколок аметиста'
+    lore:
+    - ''
+    - '&7Цена за 1 шт.: &e2$'
+    - '&7Цена за 64 шт.: &e128$'
+    - ''
+    - '&aЛКМ &7— продать 1 стак (64 шт.)'
+    - '&aПКМ &7— продать все из инвентаря'
+    left_click_commands:
+    - '[player] sell amethyst_shard 64'
+    - '[refresh]'
+    right_click_commands:
+    - '[player] sell amethyst_shard'
+    - '[refresh]'
+  emerald:
+    material: EMERALD
+    slot: 20
+    display_name: '&fИзумруд'
+    lore:
+    - ''
+    - '&7Цена за 1 шт.: &e20$'
+    - '&7Цена за 64 шт.: &e1280$'
+    - ''
+    - '&aЛКМ &7— продать 1 стак (64 шт.)'
+    - '&aПКМ &7— продать все из инвентаря'
+    left_click_commands:
+    - '[player] sell emerald 64'
+    - '[refresh]'
+    right_click_commands:
+    - '[player] sell emerald'
+    - '[refresh]'
+  diamond:
+    material: DIAMOND
+    slot: 21
+    display_name: '&fАлмаз'
+    lore:
+    - ''
+    - '&7Цена за 1 шт.: &e40$'
+    - '&7Цена за 64 шт.: &e2560$'
+    - ''
+    - '&aЛКМ &7— продать 1 стак (64 шт.)'
+    - '&aПКМ &7— продать все из инвентаря'
+    left_click_commands:
+    - '[player] sell diamond 64'
+    - '[refresh]'
+    right_click_commands:
+    - '[player] sell diamond'
+    - '[refresh]'
+  netherite_scrap:
+    material: NETHERITE_SCRAP
+    slot: 22
+    display_name: '&fНезеритовый лом'
+    lore:
+    - ''
+    - '&7Цена за 1 шт.: &e150$'
+    - '&7Цена за 64 шт.: &e9600$'
+    - ''
+    - '&aЛКМ &7— продать 1 стак (64 шт.)'
+    - '&aПКМ &7— продать все из инвентаря'
+    left_click_commands:
+    - '[player] sell netherite_scrap 64'
+    - '[refresh]'
+    right_click_commands:
+    - '[player] sell netherite_scrap'
+    - '[refresh]'
+  balance:
+    material: SUNFLOWER
+    slot: 45
+    update: true
+    display_name: '&eВаш баланс'
+    lore:
+    - '&f%vault_eco_balance_formatted%$'
+  back:
+    material: ARROW
+    slot: 49
+    display_name: '&cНазад'
+    left_click_commands:
+    - '[openguimenu] buyer'
+    right_click_commands:
+    - '[openguimenu] buyer'
+  close:
+    material: BARRIER
+    slot: 53
+    display_name: '&cЗакрыть'
+    left_click_commands: &id001
+    - '[close]'
+    right_click_commands: *id001

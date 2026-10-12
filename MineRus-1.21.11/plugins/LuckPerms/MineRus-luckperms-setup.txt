@@ -1,0 +1,178 @@
+﻿# Команды настройки групп LuckPerms для сборки MineRus.
+# Уже применены в поставляемой базе (plugins/LuckPerms/luckperms-h2-v2.mv.db).
+# Если нужно пересоздать группы — вставьте строки (без комментариев) в консоль сервера.
+
+# ===== Группы =====
+lp creategroup vip
+lp creategroup premium
+lp creategroup elite
+lp creategroup helper
+lp creategroup moder
+lp creategroup admin
+
+# ===== Вес (порядок) и префиксы =====
+lp group default setweight 1
+lp group vip setweight 10
+lp group premium setweight 20
+lp group elite setweight 30
+lp group helper setweight 100
+lp group moder setweight 200
+lp group admin setweight 300
+lp group default meta setprefix 1 "&7"
+lp group vip meta setprefix 10 "&a[VIP] "
+lp group premium meta setprefix 20 "&b[Premium] "
+lp group elite meta setprefix 30 "&6[Элита] "
+lp group helper meta setprefix 100 "&e[Хелпер] "
+lp group moder meta setprefix 200 "&9[Модератор] "
+lp group admin meta setprefix 300 "&c[Админ] "
+lp group default meta set rank "&7Игрок"
+lp group vip meta set rank "&aVIP"
+lp group premium meta set rank "&bPremium"
+lp group elite meta set rank "&6Элита"
+lp group helper meta set rank "&eХелпер"
+lp group moder meta set rank "&9Модератор"
+lp group admin meta set rank "&cАдмин"
+lp group default setdisplayname Игрок
+lp group vip setdisplayname VIP
+lp group premium setdisplayname Premium
+lp group elite setdisplayname Элита
+lp group helper setdisplayname Хелпер
+lp group moder setdisplayname Модератор
+lp group admin setdisplayname Админ
+
+# ===== Наследование =====
+lp group vip parent add default
+lp group premium parent add vip
+lp group elite parent add premium
+lp group helper parent add default
+lp group moder parent add helper
+lp group admin parent add moder
+
+# ===== Игрок (default) =====
+lp group default permission set essentials.spawn true
+lp group default permission set essentials.home true
+lp group default permission set essentials.home.bed true
+lp group default permission set essentials.sethome true
+lp group default permission set essentials.sethome.multiple true
+lp group default permission set essentials.delhome true
+lp group default permission set essentials.tpa true
+lp group default permission set essentials.tpahere true
+lp group default permission set essentials.tpaccept true
+lp group default permission set essentials.tpdeny true
+lp group default permission set essentials.tpacancel true
+lp group default permission set essentials.tpr true
+lp group default permission set essentials.back true
+lp group default permission set essentials.back.ondeath true
+lp group default permission set essentials.warp true
+lp group default permission set essentials.warp.list true
+lp group default permission set essentials.msg true
+lp group default permission set essentials.reply true
+lp group default permission set essentials.mail true
+lp group default permission set essentials.mail.send true
+lp group default permission set essentials.ignore true
+lp group default permission set essentials.afk true
+lp group default permission set essentials.balance true
+lp group default permission set essentials.balancetop true
+lp group default permission set essentials.pay true
+lp group default permission set essentials.sell true
+lp group default permission set essentials.worth true
+lp group default permission set essentials.kit true
+lp group default permission set essentials.kits.start true
+lp group default permission set essentials.kits.food true
+lp group default permission set essentials.list true
+lp group default permission set essentials.motd true
+lp group default permission set essentials.rules true
+lp group default permission set essentials.info true
+lp group default permission set essentials.help true
+lp group default permission set essentials.helpop true
+lp group default permission set essentials.me true
+lp group default permission set essentials.seen true
+lp group default permission set essentials.suicide true
+lp group default permission set essentials.compass true
+lp group default permission set essentials.getpos true
+lp group default permission set essentials.depth true
+lp group default permission set essentials.realname true
+lp group default permission set essentials.near true
+lp group default permission set essentials.playtime true
+lp group default permission set essentials.chat.question true
+lp group default permission set griefprevention.createclaims true
+lp group default permission set griefprevention.claims true
+lp group default permission set griefprevention.buysellclaimblocks true
+lp group default permission set quickshop.player true
+
+# ===== VIP (только косметика) =====
+lp group vip permission set essentials.chat.color true
+lp group vip permission set essentials.nick true
+lp group vip permission set essentials.hat true
+
+# ===== Premium (только косметика) =====
+lp group premium permission set essentials.chat.format true
+lp group premium permission set essentials.nick.color true
+lp group premium permission set essentials.ptime true
+lp group premium permission set essentials.pweather true
+
+# ===== Элита (только косметика) =====
+lp group elite permission set essentials.chat.rgb true
+lp group elite permission set essentials.nick.format true
+lp group elite permission set essentials.nick.rgb true
+lp group elite permission set essentials.signs.color true
+
+# ===== Хелпер =====
+lp group helper permission set essentials.mute true
+lp group helper permission set essentials.kick true
+lp group helper permission set essentials.tempban true
+lp group helper permission set essentials.jail true
+lp group helper permission set essentials.togglejail true
+lp group helper permission set essentials.helpop.receive true
+lp group helper permission set essentials.seen.extra true
+lp group helper permission set essentials.chat.color true
+lp group helper permission set essentials.sethome.multiple.staff true
+lp group helper permission set coreprotect.inspect true
+lp group helper permission set coreprotect.lookup true
+lp group helper permission set coreprotect.lookup.block true
+lp group helper permission set coreprotect.lookup.chat true
+lp group helper permission set coreprotect.lookup.command true
+lp group helper permission set coreprotect.lookup.container true
+lp group helper permission set coreprotect.lookup.session true
+lp group helper permission set coreprotect.lookup.sign true
+lp group helper permission set coreprotect.lookup.item true
+lp group helper permission set coreprotect.lookup.kill true
+lp group helper permission set coreprotect.lookup.username true
+lp group helper permission set coreprotect.lookup.inventory true
+lp group helper permission set griefprevention.claimslistother true
+lp group helper permission set griefprevention.softmute true
+lp group helper permission set tab.staff true
+
+# ===== Модератор =====
+lp group moder permission set essentials.ban true
+lp group moder permission set essentials.unban true
+lp group moder permission set essentials.tempban.unlimited true
+lp group moder permission set essentials.banip true
+lp group moder permission set essentials.unbanip true
+lp group moder permission set essentials.vanish true
+lp group moder permission set essentials.invsee true
+lp group moder permission set essentials.enderchest true
+lp group moder permission set essentials.enderchest.others true
+lp group moder permission set essentials.socialspy true
+lp group moder permission set essentials.tp true
+lp group moder permission set essentials.tphere true
+lp group moder permission set essentials.tpo true
+lp group moder permission set essentials.fly true
+lp group moder permission set essentials.gamemode true
+lp group moder permission set essentials.gamemode.spectator true
+lp group moder permission set essentials.gamemode.survival true
+lp group moder permission set essentials.whois true
+lp group moder permission set essentials.clearinventory.others true
+lp group moder permission set essentials.broadcast true
+lp group moder permission set coreprotect.rollback true
+lp group moder permission set coreprotect.restore true
+lp group moder permission set coreprotect.teleport true
+lp group moder permission set griefprevention.ignoreclaims true
+lp group moder permission set griefprevention.deleteclaims true
+lp group moder permission set griefprevention.adjustclaimblocks true
+lp group moder permission set quickshop.moderator true
+lp group moder permission set worldguard.region.info.* true
+lp group moder permission set worldguard.region.list true
+
+# ===== Администратор =====
+lp group admin permission set * true

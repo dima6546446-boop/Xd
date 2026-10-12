@@ -1,0 +1,211 @@
+# Меню DeluxeMenus. Сгенерировано tools/menus.py — цены берутся из tools/economy.py
+menu_title: '&8Скупщик » &6Древесина'
+size: 54
+update_interval: 1
+items:
+  filler:
+    material: GRAY_STAINED_GLASS_PANE
+    slots:
+    - 0
+    - 1
+    - 2
+    - 3
+    - 4
+    - 5
+    - 6
+    - 7
+    - 8
+    - 9
+    - 17
+    - 18
+    - 26
+    - 27
+    - 35
+    - 36
+    - 44
+    - 45
+    - 46
+    - 47
+    - 48
+    - 49
+    - 50
+    - 51
+    - 52
+    - 53
+    display_name: '&r'
+    priority: 99
+  oak_log:
+    material: OAK_LOG
+    slot: 10
+    display_name: '&fДубовое бревно'
+    lore:
+    - ''
+    - '&7Цена за 1 шт.: &e1$'
+    - '&7Цена за 64 шт.: &e64$'
+    - ''
+    - '&aЛКМ &7— продать 1 стак (64 шт.)'
+    - '&aПКМ &7— продать все из инвентаря'
+    left_click_commands:
+    - '[player] sell oak_log 64'
+    - '[refresh]'
+    right_click_commands:
+    - '[player] sell oak_log'
+    - '[refresh]'
+  spruce_log:
+    material: SPRUCE_LOG
+    slot: 11
+    display_name: '&fЕловое бревно'
+    lore:
+    - ''
+    - '&7Цена за 1 шт.: &e1$'
+    - '&7Цена за 64 шт.: &e64$'
+    - ''
+    - '&aЛКМ &7— продать 1 стак (64 шт.)'
+    - '&aПКМ &7— продать все из инвентаря'
+    left_click_commands:
+    - '[player] sell spruce_log 64'
+    - '[refresh]'
+    right_click_commands:
+    - '[player] sell spruce_log'
+    - '[refresh]'
+  birch_log:
+    material: BIRCH_LOG
+    slot: 12
+    display_name: '&fБерёзовое бревно'
+    lore:
+    - ''
+    - '&7Цена за 1 шт.: &e1$'
+    - '&7Цена за 64 шт.: &e64$'
+    - ''
+    - '&aЛКМ &7— продать 1 стак (64 шт.)'
+    - '&aПКМ &7— продать все из инвентаря'
+    left_click_commands:
+    - '[player] sell birch_log 64'
+    - '[refresh]'
+    right_click_commands:
+    - '[player] sell birch_log'
+    - '[refresh]'
+  jungle_log:
+    material: JUNGLE_LOG
+    slot: 13
+    display_name: '&fТропическое бревно'
+    lore:
+    - ''
+    - '&7Цена за 1 шт.: &e1$'
+    - '&7Цена за 64 шт.: &e64$'
+    - ''
+    - '&aЛКМ &7— продать 1 стак (64 шт.)'
+    - '&aПКМ &7— продать все из инвентаря'
+    left_click_commands:
+    - '[player] sell jungle_log 64'
+    - '[refresh]'
+    right_click_commands:
+    - '[player] sell jungle_log'
+    - '[refresh]'
+  acacia_log:
+    material: ACACIA_LOG
+    slot: 14
+    display_name: '&fАкациевое бревно'
+    lore:
+    - ''
+    - '&7Цена за 1 шт.: &e1$'
+    - '&7Цена за 64 шт.: &e64$'
+    - ''
+    - '&aЛКМ &7— продать 1 стак (64 шт.)'
+    - '&aПКМ &7— продать все из инвентаря'
+    left_click_commands:
+    - '[player] sell acacia_log 64'
+    - '[refresh]'
+    right_click_commands:
+    - '[player] sell acacia_log'
+    - '[refresh]'
+  dark_oak_log:
+    material: DARK_OAK_LOG
+    slot: 15
+    display_name: '&fБревно тёмного дуба'
+    lore:
+    - ''
+    - '&7Цена за 1 шт.: &e1$'
+    - '&7Цена за 64 шт.: &e64$'
+    - ''
+    - '&aЛКМ &7— продать 1 стак (64 шт.)'
+    - '&aПКМ &7— продать все из инвентаря'
+    left_click_commands:
+    - '[player] sell dark_oak_log 64'
+    - '[refresh]'
+    right_click_commands:
+    - '[player] sell dark_oak_log'
+    - '[refresh]'
+  cherry_log:
+    material: CHERRY_LOG
+    slot: 16
+    display_name: '&fВишнёвое бревно'
+    lore:
+    - ''
+    - '&7Цена за 1 шт.: &e1$'
+    - '&7Цена за 64 шт.: &e64$'
+    - ''
+    - '&aЛКМ &7— продать 1 стак (64 шт.)'
+    - '&aПКМ &7— продать все из инвентаря'
+    left_click_commands:
+    - '[player] sell cherry_log 64'
+    - '[refresh]'
+    right_click_commands:
+    - '[player] sell cherry_log'
+    - '[refresh]'
+  mangrove_log:
+    material: MANGROVE_LOG
+    slot: 19
+    display_name: '&fМангровое бревно'
+    lore:
+    - ''
+    - '&7Цена за 1 шт.: &e1$'
+    - '&7Цена за 64 шт.: &e64$'
+    - ''
+    - '&aЛКМ &7— продать 1 стак (64 шт.)'
+    - '&aПКМ &7— продать все из инвентаря'
+    left_click_commands:
+    - '[player] sell mangrove_log 64'
+    - '[refresh]'
+    right_click_commands:
+    - '[player] sell mangrove_log'
+    - '[refresh]'
+  pale_oak_log:
+    material: PALE_OAK_LOG
+    slot: 20
+    display_name: '&fБревно бледного дуба'
+    lore:
+    - ''
+    - '&7Цена за 1 шт.: &e1$'
+    - '&7Цена за 64 шт.: &e64$'
+    - ''
+    - '&aЛКМ &7— продать 1 стак (64 шт.)'
+    - '&aПКМ &7— продать все из инвентаря'
+    left_click_commands:
+    - '[player] sell pale_oak_log 64'
+    - '[refresh]'
+    right_click_commands:
+    - '[player] sell pale_oak_log'
+    - '[refresh]'
+  balance:
+    material: SUNFLOWER
+    slot: 45
+    update: true
+    display_name: '&eВаш баланс'
+    lore:
+    - '&f%vault_eco_balance_formatted%$'
+  back:
+    material: ARROW
+    slot: 49
+    display_name: '&cНазад'
+    left_click_commands:
+    - '[openguimenu] buyer'
+    right_click_commands:
+    - '[openguimenu] buyer'
+  close:
+    material: BARRIER
+    slot: 53
+    display_name: '&cЗакрыть'
+    left_click_commands: &id001
+    - '[close]'
+    right_click_commands: *id001

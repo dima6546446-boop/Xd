@@ -1,0 +1,129 @@
+npcs:
+  2c0c5d09-e4c4-4164-a1dc-26c7cfccc777:
+    name: shop
+    creator: c6391d1e-5894-3948-affd-f29e6fd31f2f
+    displayName: <green><bold>Торговец</bold></green>
+    type: VILLAGER
+    location:
+      world: world
+      x: -13.5
+      y: 101.0
+      z: -13.5
+      yaw: -45.0
+      pitch: 0.0
+    showInTab: false
+    spawnEntity: true
+    collidable: true
+    glowing: false
+    glowingColor: white
+    turnToPlayer: true
+    turnToPlayerDistance: -1
+    interactionCooldown: 1.0
+    scale: 1.0
+    visibility_distance: -1
+    visibility: ALL
+    skin:
+      mirrorSkin: false
+    attributes:
+      profession: librarian
+    actions:
+      ANY_CLICK:
+        '1':
+          action: player_command
+          value: shop
+  d195d2de-a6df-4c0d-973e-2bf5b9e0eafc:
+    name: buyer
+    creator: c6391d1e-5894-3948-affd-f29e6fd31f2f
+    displayName: <gold><bold>Скупщик</bold></gold>
+    type: VILLAGER
+    location:
+      world: world
+      x: 14.5
+      y: 101.0
+      z: -13.5
+      yaw: 45.0
+      pitch: 0.0
+    showInTab: false
+    spawnEntity: true
+    collidable: true
+    glowing: false
+    glowingColor: white
+    turnToPlayer: true
+    turnToPlayerDistance: -1
+    interactionCooldown: 1.0
+    scale: 1.0
+    visibility_distance: -1
+    visibility: ALL
+    skin:
+      mirrorSkin: false
+    attributes:
+      profession: toolsmith
+    actions:
+      ANY_CLICK:
+        '1':
+          action: player_command
+          value: buyer
+  5d307a06-9c24-45bf-8598-b31657ef6ffa:
+    name: donate
+    creator: c6391d1e-5894-3948-affd-f29e6fd31f2f
+    displayName: <light_purple><bold>Привилегии</bold></light_purple>
+    type: VILLAGER
+    location:
+      world: world
+      x: -13.5
+      y: 101.0
+      z: 14.5
+      yaw: -135.0
+      pitch: 0.0
+    showInTab: false
+    spawnEntity: true
+    collidable: true
+    glowing: false
+    glowingColor: white
+    turnToPlayer: true
+    turnToPlayerDistance: -1
+    interactionCooldown: 1.0
+    scale: 1.0
+    visibility_distance: -1
+    visibility: ALL
+    skin:
+      mirrorSkin: false
+    attributes:
+      profession: cleric
+    actions:
+      ANY_CLICK:
+        '1':
+          action: player_command
+          value: donate
+  3290f53b-bfd0-445d-b66c-325b665663bc:
+    name: guide
+    creator: c6391d1e-5894-3948-affd-f29e6fd31f2f
+    displayName: <aqua><bold>Гид</bold></aqua>
+    type: VILLAGER
+    location:
+      world: world
+      x: 14.5
+      y: 101.0
+      z: 14.5
+      yaw: 135.0
+      pitch: 0.0
+    showInTab: false
+    spawnEntity: true
+    collidable: true
+    glowing: false
+    glowingColor: white
+    turnToPlayer: true
+    turnToPlayerDistance: -1
+    interactionCooldown: 1.0
+    scale: 1.0
+    visibility_distance: -1
+    visibility: ALL
+    skin:
+      mirrorSkin: false
+    attributes:
+      profession: cartographer
+    actions:
+      ANY_CLICK:
+        '1':
+          action: player_command
+          value: menu

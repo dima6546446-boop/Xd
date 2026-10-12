@@ -1,0 +1,262 @@
+# Меню DeluxeMenus. Сгенерировано tools/menus.py — цены берутся из tools/economy.py
+menu_title: '&8Скупщик » &eУрожай'
+size: 54
+update_interval: 1
+items:
+  filler:
+    material: GRAY_STAINED_GLASS_PANE
+    slots:
+    - 0
+    - 1
+    - 2
+    - 3
+    - 4
+    - 5
+    - 6
+    - 7
+    - 8
+    - 9
+    - 17
+    - 18
+    - 26
+    - 27
+    - 35
+    - 36
+    - 44
+    - 45
+    - 46
+    - 47
+    - 48
+    - 49
+    - 50
+    - 51
+    - 52
+    - 53
+    display_name: '&r'
+    priority: 99
+  wheat:
+    material: WHEAT
+    slot: 10
+    display_name: '&fПшеница'
+    lore:
+    - ''
+    - '&7Цена за 1 шт.: &e0.5$'
+    - '&7Цена за 64 шт.: &e32$'
+    - ''
+    - '&aЛКМ &7— продать 1 стак (64 шт.)'
+    - '&aПКМ &7— продать все из инвентаря'
+    left_click_commands:
+    - '[player] sell wheat 64'
+    - '[refresh]'
+    right_click_commands:
+    - '[player] sell wheat'
+    - '[refresh]'
+  carrot:
+    material: CARROT
+    slot: 11
+    display_name: '&fМорковь'
+    lore:
+    - ''
+    - '&7Цена за 1 шт.: &e0.4$'
+    - '&7Цена за 64 шт.: &e25.6$'
+    - ''
+    - '&aЛКМ &7— продать 1 стак (64 шт.)'
+    - '&aПКМ &7— продать все из инвентаря'
+    left_click_commands:
+    - '[player] sell carrot 64'
+    - '[refresh]'
+    right_click_commands:
+    - '[player] sell carrot'
+    - '[refresh]'
+  potato:
+    material: POTATO
+    slot: 12
+    display_name: '&fКартофель'
+    lore:
+    - ''
+    - '&7Цена за 1 шт.: &e0.4$'
+    - '&7Цена за 64 шт.: &e25.6$'
+    - ''
+    - '&aЛКМ &7— продать 1 стак (64 шт.)'
+    - '&aПКМ &7— продать все из инвентаря'
+    left_click_commands:
+    - '[player] sell potato 64'
+    - '[refresh]'
+    right_click_commands:
+    - '[player] sell potato'
+    - '[refresh]'
+  beetroot:
+    material: BEETROOT
+    slot: 13
+    display_name: '&fСвёкла'
+    lore:
+    - ''
+    - '&7Цена за 1 шт.: &e0.4$'
+    - '&7Цена за 64 шт.: &e25.6$'
+    - ''
+    - '&aЛКМ &7— продать 1 стак (64 шт.)'
+    - '&aПКМ &7— продать все из инвентаря'
+    left_click_commands:
+    - '[player] sell beetroot 64'
+    - '[refresh]'
+    right_click_commands:
+    - '[player] sell beetroot'
+    - '[refresh]'
+  melon_slice:
+    material: MELON_SLICE
+    slot: 14
+    display_name: '&fЛомтик арбуза'
+    lore:
+    - ''
+    - '&7Цена за 1 шт.: &e0.2$'
+    - '&7Цена за 64 шт.: &e12.8$'
+    - ''
+    - '&aЛКМ &7— продать 1 стак (64 шт.)'
+    - '&aПКМ &7— продать все из инвентаря'
+    left_click_commands:
+    - '[player] sell melon_slice 64'
+    - '[refresh]'
+    right_click_commands:
+    - '[player] sell melon_slice'
+    - '[refresh]'
+  pumpkin:
+    material: PUMPKIN
+    slot: 15
+    display_name: '&fТыква'
+    lore:
+    - ''
+    - '&7Цена за 1 шт.: &e1$'
+    - '&7Цена за 64 шт.: &e64$'
+    - ''
+    - '&aЛКМ &7— продать 1 стак (64 шт.)'
+    - '&aПКМ &7— продать все из инвентаря'
+    left_click_commands:
+    - '[player] sell pumpkin 64'
+    - '[refresh]'
+    right_click_commands:
+    - '[player] sell pumpkin'
+    - '[refresh]'
+  sugar_cane:
+    material: SUGAR_CANE
+    slot: 16
+    display_name: '&fСахарный тростник'
+    lore:
+    - ''
+    - '&7Цена за 1 шт.: &e0.5$'
+    - '&7Цена за 64 шт.: &e32$'
+    - ''
+    - '&aЛКМ &7— продать 1 стак (64 шт.)'
+    - '&aПКМ &7— продать все из инвентаря'
+    left_click_commands:
+    - '[player] sell sugar_cane 64'
+    - '[refresh]'
+    right_click_commands:
+    - '[player] sell sugar_cane'
+    - '[refresh]'
+  cactus:
+    material: CACTUS
+    slot: 19
+    display_name: '&fКактус'
+    lore:
+    - ''
+    - '&7Цена за 1 шт.: &e0.5$'
+    - '&7Цена за 64 шт.: &e32$'
+    - ''
+    - '&aЛКМ &7— продать 1 стак (64 шт.)'
+    - '&aПКМ &7— продать все из инвентаря'
+    left_click_commands:
+    - '[player] sell cactus 64'
+    - '[refresh]'
+    right_click_commands:
+    - '[player] sell cactus'
+    - '[refresh]'
+  cocoa_beans:
+    material: COCOA_BEANS
+    slot: 20
+    display_name: '&fКакао-бобы'
+    lore:
+    - ''
+    - '&7Цена за 1 шт.: &e0.5$'
+    - '&7Цена за 64 шт.: &e32$'
+    - ''
+    - '&aЛКМ &7— продать 1 стак (64 шт.)'
+    - '&aПКМ &7— продать все из инвентаря'
+    left_click_commands:
+    - '[player] sell cocoa_beans 64'
+    - '[refresh]'
+    right_click_commands:
+    - '[player] sell cocoa_beans'
+    - '[refresh]'
+  sweet_berries:
+    material: SWEET_BERRIES
+    slot: 21
+    display_name: '&fСладкие ягоды'
+    lore:
+    - ''
+    - '&7Цена за 1 шт.: &e0.3$'
+    - '&7Цена за 64 шт.: &e19.2$'
+    - ''
+    - '&aЛКМ &7— продать 1 стак (64 шт.)'
+    - '&aПКМ &7— продать все из инвентаря'
+    left_click_commands:
+    - '[player] sell sweet_berries 64'
+    - '[refresh]'
+    right_click_commands:
+    - '[player] sell sweet_berries'
+    - '[refresh]'
+  egg:
+    material: EGG
+    slot: 22
+    display_name: '&fЯйцо'
+    lore:
+    - ''
+    - '&7Цена за 1 шт.: &e0.3$'
+    - '&7Цена за 64 шт.: &e19.2$'
+    - ''
+    - '&aЛКМ &7— продать 1 стак (64 шт.)'
+    - '&aПКМ &7— продать все из инвентаря'
+    left_click_commands:
+    - '[player] sell egg 64'
+    - '[refresh]'
+    right_click_commands:
+    - '[player] sell egg'
+    - '[refresh]'
+  white_wool:
+    material: WHITE_WOOL
+    slot: 23
+    display_name: '&fБелая шерсть'
+    lore:
+    - ''
+    - '&7Цена за 1 шт.: &e1$'
+    - '&7Цена за 64 шт.: &e64$'
+    - ''
+    - '&aЛКМ &7— продать 1 стак (64 шт.)'
+    - '&aПКМ &7— продать все из инвентаря'
+    left_click_commands:
+    - '[player] sell white_wool 64'
+    - '[refresh]'
+    right_click_commands:
+    - '[player] sell white_wool'
+    - '[refresh]'
+  balance:
+    material: SUNFLOWER
+    slot: 45
+    update: true
+    display_name: '&eВаш баланс'
+    lore:
+    - '&f%vault_eco_balance_formatted%$'
+  back:
+    material: ARROW
+    slot: 49
+    display_name: '&cНазад'
+    left_click_commands:
+    - '[openguimenu] buyer'
+    right_click_commands:
+    - '[openguimenu] buyer'
+  close:
+    material: BARRIER
+    slot: 53
+    display_name: '&cЗакрыть'
+    left_click_commands: &id001
+    - '[close]'
+    right_click_commands: *id001

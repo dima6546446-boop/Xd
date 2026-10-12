@@ -1,0 +1,74 @@
+bossbar-feature-not-enabled: "&cДля этой команды нужно включить функцию боссбара."
+bossbar-announce-command-usage: "Использование: /tab bossbar announce <боссбар> <длительность>"
+bossbar-not-found: "&cБоссбар с названием \"%name%\" не найден"
+bossbar-already-announced: "&cЭтот боссбар уже показывается"
+group-data-removed: "&3[TAB] Все данные группы &e%group% &3удалены"
+group-value-assigned: "&3[TAB] Параметр %property% '&r%value%&r&3' назначен группе &e%group%"
+group-value-removed: "&3[TAB] Параметр %property% удалён у группы &e%group%"
+user-data-removed: "&3[TAB] Все данные игрока &e%player% &3удалены"
+user-value-assigned: "&3[TAB] Параметр %property% '&r%value%&r&3' назначен игроку &e%player%"
+user-value-removed: "&3[TAB] Параметр %property% удалён у игрока &e%player%"
+parse-command-usage: "Использование: /tab parse <игрок> <плейсхолдер>"
+send-command-usage: "Использование: /tab send <тип> <игрок> <боссбар> <длительность>\nДоступные типы: &lbar"
+send-bar-command-usage: "Использование: /tab send bar <игрок> <боссбар> <длительность>"
+team-feature-required: "Для этой команды нужно включить функцию scoreboard-teams"
+collision-command-usage: "Использование: /tab setcollision <игрок> <true/false>"
+no-permission: "&cУ вас нет прав на эту команду. Если это ошибка — обратитесь к администрации."
+command-only-from-game: "&cЭту команду можно выполнить только в игре"
+player-not-online: "&cИгрок \"%player%\" не в сети"
+invalid-number: "\"%input%\" — это не число!"
+scoreboard-feature-not-enabled: "&4Для этой команды нужно включить функцию скорборда."
+scoreboard-announce-command-usage: "Использование: /tab scoreboard announce <скорборд> <длительность>"
+scoreboard-not-found: "&cСкорборд с названием \"%name%\" не найден"
+reload-success: "&3[TAB] Конфигурация перезагружена"
+reload-fail-file: "&3[TAB] &4Ошибка перезагрузки: в файле %file% ошибка синтаксиса. Подробности в консоли."
+scoreboard-toggle-on: "&2Скорборд включён"
+scoreboard-toggle-off: "&7Скорборд выключен"
+bossbar-toggle-on: "&2Боссбар теперь виден"
+bossbar-toggle-off: "&7Боссбар скрыт"
+scoreboard-show-usage: "Использование: /tab scoreboard show <скорборд> [игрок]"
+bossbar-not-marked-as-announcement: "&cЭтот боссбар не помечен как объявление и уже показывается постоянно (если выполнено условие показа)"
+bossbar-announcement-success: "&aБоссбар &6%bossbar% &aпоказывается всем на %length% сек."
+bossbar-send-success: "&aБоссбар &6%bossbar% &aотправлен игроку &6%player% &aна %length% сек."
+help-menu:
+- '&m                                                                                '
+- ' &8>> &3&l/tab reload'
+- '      - &7Перезагрузить плагин и конфигурацию'
+- ' &8>> &3&l/tab &9group&3/&9player &3<имя> &9<параметр> &3<значение...>'
+- '      - &7Введите &8/tab group/player&7, чтобы увидеть список параметров'
+- ' &8>> &3&l/tab parse <игрок> <плейсхолдер> '
+- '      - &7Проверить работу плейсхолдера'
+- ' &8>> &3&l/tab dump <игрок>'
+- '      - &7Сводка информации об игроке и сервере'
+- ' &8>> &3&l/tab cpu'
+- '      - &7Нагрузка плагина на процессор'
+- ' &8>> &3&l/tab group/player <имя> remove'
+- '      - &7Удалить все данные игрока/группы'
+- '&m                                                                                '
+mysql-help-menu:
+- '&6/tab mysql upload - выгрузить данные из файлов в MySQL'
+- '&6/tab mysql download - загрузить данные из MySQL в файлы'
+mysql-fail-not-enabled: "&cНельзя выгрузить/загрузить данные MySQL: MySQL отключён."
+mysql-fail-error: "Ошибка выгрузки/загрузки MySQL. Подробности в консоли."
+mysql-download-success: "&aДанные MySQL успешно загружены."
+mysql-upload-success: "&aДанные успешно выгружены в MySQL."
+scoreboard-help-menu:
+- /tab scoreboard [on/off/toggle] [игрок] [опции]
+- /tab scoreboard show <скорборд> [игрок]
+- /tab scoreboard announce <скорборд> <длительность>
+bossbar-help-menu:
+- /tab bossbar [on/off/toggle] [игрок] [опции]
+- /tab bossbar send <боссбар> [игрок]
+- /tab bossbar announce <боссбар> <длительность>
+nametag:
+  help-menu:
+  - /tab nametag <show/opaque/hide/toggle> [игрок] [зритель] [-s] - Переключить ник над головой игрока
+  - /tab nametag <showview/opaqueview/hideview/toggleview> [зритель] [-s] - Переключить видимость ников для зрителя
+  feature-not-enabled: "&cДля этой команды нужно включить функцию ников над головой."
+  view-hidden: "&aНики всех игроков скрыты для вас"
+  view-shown: "&aНики всех игроков снова видны вам"
+  player-hidden: "&aВаш ник скрыт"
+  player-shown: "&aВаш ник снова виден"
+  opaque-player-enabled: "&aВаш ник больше не виден сквозь стены"
+  opaque-view-enabled: "&aВы больше не видите ники игроков за стенами"
+  no-arg-from-console: "&cПри запуске из консоли укажите игрока"

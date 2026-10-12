@@ -1,0 +1,262 @@
+# Меню DeluxeMenus. Сгенерировано tools/menus.py — цены берутся из tools/economy.py
+menu_title: '&8Скупщик » &cДобыча с мобов'
+size: 54
+update_interval: 1
+items:
+  filler:
+    material: GRAY_STAINED_GLASS_PANE
+    slots:
+    - 0
+    - 1
+    - 2
+    - 3
+    - 4
+    - 5
+    - 6
+    - 7
+    - 8
+    - 9
+    - 17
+    - 18
+    - 26
+    - 27
+    - 35
+    - 36
+    - 44
+    - 45
+    - 46
+    - 47
+    - 48
+    - 49
+    - 50
+    - 51
+    - 52
+    - 53
+    display_name: '&r'
+    priority: 99
+  rotten_flesh:
+    material: ROTTEN_FLESH
+    slot: 10
+    display_name: '&fГнилая плоть'
+    lore:
+    - ''
+    - '&7Цена за 1 шт.: &e0.5$'
+    - '&7Цена за 64 шт.: &e32$'
+    - ''
+    - '&aЛКМ &7— продать 1 стак (64 шт.)'
+    - '&aПКМ &7— продать все из инвентаря'
+    left_click_commands:
+    - '[player] sell rotten_flesh 64'
+    - '[refresh]'
+    right_click_commands:
+    - '[player] sell rotten_flesh'
+    - '[refresh]'
+  bone:
+    material: BONE
+    slot: 11
+    display_name: '&fКость'
+    lore:
+    - ''
+    - '&7Цена за 1 шт.: &e1$'
+    - '&7Цена за 64 шт.: &e64$'
+    - ''
+    - '&aЛКМ &7— продать 1 стак (64 шт.)'
+    - '&aПКМ &7— продать все из инвентаря'
+    left_click_commands:
+    - '[player] sell bone 64'
+    - '[refresh]'
+    right_click_commands:
+    - '[player] sell bone'
+    - '[refresh]'
+  string:
+    material: STRING
+    slot: 12
+    display_name: '&fНить'
+    lore:
+    - ''
+    - '&7Цена за 1 шт.: &e1$'
+    - '&7Цена за 64 шт.: &e64$'
+    - ''
+    - '&aЛКМ &7— продать 1 стак (64 шт.)'
+    - '&aПКМ &7— продать все из инвентаря'
+    left_click_commands:
+    - '[player] sell string 64'
+    - '[refresh]'
+    right_click_commands:
+    - '[player] sell string'
+    - '[refresh]'
+  spider_eye:
+    material: SPIDER_EYE
+    slot: 13
+    display_name: '&fПаучий глаз'
+    lore:
+    - ''
+    - '&7Цена за 1 шт.: &e1$'
+    - '&7Цена за 64 шт.: &e64$'
+    - ''
+    - '&aЛКМ &7— продать 1 стак (64 шт.)'
+    - '&aПКМ &7— продать все из инвентаря'
+    left_click_commands:
+    - '[player] sell spider_eye 64'
+    - '[refresh]'
+    right_click_commands:
+    - '[player] sell spider_eye'
+    - '[refresh]'
+  gunpowder:
+    material: GUNPOWDER
+    slot: 14
+    display_name: '&fПорох'
+    lore:
+    - ''
+    - '&7Цена за 1 шт.: &e3$'
+    - '&7Цена за 64 шт.: &e192$'
+    - ''
+    - '&aЛКМ &7— продать 1 стак (64 шт.)'
+    - '&aПКМ &7— продать все из инвентаря'
+    left_click_commands:
+    - '[player] sell gunpowder 64'
+    - '[refresh]'
+    right_click_commands:
+    - '[player] sell gunpowder'
+    - '[refresh]'
+  slime_ball:
+    material: SLIME_BALL
+    slot: 15
+    display_name: '&fСлизь'
+    lore:
+    - ''
+    - '&7Цена за 1 шт.: &e4$'
+    - '&7Цена за 64 шт.: &e256$'
+    - ''
+    - '&aЛКМ &7— продать 1 стак (64 шт.)'
+    - '&aПКМ &7— продать все из инвентаря'
+    left_click_commands:
+    - '[player] sell slime_ball 64'
+    - '[refresh]'
+    right_click_commands:
+    - '[player] sell slime_ball'
+    - '[refresh]'
+  phantom_membrane:
+    material: PHANTOM_MEMBRANE
+    slot: 16
+    display_name: '&fМембрана фантома'
+    lore:
+    - ''
+    - '&7Цена за 1 шт.: &e5$'
+    - '&7Цена за 64 шт.: &e320$'
+    - ''
+    - '&aЛКМ &7— продать 1 стак (64 шт.)'
+    - '&aПКМ &7— продать все из инвентаря'
+    left_click_commands:
+    - '[player] sell phantom_membrane 64'
+    - '[refresh]'
+    right_click_commands:
+    - '[player] sell phantom_membrane'
+    - '[refresh]'
+  ender_pearl:
+    material: ENDER_PEARL
+    slot: 19
+    display_name: '&fЖемчуг Края'
+    lore:
+    - ''
+    - '&7Цена за 1 шт.: &e15$'
+    - '&7Цена за 64 шт.: &e960$'
+    - ''
+    - '&aЛКМ &7— продать 1 стак (64 шт.)'
+    - '&aПКМ &7— продать все из инвентаря'
+    left_click_commands:
+    - '[player] sell ender_pearl 64'
+    - '[refresh]'
+    right_click_commands:
+    - '[player] sell ender_pearl'
+    - '[refresh]'
+  blaze_rod:
+    material: BLAZE_ROD
+    slot: 20
+    display_name: '&fОгненный стержень'
+    lore:
+    - ''
+    - '&7Цена за 1 шт.: &e10$'
+    - '&7Цена за 64 шт.: &e640$'
+    - ''
+    - '&aЛКМ &7— продать 1 стак (64 шт.)'
+    - '&aПКМ &7— продать все из инвентаря'
+    left_click_commands:
+    - '[player] sell blaze_rod 64'
+    - '[refresh]'
+    right_click_commands:
+    - '[player] sell blaze_rod'
+    - '[refresh]'
+  ghast_tear:
+    material: GHAST_TEAR
+    slot: 21
+    display_name: '&fСлеза гаста'
+    lore:
+    - ''
+    - '&7Цена за 1 шт.: &e15$'
+    - '&7Цена за 64 шт.: &e960$'
+    - ''
+    - '&aЛКМ &7— продать 1 стак (64 шт.)'
+    - '&aПКМ &7— продать все из инвентаря'
+    left_click_commands:
+    - '[player] sell ghast_tear 64'
+    - '[refresh]'
+    right_click_commands:
+    - '[player] sell ghast_tear'
+    - '[refresh]'
+  leather:
+    material: LEATHER
+    slot: 22
+    display_name: '&fКожа'
+    lore:
+    - ''
+    - '&7Цена за 1 шт.: &e2$'
+    - '&7Цена за 64 шт.: &e128$'
+    - ''
+    - '&aЛКМ &7— продать 1 стак (64 шт.)'
+    - '&aПКМ &7— продать все из инвентаря'
+    left_click_commands:
+    - '[player] sell leather 64'
+    - '[refresh]'
+    right_click_commands:
+    - '[player] sell leather'
+    - '[refresh]'
+  feather:
+    material: FEATHER
+    slot: 23
+    display_name: '&fПеро'
+    lore:
+    - ''
+    - '&7Цена за 1 шт.: &e0.5$'
+    - '&7Цена за 64 шт.: &e32$'
+    - ''
+    - '&aЛКМ &7— продать 1 стак (64 шт.)'
+    - '&aПКМ &7— продать все из инвентаря'
+    left_click_commands:
+    - '[player] sell feather 64'
+    - '[refresh]'
+    right_click_commands:
+    - '[player] sell feather'
+    - '[refresh]'
+  balance:
+    material: SUNFLOWER
+    slot: 45
+    update: true
+    display_name: '&eВаш баланс'
+    lore:
+    - '&f%vault_eco_balance_formatted%$'
+  back:
+    material: ARROW
+    slot: 49
+    display_name: '&cНазад'
+    left_click_commands:
+    - '[openguimenu] buyer'
+    right_click_commands:
+    - '[openguimenu] buyer'
+  close:
+    material: BARRIER
+    slot: 53
+    display_name: '&cЗакрыть'
+    left_click_commands: &id001
+    - '[close]'
+    right_click_commands: *id001

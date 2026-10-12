@@ -1,0 +1,610 @@
+# Меню DeluxeMenus. Сгенерировано tools/menus.py — цены берутся из tools/economy.py
+menu_title: '&8Магазин » &eФермерство'
+size: 54
+update_interval: 1
+items:
+  filler:
+    material: GRAY_STAINED_GLASS_PANE
+    slots:
+    - 0
+    - 1
+    - 2
+    - 3
+    - 4
+    - 5
+    - 6
+    - 7
+    - 8
+    - 9
+    - 17
+    - 18
+    - 26
+    - 27
+    - 35
+    - 36
+    - 44
+    - 45
+    - 46
+    - 47
+    - 48
+    - 49
+    - 50
+    - 51
+    - 52
+    - 53
+    display_name: '&r'
+    priority: 99
+  wheat_seeds:
+    material: WHEAT_SEEDS
+    amount: 16
+    slot: 10
+    display_name: '&fСемена пшеницы &7x16'
+    lore:
+    - ''
+    - '&7Цена: &e16$'
+    - ''
+    - '&aНажмите, чтобы купить'
+    left_click_requirement:
+      requirements:
+        money:
+          type: has money
+          amount: 16
+          deny_commands:
+          - '[message] &cНедостаточно денег! Нужно &e16$'
+          - '[sound] ENTITY_VILLAGER_NO'
+        space:
+          type: '>='
+          input: '%player_empty_slots%'
+          output: 1
+          deny_commands:
+          - '[message] &cОсвободите хотя бы один слот в инвентаре!'
+          - '[sound] ENTITY_VILLAGER_NO'
+    left_click_commands: &id001
+    - '[takemoney] 16'
+    - '[console] minecraft:give %player_name% minecraft:wheat_seeds 16'
+    - '[message] &aВы купили &fСемена пшеницы x16 &aза &e16$'
+    - '[sound] ENTITY_EXPERIENCE_ORB_PICKUP'
+    right_click_requirement:
+      requirements:
+        money:
+          type: has money
+          amount: 16
+          deny_commands:
+          - '[message] &cНедостаточно денег! Нужно &e16$'
+          - '[sound] ENTITY_VILLAGER_NO'
+        space:
+          type: '>='
+          input: '%player_empty_slots%'
+          output: 1
+          deny_commands:
+          - '[message] &cОсвободите хотя бы один слот в инвентаре!'
+          - '[sound] ENTITY_VILLAGER_NO'
+    right_click_commands: *id001
+  beetroot_seeds:
+    material: BEETROOT_SEEDS
+    amount: 16
+    slot: 11
+    display_name: '&fСемена свёклы &7x16'
+    lore:
+    - ''
+    - '&7Цена: &e16$'
+    - ''
+    - '&aНажмите, чтобы купить'
+    left_click_requirement:
+      requirements:
+        money:
+          type: has money
+          amount: 16
+          deny_commands:
+          - '[message] &cНедостаточно денег! Нужно &e16$'
+          - '[sound] ENTITY_VILLAGER_NO'
+        space:
+          type: '>='
+          input: '%player_empty_slots%'
+          output: 1
+          deny_commands:
+          - '[message] &cОсвободите хотя бы один слот в инвентаре!'
+          - '[sound] ENTITY_VILLAGER_NO'
+    left_click_commands: &id002
+    - '[takemoney] 16'
+    - '[console] minecraft:give %player_name% minecraft:beetroot_seeds 16'
+    - '[message] &aВы купили &fСемена свёклы x16 &aза &e16$'
+    - '[sound] ENTITY_EXPERIENCE_ORB_PICKUP'
+    right_click_requirement:
+      requirements:
+        money:
+          type: has money
+          amount: 16
+          deny_commands:
+          - '[message] &cНедостаточно денег! Нужно &e16$'
+          - '[sound] ENTITY_VILLAGER_NO'
+        space:
+          type: '>='
+          input: '%player_empty_slots%'
+          output: 1
+          deny_commands:
+          - '[message] &cОсвободите хотя бы один слот в инвентаре!'
+          - '[sound] ENTITY_VILLAGER_NO'
+    right_click_commands: *id002
+  pumpkin_seeds:
+    material: PUMPKIN_SEEDS
+    amount: 8
+    slot: 12
+    display_name: '&fСемена тыквы &7x8'
+    lore:
+    - ''
+    - '&7Цена: &e24$'
+    - ''
+    - '&aНажмите, чтобы купить'
+    left_click_requirement:
+      requirements:
+        money:
+          type: has money
+          amount: 24
+          deny_commands:
+          - '[message] &cНедостаточно денег! Нужно &e24$'
+          - '[sound] ENTITY_VILLAGER_NO'
+        space:
+          type: '>='
+          input: '%player_empty_slots%'
+          output: 1
+          deny_commands:
+          - '[message] &cОсвободите хотя бы один слот в инвентаре!'
+          - '[sound] ENTITY_VILLAGER_NO'
+    left_click_commands: &id003
+    - '[takemoney] 24'
+    - '[console] minecraft:give %player_name% minecraft:pumpkin_seeds 8'
+    - '[message] &aВы купили &fСемена тыквы x8 &aза &e24$'
+    - '[sound] ENTITY_EXPERIENCE_ORB_PICKUP'
+    right_click_requirement:
+      requirements:
+        money:
+          type: has money
+          amount: 24
+          deny_commands:
+          - '[message] &cНедостаточно денег! Нужно &e24$'
+          - '[sound] ENTITY_VILLAGER_NO'
+        space:
+          type: '>='
+          input: '%player_empty_slots%'
+          output: 1
+          deny_commands:
+          - '[message] &cОсвободите хотя бы один слот в инвентаре!'
+          - '[sound] ENTITY_VILLAGER_NO'
+    right_click_commands: *id003
+  melon_seeds:
+    material: MELON_SEEDS
+    amount: 8
+    slot: 13
+    display_name: '&fСемена арбуза &7x8'
+    lore:
+    - ''
+    - '&7Цена: &e24$'
+    - ''
+    - '&aНажмите, чтобы купить'
+    left_click_requirement:
+      requirements:
+        money:
+          type: has money
+          amount: 24
+          deny_commands:
+          - '[message] &cНедостаточно денег! Нужно &e24$'
+          - '[sound] ENTITY_VILLAGER_NO'
+        space:
+          type: '>='
+          input: '%player_empty_slots%'
+          output: 1
+          deny_commands:
+          - '[message] &cОсвободите хотя бы один слот в инвентаре!'
+          - '[sound] ENTITY_VILLAGER_NO'
+    left_click_commands: &id004
+    - '[takemoney] 24'
+    - '[console] minecraft:give %player_name% minecraft:melon_seeds 8'
+    - '[message] &aВы купили &fСемена арбуза x8 &aза &e24$'
+    - '[sound] ENTITY_EXPERIENCE_ORB_PICKUP'
+    right_click_requirement:
+      requirements:
+        money:
+          type: has money
+          amount: 24
+          deny_commands:
+          - '[message] &cНедостаточно денег! Нужно &e24$'
+          - '[sound] ENTITY_VILLAGER_NO'
+        space:
+          type: '>='
+          input: '%player_empty_slots%'
+          output: 1
+          deny_commands:
+          - '[message] &cОсвободите хотя бы один слот в инвентаре!'
+          - '[sound] ENTITY_VILLAGER_NO'
+    right_click_commands: *id004
+  sugar_cane:
+    material: SUGAR_CANE
+    amount: 8
+    slot: 14
+    display_name: '&fСахарный тростник &7x8'
+    lore:
+    - ''
+    - '&7Цена: &e32$'
+    - ''
+    - '&aНажмите, чтобы купить'
+    left_click_requirement:
+      requirements:
+        money:
+          type: has money
+          amount: 32
+          deny_commands:
+          - '[message] &cНедостаточно денег! Нужно &e32$'
+          - '[sound] ENTITY_VILLAGER_NO'
+        space:
+          type: '>='
+          input: '%player_empty_slots%'
+          output: 1
+          deny_commands:
+          - '[message] &cОсвободите хотя бы один слот в инвентаре!'
+          - '[sound] ENTITY_VILLAGER_NO'
+    left_click_commands: &id005
+    - '[takemoney] 32'
+    - '[console] minecraft:give %player_name% minecraft:sugar_cane 8'
+    - '[message] &aВы купили &fСахарный тростник x8 &aза &e32$'
+    - '[sound] ENTITY_EXPERIENCE_ORB_PICKUP'
+    right_click_requirement:
+      requirements:
+        money:
+          type: has money
+          amount: 32
+          deny_commands:
+          - '[message] &cНедостаточно денег! Нужно &e32$'
+          - '[sound] ENTITY_VILLAGER_NO'
+        space:
+          type: '>='
+          input: '%player_empty_slots%'
+          output: 1
+          deny_commands:
+          - '[message] &cОсвободите хотя бы один слот в инвентаре!'
+          - '[sound] ENTITY_VILLAGER_NO'
+    right_click_commands: *id005
+  cactus:
+    material: CACTUS
+    amount: 8
+    slot: 15
+    display_name: '&fКактус &7x8'
+    lore:
+    - ''
+    - '&7Цена: &e32$'
+    - ''
+    - '&aНажмите, чтобы купить'
+    left_click_requirement:
+      requirements:
+        money:
+          type: has money
+          amount: 32
+          deny_commands:
+          - '[message] &cНедостаточно денег! Нужно &e32$'
+          - '[sound] ENTITY_VILLAGER_NO'
+        space:
+          type: '>='
+          input: '%player_empty_slots%'
+          output: 1
+          deny_commands:
+          - '[message] &cОсвободите хотя бы один слот в инвентаре!'
+          - '[sound] ENTITY_VILLAGER_NO'
+    left_click_commands: &id006
+    - '[takemoney] 32'
+    - '[console] minecraft:give %player_name% minecraft:cactus 8'
+    - '[message] &aВы купили &fКактус x8 &aза &e32$'
+    - '[sound] ENTITY_EXPERIENCE_ORB_PICKUP'
+    right_click_requirement:
+      requirements:
+        money:
+          type: has money
+          amount: 32
+          deny_commands:
+          - '[message] &cНедостаточно денег! Нужно &e32$'
+          - '[sound] ENTITY_VILLAGER_NO'
+        space:
+          type: '>='
+          input: '%player_empty_slots%'
+          output: 1
+          deny_commands:
+          - '[message] &cОсвободите хотя бы один слот в инвентаре!'
+          - '[sound] ENTITY_VILLAGER_NO'
+    right_click_commands: *id006
+  cocoa_beans:
+    material: COCOA_BEANS
+    amount: 8
+    slot: 16
+    display_name: '&fКакао-бобы &7x8'
+    lore:
+    - ''
+    - '&7Цена: &e32$'
+    - ''
+    - '&aНажмите, чтобы купить'
+    left_click_requirement:
+      requirements:
+        money:
+          type: has money
+          amount: 32
+          deny_commands:
+          - '[message] &cНедостаточно денег! Нужно &e32$'
+          - '[sound] ENTITY_VILLAGER_NO'
+        space:
+          type: '>='
+          input: '%player_empty_slots%'
+          output: 1
+          deny_commands:
+          - '[message] &cОсвободите хотя бы один слот в инвентаре!'
+          - '[sound] ENTITY_VILLAGER_NO'
+    left_click_commands: &id007
+    - '[takemoney] 32'
+    - '[console] minecraft:give %player_name% minecraft:cocoa_beans 8'
+    - '[message] &aВы купили &fКакао-бобы x8 &aза &e32$'
+    - '[sound] ENTITY_EXPERIENCE_ORB_PICKUP'
+    right_click_requirement:
+      requirements:
+        money:
+          type: has money
+          amount: 32
+          deny_commands:
+          - '[message] &cНедостаточно денег! Нужно &e32$'
+          - '[sound] ENTITY_VILLAGER_NO'
+        space:
+          type: '>='
+          input: '%player_empty_slots%'
+          output: 1
+          deny_commands:
+          - '[message] &cОсвободите хотя бы один слот в инвентаре!'
+          - '[sound] ENTITY_VILLAGER_NO'
+    right_click_commands: *id007
+  sweet_berries:
+    material: SWEET_BERRIES
+    amount: 16
+    slot: 19
+    display_name: '&fСладкие ягоды &7x16'
+    lore:
+    - ''
+    - '&7Цена: &e32$'
+    - ''
+    - '&aНажмите, чтобы купить'
+    left_click_requirement:
+      requirements:
+        money:
+          type: has money
+          amount: 32
+          deny_commands:
+          - '[message] &cНедостаточно денег! Нужно &e32$'
+          - '[sound] ENTITY_VILLAGER_NO'
+        space:
+          type: '>='
+          input: '%player_empty_slots%'
+          output: 1
+          deny_commands:
+          - '[message] &cОсвободите хотя бы один слот в инвентаре!'
+          - '[sound] ENTITY_VILLAGER_NO'
+    left_click_commands: &id008
+    - '[takemoney] 32'
+    - '[console] minecraft:give %player_name% minecraft:sweet_berries 16'
+    - '[message] &aВы купили &fСладкие ягоды x16 &aза &e32$'
+    - '[sound] ENTITY_EXPERIENCE_ORB_PICKUP'
+    right_click_requirement:
+      requirements:
+        money:
+          type: has money
+          amount: 32
+          deny_commands:
+          - '[message] &cНедостаточно денег! Нужно &e32$'
+          - '[sound] ENTITY_VILLAGER_NO'
+        space:
+          type: '>='
+          input: '%player_empty_slots%'
+          output: 1
+          deny_commands:
+          - '[message] &cОсвободите хотя бы один слот в инвентаре!'
+          - '[sound] ENTITY_VILLAGER_NO'
+    right_click_commands: *id008
+  bone_meal:
+    material: BONE_MEAL
+    amount: 32
+    slot: 20
+    display_name: '&fКостная мука &7x32'
+    lore:
+    - ''
+    - '&7Цена: &e48$'
+    - ''
+    - '&aНажмите, чтобы купить'
+    left_click_requirement:
+      requirements:
+        money:
+          type: has money
+          amount: 48
+          deny_commands:
+          - '[message] &cНедостаточно денег! Нужно &e48$'
+          - '[sound] ENTITY_VILLAGER_NO'
+        space:
+          type: '>='
+          input: '%player_empty_slots%'
+          output: 1
+          deny_commands:
+          - '[message] &cОсвободите хотя бы один слот в инвентаре!'
+          - '[sound] ENTITY_VILLAGER_NO'
+    left_click_commands: &id009
+    - '[takemoney] 48'
+    - '[console] minecraft:give %player_name% minecraft:bone_meal 32'
+    - '[message] &aВы купили &fКостная мука x32 &aза &e48$'
+    - '[sound] ENTITY_EXPERIENCE_ORB_PICKUP'
+    right_click_requirement:
+      requirements:
+        money:
+          type: has money
+          amount: 48
+          deny_commands:
+          - '[message] &cНедостаточно денег! Нужно &e48$'
+          - '[sound] ENTITY_VILLAGER_NO'
+        space:
+          type: '>='
+          input: '%player_empty_slots%'
+          output: 1
+          deny_commands:
+          - '[message] &cОсвободите хотя бы один слот в инвентаре!'
+          - '[sound] ENTITY_VILLAGER_NO'
+    right_click_commands: *id009
+  oak_sapling:
+    material: OAK_SAPLING
+    amount: 8
+    slot: 21
+    display_name: '&fСаженец дуба &7x8'
+    lore:
+    - ''
+    - '&7Цена: &e32$'
+    - ''
+    - '&aНажмите, чтобы купить'
+    left_click_requirement:
+      requirements:
+        money:
+          type: has money
+          amount: 32
+          deny_commands:
+          - '[message] &cНедостаточно денег! Нужно &e32$'
+          - '[sound] ENTITY_VILLAGER_NO'
+        space:
+          type: '>='
+          input: '%player_empty_slots%'
+          output: 1
+          deny_commands:
+          - '[message] &cОсвободите хотя бы один слот в инвентаре!'
+          - '[sound] ENTITY_VILLAGER_NO'
+    left_click_commands: &id010
+    - '[takemoney] 32'
+    - '[console] minecraft:give %player_name% minecraft:oak_sapling 8'
+    - '[message] &aВы купили &fСаженец дуба x8 &aза &e32$'
+    - '[sound] ENTITY_EXPERIENCE_ORB_PICKUP'
+    right_click_requirement:
+      requirements:
+        money:
+          type: has money
+          amount: 32
+          deny_commands:
+          - '[message] &cНедостаточно денег! Нужно &e32$'
+          - '[sound] ENTITY_VILLAGER_NO'
+        space:
+          type: '>='
+          input: '%player_empty_slots%'
+          output: 1
+          deny_commands:
+          - '[message] &cОсвободите хотя бы один слот в инвентаре!'
+          - '[sound] ENTITY_VILLAGER_NO'
+    right_click_commands: *id010
+  cherry_sapling:
+    material: CHERRY_SAPLING
+    amount: 4
+    slot: 22
+    display_name: '&fСаженец вишни &7x4'
+    lore:
+    - ''
+    - '&7Цена: &e32$'
+    - ''
+    - '&aНажмите, чтобы купить'
+    left_click_requirement:
+      requirements:
+        money:
+          type: has money
+          amount: 32
+          deny_commands:
+          - '[message] &cНедостаточно денег! Нужно &e32$'
+          - '[sound] ENTITY_VILLAGER_NO'
+        space:
+          type: '>='
+          input: '%player_empty_slots%'
+          output: 1
+          deny_commands:
+          - '[message] &cОсвободите хотя бы один слот в инвентаре!'
+          - '[sound] ENTITY_VILLAGER_NO'
+    left_click_commands: &id011
+    - '[takemoney] 32'
+    - '[console] minecraft:give %player_name% minecraft:cherry_sapling 4'
+    - '[message] &aВы купили &fСаженец вишни x4 &aза &e32$'
+    - '[sound] ENTITY_EXPERIENCE_ORB_PICKUP'
+    right_click_requirement:
+      requirements:
+        money:
+          type: has money
+          amount: 32
+          deny_commands:
+          - '[message] &cНедостаточно денег! Нужно &e32$'
+          - '[sound] ENTITY_VILLAGER_NO'
+        space:
+          type: '>='
+          input: '%player_empty_slots%'
+          output: 1
+          deny_commands:
+          - '[message] &cОсвободите хотя бы один слот в инвентаре!'
+          - '[sound] ENTITY_VILLAGER_NO'
+    right_click_commands: *id011
+  nether_wart:
+    material: NETHER_WART
+    amount: 8
+    slot: 23
+    display_name: '&fАдский нарост &7x8'
+    lore:
+    - ''
+    - '&7Цена: &e96$'
+    - ''
+    - '&aНажмите, чтобы купить'
+    left_click_requirement:
+      requirements:
+        money:
+          type: has money
+          amount: 96
+          deny_commands:
+          - '[message] &cНедостаточно денег! Нужно &e96$'
+          - '[sound] ENTITY_VILLAGER_NO'
+        space:
+          type: '>='
+          input: '%player_empty_slots%'
+          output: 1
+          deny_commands:
+          - '[message] &cОсвободите хотя бы один слот в инвентаре!'
+          - '[sound] ENTITY_VILLAGER_NO'
+    left_click_commands: &id012
+    - '[takemoney] 96'
+    - '[console] minecraft:give %player_name% minecraft:nether_wart 8'
+    - '[message] &aВы купили &fАдский нарост x8 &aза &e96$'
+    - '[sound] ENTITY_EXPERIENCE_ORB_PICKUP'
+    right_click_requirement:
+      requirements:
+        money:
+          type: has money
+          amount: 96
+          deny_commands:
+          - '[message] &cНедостаточно денег! Нужно &e96$'
+          - '[sound] ENTITY_VILLAGER_NO'
+        space:
+          type: '>='
+          input: '%player_empty_slots%'
+          output: 1
+          deny_commands:
+          - '[message] &cОсвободите хотя бы один слот в инвентаре!'
+          - '[sound] ENTITY_VILLAGER_NO'
+    right_click_commands: *id012
+  balance:
+    material: SUNFLOWER
+    slot: 45
+    update: true
+    display_name: '&eВаш баланс'
+    lore:
+    - '&f%vault_eco_balance_formatted%$'
+  back:
+    material: ARROW
+    slot: 49
+    display_name: '&cНазад'
+    left_click_commands:
+    - '[openguimenu] shop'
+    right_click_commands:
+    - '[openguimenu] shop'
+  close:
+    material: BARRIER
+    slot: 53
+    display_name: '&cЗакрыть'
+    left_click_commands: &id013
+    - '[close]'
+    right_click_commands: *id013

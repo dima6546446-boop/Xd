@@ -1,0 +1,3 @@
+# Чтобы запустить сервер, владелец должен принять EULA Minecraft: https://aka.ms/MinecraftEULA
+# start.bat спросит об этом при первом запуске. Вручную: замените false на true.
+eula=false

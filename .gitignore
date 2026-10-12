@@ -1,0 +1,6 @@
+dist/
+*.zip
+MineRus-1.21.11/runtime/
+MineRus-1.21.11/logs/
+MineRus-1.21.11/backups/
+__pycache__/

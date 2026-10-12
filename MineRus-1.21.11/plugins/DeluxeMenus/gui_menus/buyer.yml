@@ -1,0 +1,131 @@
+# Меню DeluxeMenus. Сгенерировано tools/menus.py — цены берутся из tools/economy.py
+menu_title: '&8Скупщик'
+open_command:
+- buyer
+- skupka
+register_command: true
+size: 27
+update_interval: 1
+items:
+  filler:
+    material: GRAY_STAINED_GLASS_PANE
+    slots:
+    - 0
+    - 1
+    - 2
+    - 3
+    - 4
+    - 5
+    - 6
+    - 7
+    - 8
+    - 9
+    - 10
+    - 11
+    - 12
+    - 13
+    - 14
+    - 15
+    - 16
+    - 17
+    - 18
+    - 19
+    - 20
+    - 21
+    - 22
+    - 23
+    - 24
+    - 25
+    - 26
+    display_name: '&r'
+    priority: 99
+  ores:
+    material: DIAMOND
+    slot: 10
+    display_name: '&bРуды и минералы'
+    lore:
+    - ''
+    - '&7Товаров: &f11'
+    - ''
+    - '&aНажмите, чтобы открыть'
+    left_click_commands:
+    - '[openguimenu] buyer_ores'
+    right_click_commands:
+    - '[openguimenu] buyer_ores'
+  mobs:
+    material: ROTTEN_FLESH
+    slot: 12
+    display_name: '&cДобыча с мобов'
+    lore:
+    - ''
+    - '&7Товаров: &f12'
+    - ''
+    - '&aНажмите, чтобы открыть'
+    left_click_commands:
+    - '[openguimenu] buyer_mobs'
+    right_click_commands:
+    - '[openguimenu] buyer_mobs'
+  farm:
+    material: WHEAT
+    slot: 14
+    display_name: '&eУрожай'
+    lore:
+    - ''
+    - '&7Товаров: &f12'
+    - ''
+    - '&aНажмите, чтобы открыть'
+    left_click_commands:
+    - '[openguimenu] buyer_farm'
+    right_click_commands:
+    - '[openguimenu] buyer_farm'
+  wood:
+    material: OAK_LOG
+    slot: 16
+    display_name: '&6Древесина'
+    lore:
+    - ''
+    - '&7Товаров: &f9'
+    - ''
+    - '&aНажмите, чтобы открыть'
+    left_click_commands:
+    - '[openguimenu] buyer_wood'
+    right_click_commands:
+    - '[openguimenu] buyer_wood'
+  balance:
+    material: SUNFLOWER
+    slot: 18
+    update: true
+    display_name: '&eВаш баланс'
+    lore:
+    - '&f%vault_eco_balance_formatted%$'
+  back:
+    material: ARROW
+    slot: 22
+    display_name: '&cНазад'
+    left_click_commands:
+    - '[openguimenu] main'
+    right_click_commands:
+    - '[openguimenu] main'
+  close:
+    material: BARRIER
+    slot: 26
+    display_name: '&cЗакрыть'
+    left_click_commands: &id001
+    - '[close]'
+    right_click_commands: *id001
+  sellall:
+    material: HOPPER
+    slot: 4
+    display_name: '&c&lПродать всё'
+    lore:
+    - ''
+    - '&7Продаёт &fвсе предметы из инвентаря&7,'
+    - '&7которые принимает скупщик'
+    - '&7(руды, урожай, древесина, добыча).'
+    - ''
+    - '&cВнимание: &7продаются и алмазы!'
+    - ''
+    - '&eShift + ЛКМ, чтобы продать всё'
+    shift_left_click_commands:
+    - '[player] sell inventory'
+    - '[refresh]'

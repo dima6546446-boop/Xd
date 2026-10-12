@@ -1,0 +1,63 @@
+# Меню DeluxeMenus. Сгенерировано tools/menus.py — цены берутся из tools/economy.py
+menu_title: '&8&3Как открыть свой магазин'
+size: 27
+items:
+  filler:
+    material: GRAY_STAINED_GLASS_PANE
+    slots:
+    - 0
+    - 1
+    - 2
+    - 3
+    - 4
+    - 5
+    - 6
+    - 7
+    - 8
+    - 9
+    - 10
+    - 11
+    - 12
+    - 13
+    - 14
+    - 15
+    - 16
+    - 17
+    - 18
+    - 19
+    - 20
+    - 21
+    - 22
+    - 23
+    - 24
+    - 25
+    - 26
+    display_name: '&r'
+    priority: 99
+  info:
+    material: CHEST
+    slot: 13
+    display_name: '&3&lКак открыть свой магазин'
+    lore:
+    - ''
+    - '&f1. &7Поставьте сундук (в своём привате).'
+    - '&f2. &7Возьмите товар в руку и ударьте'
+    - '&7    сундук (ЛКМ).'
+    - '&f3. &7Введите в чат цену за 1 шт.'
+    - '&f4. &7Положите товар в сундук.'
+    - ''
+    - '&e/qs buy &7— магазин будет скупать товар'
+    - '&e/qs sell &7— магазин будет продавать'
+    - '&e/qs price <цена> &7— сменить цену'
+    - '&e/qs remove &7— удалить магазин'
+    - ''
+    - '&7Покупателю достаточно нажать на сундук'
+    - '&7и ввести количество в чат.'
+  back:
+    material: ARROW
+    slot: 22
+    display_name: '&cНазад'
+    left_click_commands:
+    - '[openguimenu] main'
+    right_click_commands:
+    - '[openguimenu] main'

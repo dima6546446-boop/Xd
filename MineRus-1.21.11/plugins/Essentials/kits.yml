@@ -1,0 +1,22 @@
+# Наборы (Essentials). Выдать себе: /kit <название>. Право: essentials.kits.<название>
+kits:
+  start:
+    # Стартовый набор: выдаётся автоматически при первом входе. delay: -1 — только один раз.
+    delay: -1
+    items:
+      - stone_sword 1 name:&fМеч_новичка
+      - stone_pickaxe 1 name:&fКирка_новичка
+      - stone_axe 1 name:&fТопор_новичка
+      - stone_shovel 1
+      - bread 16
+      - torch 16
+      - oak_log 16
+      - golden_shovel 1 name:&eЛопата_привата lore:&7ПКМ_по_двум_углам_—_создать_приват
+      - stick 1 name:&eПросмотр_приватов lore:&7ПКМ_—_показать_границы_приватов
+  food:
+    # Ежедневная еда (раз в 24 часа)
+    delay: 86400
+    items:
+      - bread 16
+      - cooked_beef 8
+      - apple 8

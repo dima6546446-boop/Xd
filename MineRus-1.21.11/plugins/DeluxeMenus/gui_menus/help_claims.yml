@@ -1,0 +1,65 @@
+# Меню DeluxeMenus. Сгенерировано tools/menus.py — цены берутся из tools/economy.py
+menu_title: '&8&2Как заприватить территорию'
+size: 27
+items:
+  filler:
+    material: GRAY_STAINED_GLASS_PANE
+    slots:
+    - 0
+    - 1
+    - 2
+    - 3
+    - 4
+    - 5
+    - 6
+    - 7
+    - 8
+    - 9
+    - 10
+    - 11
+    - 12
+    - 13
+    - 14
+    - 15
+    - 16
+    - 17
+    - 18
+    - 19
+    - 20
+    - 21
+    - 22
+    - 23
+    - 24
+    - 25
+    - 26
+    display_name: '&r'
+    priority: 99
+  info:
+    material: GOLDEN_SHOVEL
+    slot: 13
+    display_name: '&2&lКак заприватить территорию'
+    lore:
+    - ''
+    - '&f1. &7Возьмите &eзолотую лопату&7.'
+    - '&f2. &7ПКМ по одному углу участка,'
+    - '&7    затем ПКМ по противоположному.'
+    - '&f3. &7Готово! Границы покажет &eпалка &7(ПКМ).'
+    - ''
+    - '&7Первый сундук автоматически создаёт'
+    - '&7небольшой приват вокруг себя.'
+    - ''
+    - '&e/trust <ник> &7— дать другу строить'
+    - '&e/untrust <ник> &7— забрать доступ'
+    - '&e/claimslist &7— список приватов и блоков'
+    - '&e/abandonclaim &7— удалить приват'
+    - '&e/buyclaimblocks <кол-во> &7— купить блоки'
+    - ''
+    - '&7Блоки привата копятся за время игры.'
+  back:
+    material: ARROW
+    slot: 22
+    display_name: '&cНазад'
+    left_click_commands:
+    - '[openguimenu] main'
+    right_click_commands:
+    - '[openguimenu] main'
