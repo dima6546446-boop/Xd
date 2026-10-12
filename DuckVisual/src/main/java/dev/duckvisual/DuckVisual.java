@@ -78,6 +78,7 @@ public class DuckVisual implements ClientModInitializer {
             MatrixStack ms = new MatrixStack();
             ms.multiplyPositionMatrix(context.positionMatrix());
             WorldRender render = new WorldRender(ms, context.camera(), context.tickCounter().getTickDelta(true));
+            dev.duckvisual.util.Projection.capture(context.positionMatrix(), context.projectionMatrix(), context.camera().getPos());
             Render3D.begin(context.projectionMatrix());
             try {
                 for (Module m : moduleManager.getModules()) {

@@ -16,7 +16,12 @@
     "MouseMixin",
     "WorldColorMixin",
     "ClientWorldMixin",
-    "EntityRenderDispatcherMixin"
+    "EntityRenderDispatcherMixin",
+    "EntityMixin",
+    "CameraMixin",
+    "MinecraftClientMixin",
+    "EntityRendererMixin",
+    "ClientPlayNetworkHandlerMixin"
   ],
   "injectors": {
     "defaultRequire": 1

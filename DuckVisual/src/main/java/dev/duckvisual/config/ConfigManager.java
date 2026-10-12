@@ -56,10 +56,62 @@ public class ConfigManager {
         return root;
     }
 
-    public boolean load() {
-        if (!Files.exists(file)) return false;
+    private Path profileDir() {
+        return file.getParent().resolve("duckvisual");
+    }
+
+    private static boolean validName(String name) {
+        return name.matches("[A-Za-z0-9_\\-]{1,32}");
+    }
+
+    /** Saves the current state as a named profile in config/duckvisual/&lt;name&gt;.json. */
+    public boolean saveProfile(String name) {
+        if (!validName(name)) return false;
         try {
-            JsonObject root = JsonParser.parseString(Files.readString(file)).getAsJsonObject();
+            Files.createDirectories(profileDir());
+            Files.writeString(profileDir().resolve(name + ".json"), GSON.toJson(serialize()));
+            return true;
+        } catch (Exception e) {
+            DuckVisual.LOGGER.error("Failed to save profile", e);
+            return false;
+        }
+    }
+
+    public boolean loadProfile(String name) {
+        if (!validName(name)) return false;
+        Path p = profileDir().resolve(name + ".json");
+        if (!Files.exists(p)) return false;
+        boolean ok = load(p);
+        if (ok) save();
+        return ok;
+    }
+
+    public boolean deleteProfile(String name) {
+        if (!validName(name)) return false;
+        try {
+            return Files.deleteIfExists(profileDir().resolve(name + ".json"));
+        } catch (Exception e) {
+            return false;
+        }
+    }
+
+    public java.util.List<String> listProfiles() {
+        try (var stream = Files.list(profileDir())) {
+            return stream.map(p -> p.getFileName().toString())
+                    .filter(n -> n.endsWith(".json")).map(n -> n.substring(0, n.length() - 5)).sorted().toList();
+        } catch (Exception e) {
+            return java.util.List.of();
+        }
+    }
+
+    public boolean load() {
+        return load(file);
+    }
+
+    private boolean load(Path source) {
+        if (!Files.exists(source)) return false;
+        try {
+            JsonObject root = JsonParser.parseString(Files.readString(source)).getAsJsonObject();
             for (Module m : DuckVisual.modules().getModules()) {
                 if (!root.has(m.getName())) continue;
                 JsonObject o = root.getAsJsonObject(m.getName());

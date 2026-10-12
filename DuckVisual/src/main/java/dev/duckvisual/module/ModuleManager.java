@@ -37,6 +37,10 @@ public class ModuleManager {
         add(new DamageIndicators());
         add(new CritIndicator());
         add(new HealthTags());
+        add(new Freelook());
+        add(new GlowESP());
+        add(new Nametags());
+        add(new TotemCounter());
         // Hud
         add(new Watermark());
         add(new ArrayListHud());
@@ -48,6 +52,8 @@ public class ModuleManager {
         add(new ArmorHud());
         add(new Cooldowns());
         add(new CustomHotbar());
+        add(new LowHealth());
+        add(new CombatInfo());
         // World
         add(new Fullbright());
         add(new TimeChanger());
