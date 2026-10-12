@@ -14,7 +14,8 @@ import org.spongepowered.asm.mixin.injection.At;
 @Mixin(WorldRenderer.class)
 public class WorldRendererMixin {
     /** Shifts each chunk section's ChunkOffset uniform while it is animating in. */
-    @WrapOperation(method = "renderLayer", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gl/GlUniform;set(FFF)V", ordinal = 0))
+    // Sodium replaces renderLayer entirely, so this is optional (require = 0) and simply does nothing there
+    @WrapOperation(method = "renderLayer", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gl/GlUniform;set(FFF)V", ordinal = 0), require = 0)
     private void duck$chunkAnim(GlUniform uniform, float x, float y, float z, Operation<Void> original,
                                 @Local ChunkBuilder.BuiltChunk chunk) {
         ChunkAnimator ca = DuckVisual.modules().get(ChunkAnimator.class);

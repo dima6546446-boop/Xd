@@ -19,8 +19,16 @@ public class ChunkAnimator extends Module {
     /** Built chunk objects are pooled and re-used for other positions, so key on (chunk, origin). */
     private final Map<ChunkBuilder.BuiltChunk, long[]> seen = new IdentityHashMap<>();
 
+    /** Sodium has its own chunk renderer, the vanilla hook we use is never called there. */
+    public static final boolean SODIUM = net.fabricmc.loader.api.FabricLoader.getInstance().isModLoaded("sodium");
+
     public ChunkAnimator() {
-        super("ChunkAnimator", "Chunks slide in when they load", Category.WORLD);
+        super("ChunkAnimator", SODIUM ? "Not available with Sodium" : "Chunks slide in when they load", Category.WORLD);
+    }
+
+    @Override
+    public String getSuffix() {
+        return SODIUM ? "Sodium" : mode.get();
     }
 
     /** @return vertical offset in blocks for this section right now. */

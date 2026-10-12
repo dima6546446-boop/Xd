@@ -2,6 +2,7 @@
   "required": true,
   "minVersion": "0.8",
   "package": "dev.duckvisual.mixin",
+  "plugin": "dev.duckvisual.mixin.DuckMixinPlugin",
   "compatibilityLevel": "JAVA_21",
   "client": [
     "GameRendererMixin",
@@ -33,6 +34,6 @@
     "SliderWidgetMixin"
   ],
   "injectors": {
-    "defaultRequire": 1
+    "defaultRequire": 0
   }
 }
