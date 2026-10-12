@@ -61,6 +61,7 @@ public class ModuleManager {
         add(new CombatInfo());
         add(new TabList());
         add(new ScoreboardHud());
+        add(new Music());
         // World
         add(new Fullbright());
         add(new TimeChanger());

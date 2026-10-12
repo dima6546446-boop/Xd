@@ -63,6 +63,12 @@ public class ClickGuiScreen extends Screen {
     private BindSetting bindingSetting;
     private static boolean paletteTab;
     private static boolean configsTab;
+    private static boolean guideTab;
+    private static Module guideFocus;
+    private static float guideScroll;
+    private float guideScrollAnim;
+    private float guideAnim;
+    private float guideHeight;
     private String configName = "";
     private boolean configFocused;
     private String configStatus = "";
@@ -226,7 +232,7 @@ public class ClickGuiScreen extends Screen {
 
         float ty = y + 46;
         for (Category c : Category.values()) {
-            boolean sel = c == current && search.isEmpty() && !paletteTab && !configsTab;
+            boolean sel = c == current && search.isEmpty() && !paletteTab && !configsTab && !guideTab;
             boolean hov = mx >= x + 6 && mx <= x + SIDEBAR - 6 && my >= ty && my <= ty + 22;
             float a = Animation.approach(tabAnim.getOrDefault(c, 0f), sel ? 1 : hov ? 0.4f : 0, 12);
             tabAnim.put(c, a);
@@ -246,6 +252,7 @@ public class ClickGuiScreen extends Screen {
                 current = c;
                 paletteTab = false;
                 configsTab = false;
+                guideTab = false;
                 search = "";
                 scrollAnim = scroll.getOrDefault(c, 0f);
             }));
@@ -254,7 +261,7 @@ public class ClickGuiScreen extends Screen {
 
         // palette tab
         {
-            boolean sel = paletteTab && !configsTab && search.isEmpty();
+            boolean sel = paletteTab && !configsTab && !guideTab && search.isEmpty();
             boolean hov = mx >= x + 6 && mx <= x + SIDEBAR - 6 && my >= ty && my <= ty + 22;
             paletteAnim = Animation.approach(paletteAnim, sel ? 1 : hov ? 0.4f : 0, 12);
             float a = paletteAnim;
@@ -269,6 +276,7 @@ public class ClickGuiScreen extends Screen {
             hits.add(new Hit(x + 6, ty, SIDEBAR - 12, 22, b -> {
                 paletteTab = true;
                 configsTab = false;
+                guideTab = false;
                 search = "";
             }));
         }
@@ -276,7 +284,7 @@ public class ClickGuiScreen extends Screen {
 
         // configs tab
         {
-            boolean sel = configsTab && search.isEmpty();
+            boolean sel = configsTab && !guideTab && search.isEmpty();
             boolean hov = mx >= x + 6 && mx <= x + SIDEBAR - 6 && my >= ty && my <= ty + 22;
             configsAnim = Animation.approach(configsAnim, sel ? 1 : hov ? 0.4f : 0, 12);
             float a = configsAnim;
@@ -290,8 +298,26 @@ public class ClickGuiScreen extends Screen {
             hits.add(new Hit(x + 6, ty, SIDEBAR - 12, 22, b -> {
                 configsTab = true;
                 paletteTab = false;
+                guideTab = false;
                 search = "";
             }));
+        }
+        ty += 26;
+
+        // guide tab: descriptions of every module
+        {
+            boolean sel = guideTab;
+            boolean hov = mx >= x + 6 && mx <= x + SIDEBAR - 6 && my >= ty && my <= ty + 22;
+            guideAnim = Animation.approach(guideAnim, sel ? 1 : hov ? 0.4f : 0, 12);
+            float a = guideAnim;
+            if (a > 0.01f) {
+                Render2D.roundedRect(ctx, x + 6, ty, SIDEBAR - 12, 22, 5, ColorUtil.withAlpha(ColorUtil.theme(), (int) (40 * a)));
+                Render2D.roundedRect(ctx, x + 6, ty + 5, 2, 12, 1, ColorUtil.fade(ColorUtil.theme(), a));
+            }
+            Render2D.roundedRect(ctx, x + 14, ty + 4, 14, 14, 4, sel ? ColorUtil.theme() : 0xFF24242D);
+            Render2D.centeredText(ctx, "?", x + 21.5f, ty + 7, sel ? 0xFF111111 : SUBTEXT);
+            Render2D.text(ctx, "\u041E\u043F\u0438\u0441\u0430\u043D\u0438\u0435", x + 34, ty + 7, ColorUtil.lerp(SUBTEXT, TEXT, a));
+            hits.add(new Hit(x + 6, ty, SIDEBAR - 12, 22, b -> openGuide(null)));
         }
 
         // search field
@@ -307,6 +333,10 @@ public class ClickGuiScreen extends Screen {
     // ------------------------------------------------------------------ content
 
     private void renderContent(DrawContext ctx, float x, float y, float w, float h, float mx, float my) {
+        if (guideTab) {
+            renderGuide(ctx, x, y, w, h, mx, my);
+            return;
+        }
         if (configsTab && search.isEmpty()) {
             renderConfigs(ctx, x, y, w, h, mx, my);
             return;
@@ -352,6 +382,107 @@ public class ClickGuiScreen extends Screen {
         if (contentHeight > viewH) {
             float barH = viewH * viewH / contentHeight;
             float barY = top + (-scrollAnim / (contentHeight - viewH)) * (viewH - barH);
+            Render2D.roundedRect(ctx, x + w + 3, barY, 2, barH, 1, ColorUtil.withAlpha(ColorUtil.theme(), 150));
+        }
+    }
+
+    private void openGuide(Module focus) {
+        guideTab = true;
+        paletteTab = false;
+        configsTab = false;
+        guideFocus = focus;
+        guideScroll = 0;
+        guideScrollAnim = 0;
+        search = "";
+    }
+
+    /** Splits text into lines that fit {@code maxW} pixels at the given scale. */
+    private static List<String> wrap(String text, float maxW, float scale) {
+        List<String> lines = new ArrayList<>();
+        StringBuilder line = new StringBuilder();
+        for (String word : text.split(" ")) {
+            String test = line.length() == 0 ? word : line + " " + word;
+            if (Render2D.width(test) * scale > maxW && line.length() > 0) {
+                lines.add(line.toString());
+                line = new StringBuilder(word);
+            } else {
+                line = new StringBuilder(test);
+            }
+        }
+        if (line.length() > 0) lines.add(line.toString());
+        return lines;
+    }
+
+    /** Scrollable list of every module with its long description (search filters it too). */
+    private void renderGuide(DrawContext ctx, float x, float y, float w, float h, float mx, float my) {
+        Render2D.text(ctx, "\u041E\u043F\u0438\u0441\u0430\u043D\u0438\u0435 \u0444\u0443\u043D\u043A\u0446\u0438\u0439", x + 2, y + 3, TEXT);
+        float top = y + 16, viewH = h - 16;
+        float descScale = 0.8f;
+        float lineH = 10 * descScale + 1;
+
+        // layout pass: find heights and the focused module's offset
+        List<Module> mods = DuckVisual.modules().getModules().stream()
+                .filter(m -> search.isEmpty() || m.getName().toLowerCase().contains(search.toLowerCase())
+                        || Guide.get(m.getName()).toLowerCase().contains(search.toLowerCase()))
+                .toList();
+        float focusY = -1, total = 0;
+        List<List<String>> wrapped = new ArrayList<>();
+        for (Module m : mods) {
+            String text = Guide.get(m.getName());
+            if (text.isEmpty()) text = m.getDescription();
+            List<String> lines = wrap(text, w - 20, descScale);
+            wrapped.add(lines);
+            if (m == guideFocus) focusY = total;
+            total += 22 + lines.size() * lineH + 6;
+        }
+        guideHeight = total;
+        if (guideFocus != null && focusY >= 0) {
+            guideScroll = -focusY;
+            guideFocus = null;
+        }
+        guideScroll = MathHelper.clamp(guideScroll, -Math.max(0, total - viewH), 0);
+        guideScrollAnim = Animation.approach(guideScrollAnim, guideScroll, 14);
+
+        ctx.enableScissor((int) x, (int) top, (int) (x + w), (int) (top + viewH));
+        float yy = top + guideScrollAnim;
+        for (int i = 0; i < mods.size(); i++) {
+            Module m = mods.get(i);
+            List<String> lines = wrapped.get(i);
+            float ch = 22 + lines.size() * lineH;
+            if (yy + ch > top && yy < top + viewH) {
+                Render2D.roundedRect(ctx, x, yy, w, ch, 5, CARD);
+                Render2D.roundedRect(ctx, x, yy + 5, 2, 10, 1, m.isEnabled() ? ColorUtil.theme() : 0xFF3A3A44);
+                Render2D.text(ctx, m.getName(), x + 8, yy + 6, m.isEnabled() ? ColorUtil.theme() : TEXT);
+                String cat = m.getCategory().title;
+                ctx.getMatrices().push();
+                ctx.getMatrices().translate(x + 12 + Render2D.width(m.getName()), yy + 7, 0);
+                ctx.getMatrices().scale(0.7f, 0.7f, 1);
+                Render2D.text(ctx, cat, 0, 0, SUBTEXT);
+                ctx.getMatrices().pop();
+                // toggle right from the guide
+                if (!(m instanceof ClickGui)) {
+                    float sw = 20, sh = 10, swX = x + w - sw - 7, swY = yy + 6;
+                    float t = m.animation;
+                    Render2D.roundedRect(ctx, swX, swY, sw, sh, 5, ColorUtil.lerp(0xFF2C2C36, ColorUtil.theme(), t));
+                    Render2D.circle(ctx, swX + 5 + (sw - 10) * t, swY + 5, 3.5f, ColorUtil.lerp(0xFF8C8C99, 0xFFFFFFFF, t));
+                    if (yy + 6 > top && yy + 16 < top + viewH) hits.add(new Hit(swX - 2, swY - 2, sw + 4, sh + 4, b -> m.toggle()));
+                }
+                ctx.getMatrices().push();
+                ctx.getMatrices().translate(x + 8, yy + 19, 0);
+                ctx.getMatrices().scale(descScale, descScale, 1);
+                float ly = 0;
+                for (String l : lines) {
+                    Render2D.text(ctx, l, 0, ly, 0xFFC8C8D0);
+                    ly += lineH / descScale;
+                }
+                ctx.getMatrices().pop();
+            }
+            yy += ch + 6;
+        }
+        ctx.disableScissor();
+        if (total > viewH) {
+            float barH = viewH * viewH / total;
+            float barY = top + (-guideScrollAnim / (total - viewH)) * (viewH - barH);
             Render2D.roundedRect(ctx, x + w + 3, barY, 2, barH, 1, ColorUtil.withAlpha(ColorUtil.theme(), 150));
         }
     }
@@ -497,7 +628,7 @@ public class ClickGuiScreen extends Screen {
             ctx.getMatrices().translate(x + 7, y + 18, 0);
             ctx.getMatrices().scale(0.7f, 0.7f, 1);
             String desc = m.getDescription();
-            float maxW = (w - 46) / 0.7f;
+            float maxW = (w - 56) / 0.7f;
             while (Render2D.width(desc) > maxW && desc.length() > 3) desc = desc.substring(0, desc.length() - 4) + "..";
             Render2D.text(ctx, desc, 0, 0, SUBTEXT);
             ctx.getMatrices().pop();
@@ -521,6 +652,14 @@ public class ClickGuiScreen extends Screen {
                     binding = m;
                 }
             }));
+        }
+        // "?" opens this module's description in the guide tab (added after the card so it wins the click)
+        {
+            float qx = x + w - (m instanceof ClickGui ? 30 : 40), qy = y + headH / 2 - 5;
+            boolean qh = mouseInView && mx >= qx && mx <= qx + 10 && my >= qy && my <= qy + 10;
+            Render2D.circle(ctx, qx + 5, qy + 5, 5, qh ? ColorUtil.withAlpha(ColorUtil.theme(), 160) : 0xFF24242D);
+            Render2D.centeredText(ctx, "?", qx + 5.5f, qy + 1, qh ? 0xFF111111 : SUBTEXT);
+            if (mouseInView) hits.add(new Hit(qx, qy, 10, 10, b -> openGuide(m)));
         }
 
         if (ex > 0.01f && settingsH > 0) {
@@ -721,6 +860,10 @@ public class ClickGuiScreen extends Screen {
 
     @Override
     public boolean mouseScrolled(double mouseX, double mouseY, double horizontal, double vertical) {
+        if (insideWindow(mouseX, mouseY) && guideTab) {
+            guideScroll += (float) vertical * 30;
+            return true;
+        }
         if (insideWindow(mouseX, mouseY)) {
             scroll.put(current, scroll.getOrDefault(current, 0f) + (float) vertical * 24);
             return true;

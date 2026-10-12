@@ -23,6 +23,7 @@ ClickGUI, HUD, China Hat, Jump Circles, Trails, Target ESP, Hit Particles, ка�
 | Переключить режим | ЛКМ — вперёд, ПКМ — назад |
 | Двигать HUD | Зажать ЛКМ на элементе HUD при открытом меню |
 | Поиск | Поле `Search...` внизу слева |
+| Описание функций | Вкладка **Описание** в меню или кнопка **?** на карточке модуля |
 | Freelook | Зажать Left Alt |
 | HUD-редактор | При открытом меню тащить элементы HUD, они прилипают к центру и краям (Shift — без прилипания) |
 | Сменить цвета | Вкладка **Palette** в меню — клик по палитре (ПКМ по Custom — свои цвета) |
@@ -82,6 +83,10 @@ ClickGUI, HUD, China Hat, Jump Circles, Trails, Target ESP, Hit Particles, ка�
 - **CombatInfo** — счётчик комбо и дистанция последнего удара (reach).
 - **TabList** — новый Tab: головы игроков, цветной пинг, скругленная панель.
 - **ScoreboardHud** — новый скорборд справа.
+- **Music** — что сейчас играет: обложка, название (бегущая строка), исполнитель, источник, прогресс и эквалайзер. Бинды Play/Pause, Next, Previous.
+  - **Windows 10/11** — через системный медиа-центр Windows (то же, что в окне громкости): браузеры Chrome / Edge / Firefox / Opera / Яндекс Браузер / Brave (YouTube, YouTube Music, SoundCloud, Яндекс Музыка, VK Музыка, Deezer и т.д.), Spotify, приложение Яндекс Музыки, Apple Music, AIMP, foobar2000, MusicBee, Медиаплеер Windows и любые программы, которые показывают трек в окне громкости.
+  - **Linux** — через `playerctl` (любой MPRIS-плеер, включая браузеры).
+  - **macOS** — Spotify и Apple Music.
 - **Cooldowns** — кулдауны предметов (жемчуг, яблоки, щит, заряды ветра).
 
 **World**
@@ -126,7 +131,7 @@ ClickGUI, HUD, China Hat, Jump Circles, Trails, Target ESP, Hit Particles, ка�
 
 Готовый мод: `build/libs/duck-visual-1.0.0.jar`.
 
-Всего модулей: **60**. Готовая сборка лежит в [`release/duck-visual-1.0.0.jar`](release/duck-visual-1.0.0.jar).
+Всего модулей: **61**. Готовая сборка лежит в [`release/duck-visual-1.0.0.jar`](release/duck-visual-1.0.0.jar).
 
 ## Скриншоты
 
