@@ -47,8 +47,13 @@ public class ClickGuiScreen extends Screen {
     private static final Map<Category, Float> tabAnim = new HashMap<>();
 
     private float scrollAnim;
+    private static final float OPEN_TIME = 0.18f, CLOSE_TIME = 0.11f;
+
+    /** 0..1, driven by wall-clock time so open/close speed does not depend on FPS. */
     private float openAnim;
     private boolean closing;
+    private long animStart = System.nanoTime();
+    private float closeFrom = 1;
     private String search = "";
     private boolean searchFocused;
 
@@ -99,11 +104,16 @@ public class ClickGuiScreen extends Screen {
 
     @Override
     public void render(DrawContext ctx, int mouseX, int mouseY, float delta) {
-        Animation.updateFrame();
-        openAnim = Animation.approach(openAnim, closing ? 0 : 1, 14);
-        if (closing && openAnim < 0.03f) {
-            super.close();
-            return;
+        float elapsed = (System.nanoTime() - animStart) / 1_000_000_000f;
+        if (closing) {
+            float p = Math.min(1, elapsed / CLOSE_TIME);
+            openAnim = closeFrom * (1 - p * p);
+            if (p >= 1) {
+                super.close();
+                return;
+            }
+        } else {
+            openAnim = Math.min(1, elapsed / OPEN_TIME);
         }
         renderBackground(ctx, mouseX, mouseY, delta);
         hits.clear();
@@ -426,6 +436,7 @@ public class ClickGuiScreen extends Screen {
 
     @Override
     public boolean mouseClicked(double mouseX, double mouseY, int button) {
+        if (closing) return true;
         lastMouseX = mouseX;
         lastMouseY = mouseY;
         if (binding != null) {
@@ -497,6 +508,7 @@ public class ClickGuiScreen extends Screen {
 
     @Override
     public boolean keyPressed(int keyCode, int scanCode, int modifiers) {
+        if (closing) return true;
         if (binding != null) {
             binding.setKey(keyCode == GLFW.GLFW_KEY_ESCAPE || keyCode == GLFW.GLFW_KEY_DELETE
                     || keyCode == GLFW.GLFW_KEY_BACKSPACE ? -1 : keyCode);
@@ -537,11 +549,17 @@ public class ClickGuiScreen extends Screen {
     public void close() {
         if (closing) return;
         closing = true;
-        DuckVisual.config().save();
+        closeFrom = openAnim;
+        animStart = System.nanoTime();
+        draggingWindow = false;
+        draggingHud = null;
+        activeSlider = null;
+        searchFocused = false;
+        binding = null;
     }
 
     @Override
     public void removed() {
-        DuckVisual.config().save();
+        DuckVisual.config().saveAsync();
     }
 }

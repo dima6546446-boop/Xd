@@ -25,6 +25,12 @@ public class ModuleManager {
         add(new SwingAnimation());
         add(new AspectRatio());
         add(new NoRender());
+        add(new Zoom());
+        add(new BlockOverlay());
+        add(new BoxESP());
+        add(new Tracers());
+        add(new HitSounds());
+        add(new KillEffects());
         // Hud
         add(new Watermark());
         add(new ArrayListHud());
@@ -33,10 +39,13 @@ public class ModuleManager {
         add(new TargetHud());
         add(new Information());
         add(new Notifications());
+        add(new ArmorHud());
+        add(new Cooldowns());
         // World
         add(new Fullbright());
         add(new TimeChanger());
         add(new WorldParticles());
+        add(new WorldColor());
         // Misc
         add(new Theme());
         add(new ClickGui());

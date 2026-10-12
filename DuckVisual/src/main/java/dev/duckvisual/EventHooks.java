@@ -22,6 +22,8 @@ public final class EventHooks {
         if (hp.isEnabled()) hp.spawn(entity);
         TargetESP esp = DuckVisual.modules().get(TargetESP.class);
         if (esp.isEnabled()) esp.onHit();
+        var sounds = DuckVisual.modules().get(dev.duckvisual.module.impl.visual.HitSounds.class);
+        if (sounds.isEnabled()) sounds.play();
         TargetHud hud = DuckVisual.modules().get(TargetHud.class);
         if (hud.isEnabled()) hud.onHit();
     }

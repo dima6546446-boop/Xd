@@ -41,6 +41,12 @@ ClickGUI, HUD, China Hat, Jump Circles, Trails, Target ESP, Hit Particles, ка�
 - **SwingAnimation** — анимации удара (Smooth / Block / Slide / Spin / Punch / Down) и скорость.
 - **AspectRatio** — растянутое разрешение.
 - **NoRender** — убрать тряску при уроне, огонь, тыкву, тошноту, боссбар, скорборд, иконки эффектов.
+- **Zoom** — зум на зажатую клавишу (C / V / Z / X / Alt / Mouse 4), колесо мыши меняет приближение.
+- **BlockOverlay** — красивая обводка блока под прицелом с заливкой и плавным перемещением.
+- **BoxESP** — боксы вокруг игроков/мобов/животных (Box / Filled / Corners) + полоска HP.
+- **Tracers** — линии от прицела к игрокам (цвет по дистанции или по теме).
+- **HitSounds** — звук при ударе (Bell / Pling / Orb / Chime / Arrow).
+- **KillEffects** — молния, частицы и звук, когда твоя цель умирает, + счётчик убийств.
 
 **Hud**
 - **Watermark** — лого Duck Visual, ник, FPS, пинг, время.
@@ -50,11 +56,14 @@ ClickGUI, HUD, China Hat, Jump Circles, Trails, Target ESP, Hit Particles, ка�
 - **TargetHud** — информация о цели: голова, HP-бар, броня, частицы.
 - **Information** — координаты (+ координаты Незера), скорость, сервер.
 - **Notifications** — уведомления о включении/выключении модулей.
+- **ArmorHud** — броня и её прочность в процентах.
+- **Cooldowns** — кулдауны предметов (жемчуг, яблоки, щит, заряды ветра).
 
 **World**
 - **Fullbright** — полная яркость.
 - **TimeChanger** — время суток на клиенте (фикс. или цикл).
 - **WorldParticles** — светящиеся частицы вокруг (Fireflies / Snow / Rise).
+- **WorldColor** — окрашивает небо, туман и облака в цвет темы или свой.
 
 **Misc**
 - **Theme** — цвета клиента: Gradient / Static / Rainbow, два цвета, скорость.

@@ -12,7 +12,10 @@
     "LivingEntityMixin",
     "OverlayTextureAccessor",
     "WorldPropertiesMixin",
-    "BossBarHudMixin"
+    "BossBarHudMixin",
+    "MouseMixin",
+    "WorldColorMixin",
+    "ClientWorldMixin"
   ],
   "injectors": {
     "defaultRequire": 1

@@ -97,6 +97,53 @@ public final class Render3D {
         glow(r, c, size * 0.35f, color);
     }
 
+    /** Filled box; {@code b} must be camera-relative. Top/bottom get their own colors for a gradient. */
+    public static void filledBox(WorldRender r, net.minecraft.util.math.Box b, int bottom, int top) {
+        Matrix4f m = r.matrices().peek().getPositionMatrix();
+        float x1 = (float) b.minX, y1 = (float) b.minY, z1 = (float) b.minZ;
+        float x2 = (float) b.maxX, y2 = (float) b.maxY, z2 = (float) b.maxZ;
+        BufferBuilder q = buffer(VertexFormat.DrawMode.QUADS);
+        // bottom / top
+        q.vertex(m, x1, y1, z1).color(bottom); q.vertex(m, x2, y1, z1).color(bottom);
+        q.vertex(m, x2, y1, z2).color(bottom); q.vertex(m, x1, y1, z2).color(bottom);
+        q.vertex(m, x1, y2, z1).color(top); q.vertex(m, x1, y2, z2).color(top);
+        q.vertex(m, x2, y2, z2).color(top); q.vertex(m, x2, y2, z1).color(top);
+        // sides
+        q.vertex(m, x1, y1, z1).color(bottom); q.vertex(m, x1, y2, z1).color(top);
+        q.vertex(m, x2, y2, z1).color(top); q.vertex(m, x2, y1, z1).color(bottom);
+        q.vertex(m, x1, y1, z2).color(bottom); q.vertex(m, x2, y1, z2).color(bottom);
+        q.vertex(m, x2, y2, z2).color(top); q.vertex(m, x1, y2, z2).color(top);
+        q.vertex(m, x1, y1, z1).color(bottom); q.vertex(m, x1, y1, z2).color(bottom);
+        q.vertex(m, x1, y2, z2).color(top); q.vertex(m, x1, y2, z1).color(top);
+        q.vertex(m, x2, y1, z1).color(bottom); q.vertex(m, x2, y2, z1).color(top);
+        q.vertex(m, x2, y2, z2).color(top); q.vertex(m, x2, y1, z2).color(bottom);
+        draw(q);
+    }
+
+    /** Box edges; {@code b} must be camera-relative. */
+    public static void outlineBox(WorldRender r, net.minecraft.util.math.Box b, int bottom, int top) {
+        Matrix4f m = r.matrices().peek().getPositionMatrix();
+        float x1 = (float) b.minX, y1 = (float) b.minY, z1 = (float) b.minZ;
+        float x2 = (float) b.maxX, y2 = (float) b.maxY, z2 = (float) b.maxZ;
+        BufferBuilder l = buffer(VertexFormat.DrawMode.DEBUG_LINES);
+        float[][] c = {{x1, z1}, {x2, z1}, {x2, z2}, {x1, z2}};
+        for (int i = 0; i < 4; i++) {
+            float[] a = c[i], n = c[(i + 1) % 4];
+            l.vertex(m, a[0], y1, a[1]).color(bottom); l.vertex(m, n[0], y1, n[1]).color(bottom);
+            l.vertex(m, a[0], y2, a[1]).color(top); l.vertex(m, n[0], y2, n[1]).color(top);
+            l.vertex(m, a[0], y1, a[1]).color(bottom); l.vertex(m, a[0], y2, a[1]).color(top);
+        }
+        draw(l);
+    }
+
+    public static void line(WorldRender r, Vec3d a, Vec3d b, int colorA, int colorB) {
+        Matrix4f m = r.matrices().peek().getPositionMatrix();
+        BufferBuilder l = buffer(VertexFormat.DrawMode.DEBUG_LINES);
+        l.vertex(m, (float) a.x, (float) a.y, (float) a.z).color(colorA);
+        l.vertex(m, (float) b.x, (float) b.y, (float) b.z).color(colorB);
+        draw(l);
+    }
+
     public static Vec3d interpolate(net.minecraft.entity.Entity e, float tickDelta) {
         return e.getLerpedPos(tickDelta);
     }

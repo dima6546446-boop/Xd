@@ -17,7 +17,32 @@ public class ConfigManager {
     private static final Gson GSON = new GsonBuilder().setPrettyPrinting().create();
     private final Path file = FabricLoader.getInstance().getConfigDir().resolve("duckvisual.json");
 
+    private static final java.util.concurrent.ExecutorService IO = java.util.concurrent.Executors.newSingleThreadExecutor(r -> {
+        Thread t = new Thread(r, "DuckVisual-Config");
+        t.setDaemon(true);
+        return t;
+    });
+
+    /** Serializes on the caller thread (cheap) and writes the file in the background. */
+    public void saveAsync() {
+        String json = GSON.toJson(serialize());
+        IO.execute(() -> write(json));
+    }
+
     public void save() {
+        write(GSON.toJson(serialize()));
+    }
+
+    private void write(String json) {
+        try {
+            Files.createDirectories(file.getParent());
+            Files.writeString(file, json);
+        } catch (Exception e) {
+            DuckVisual.LOGGER.error("Failed to save config", e);
+        }
+    }
+
+    private JsonObject serialize() {
         JsonObject root = new JsonObject();
         for (Module m : DuckVisual.modules().getModules()) {
             JsonObject o = new JsonObject();
@@ -28,12 +53,7 @@ public class ConfigManager {
             o.add("settings", settings);
             root.add(m.getName(), o);
         }
-        try {
-            Files.createDirectories(file.getParent());
-            Files.writeString(file, GSON.toJson(root));
-        } catch (Exception e) {
-            DuckVisual.LOGGER.error("Failed to save config", e);
-        }
+        return root;
     }
 
     public boolean load() {

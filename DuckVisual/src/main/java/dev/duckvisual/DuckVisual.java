@@ -63,7 +63,6 @@ public class DuckVisual implements ClientModInitializer {
         ClientTickEvents.END_CLIENT_TICK.register(this::onTick);
 
         HudRenderCallback.EVENT.register((ctx, counter) -> {
-            Animation.updateFrame();
             MinecraftClient mc = MinecraftClient.getInstance();
             if (mc.options.hudHidden || mc.player == null) return;
             float td = counter.getTickDelta(true);
@@ -88,6 +87,10 @@ public class DuckVisual implements ClientModInitializer {
                 Render3D.end();
             }
         });
+
+        // BlockOverlay draws its own outline in the LAST pass, so suppress the vanilla one
+        WorldRenderEvents.BLOCK_OUTLINE.register((ctx, outline) ->
+                !moduleManager.get(dev.duckvisual.module.impl.visual.BlockOverlay.class).isEnabled());
 
         AttackEntityCallback.EVENT.register((player, world, hand, entity, hit) -> {
             if (world.isClient) EventHooks.onAttack(entity);
