@@ -14,6 +14,13 @@ public final class EventHooks {
     public static long targetTime;
 
     public static void onAttack(Entity entity) {
+        var mc = net.minecraft.client.MinecraftClient.getInstance();
+        boolean crit = mc.player != null && dev.duckvisual.module.impl.visual.CritIndicator.canCrit(mc.player)
+                && entity instanceof LivingEntity;
+        var ci = DuckVisual.modules().get(dev.duckvisual.module.impl.visual.CritIndicator.class);
+        if (ci.isEnabled()) ci.onHit(crit);
+        var di = DuckVisual.modules().get(dev.duckvisual.module.impl.visual.DamageIndicators.class);
+        if (di.isEnabled()) di.markHit(entity, crit);
         if (entity instanceof LivingEntity living) {
             target = living;
             targetTime = System.currentTimeMillis();

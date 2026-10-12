@@ -144,6 +144,49 @@ public final class Render3D {
         draw(l);
     }
 
+    /**
+     * Camera-facing text at a camera-relative position, like a name tag.
+     * {@code scale} 1 = vanilla name tag size.
+     */
+    public static void text(WorldRender r, String text, Vec3d c, float scale, int color, boolean throughWalls) {
+        if (ColorUtil.alpha(color) < 8) return;
+        var mc = net.minecraft.client.MinecraftClient.getInstance();
+        MatrixStack ms = r.matrices();
+        ms.push();
+        ms.translate(c.x, c.y, c.z);
+        ms.multiply(r.camera().getRotation());
+        float s = 0.025f * scale;
+        ms.scale(s, -s, s);
+        var consumers = mc.getBufferBuilders().getEntityVertexConsumers();
+        float x = -mc.textRenderer.getWidth(text) / 2f;
+        mc.textRenderer.draw(text, x, 0, color, true, ms.peek().getPositionMatrix(), consumers,
+                throughWalls ? net.minecraft.client.font.TextRenderer.TextLayerType.SEE_THROUGH
+                        : net.minecraft.client.font.TextRenderer.TextLayerType.NORMAL,
+                0, net.minecraft.client.render.LightmapTextureManager.MAX_LIGHT_COORDINATE);
+        consumers.draw();
+        ms.pop();
+        // the text layer changes GL state; restore ours
+        RenderSystem.enableBlend();
+        RenderSystem.disableCull();
+        RenderSystem.depthMask(false);
+        RenderSystem.setShader(ShaderProgramKeys.POSITION_COLOR);
+    }
+
+    /** Camera-facing flat bar (e.g. health) centered at {@code c}, size in blocks. */
+    public static void bar(WorldRender r, Vec3d c, float w, float h, float fill, int bg, int fg) {
+        MatrixStack ms = r.matrices();
+        ms.push();
+        ms.translate(c.x, c.y, c.z);
+        ms.multiply(r.camera().getRotation());
+        Matrix4f m = ms.peek().getPositionMatrix();
+        BufferBuilder b = buffer(VertexFormat.DrawMode.QUADS);
+        float x1 = -w / 2, x2 = w / 2, y1 = -h / 2, y2 = h / 2, fx = x1 + w * Math.max(0, Math.min(1, fill));
+        b.vertex(m, x1, y1, 0).color(bg); b.vertex(m, x1, y2, 0).color(bg); b.vertex(m, x2, y2, 0).color(bg); b.vertex(m, x2, y1, 0).color(bg);
+        b.vertex(m, x1, y1, -0.001f).color(fg); b.vertex(m, x1, y2, -0.001f).color(fg); b.vertex(m, fx, y2, -0.001f).color(fg); b.vertex(m, fx, y1, -0.001f).color(fg);
+        draw(b);
+        ms.pop();
+    }
+
     public static Vec3d interpolate(net.minecraft.entity.Entity e, float tickDelta) {
         return e.getLerpedPos(tickDelta);
     }

@@ -33,6 +33,10 @@ public class ModuleManager {
         add(new KillEffects());
         add(new HitBoxes());
         add(new CustomModels());
+        add(new Trajectories());
+        add(new DamageIndicators());
+        add(new CritIndicator());
+        add(new HealthTags());
         // Hud
         add(new Watermark());
         add(new ArrayListHud());
