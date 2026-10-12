@@ -84,13 +84,13 @@ scoreboard:
       - ''
       - '&#ffb347▶ &fНик: &#ffb347%player%'
       - '&#ffb347▶ &fРанг: %luckperms_meta_rank%'
+      - '&#ffb347▶ &fКлан: &#ffb347%clinder_clan_name%'
       - '&#ffb347▶ &fТитул: %clinder_tag%'
       - ''
       - '&#a0ff6b$ &fБаланс: &#a0ff6b%vault_eco_balance_formatted%$'
       - '&#ffd36b✦ &fСерия наград: &#ffd36b%clinder_streak% дн.'
       - ''
-      - '&#ff6b6b⚔ &fУбийств: &#ff6b6b%clinder_kills%'
-      - '&#9e9e9e☠ &fСмертей: &#9e9e9e%clinder_deaths%'
+      - '&#ff6b6b⚔ &fУбийств/смертей: &#ff6b6b%clinder_kills%&7/&#9e9e9e%clinder_deaths%'
       - '&#6bcbff⌚ &fВ игре: &#6bcbff%clinder_playtime%'
       - ''
       - '&#a0ff6b● &fОнлайн: &#a0ff6b%online%'
@@ -166,6 +166,8 @@ placeholders:
 placeholder-output-replacements:
   '%clinder_tag%':
     '': '&7нет &8(/tags)'
+  '%clinder_clan_name%':
+    '': '&7нет &8(/clan)'
 conditions:
   nick: # use it with %condition:nick%
     conditions:

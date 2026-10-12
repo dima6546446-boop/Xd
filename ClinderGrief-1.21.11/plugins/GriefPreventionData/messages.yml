@@ -1,4 +1,3 @@
-# Русский перевод сообщений GriefPrevention (сборка ClinderGrief). Цвета задаются символом $ (например $a).
 # Use a YAML editor like NotepadPlusPlus to edit this file.  
 # After editing, back up your changes before reloading the server in case you made a syntax error.  
 # Use dollar signs ($) for formatting codes, which are documented here: http://minecraft.gamepedia.com/Formatting_codes
@@ -12,11 +11,14 @@ Messages:
     Text: Приваты удалены. Теперь у вас {0} свободных блоков привата.
     Notes: '0: remaining blocks'
   RestoreNatureActivate:
-    Text: Режим восстановления природы! ПКМ — восстановить природу, /basicclaims — выйти из режима.
+    Text: Режим восстановления природы! ПКМ — восстановить природу, /basicclaims —
+      выйти из режима.
   RestoreNatureAggressiveActivate:
-    Text: Агрессивный режим включён. НЕ используйте его под тем, что хотите сохранить! ПКМ — агрессивно восстановить природу, /basicclaims — выйти.
+    Text: Агрессивный режим включён. НЕ используйте его под тем, что хотите сохранить!
+      ПКМ — агрессивно восстановить природу, /basicclaims — выйти.
   FillModeActive:
-    Text: Режим заполнения с радиусом {0}. Нажмите ПКМ по области, чтобы заполнить её.
+    Text: Режим заполнения с радиусом {0}. Нажмите ПКМ по области, чтобы заполнить
+      её.
     Notes: '0: fill radius'
   TransferClaimPermission:
     Text: Для этой команды нужно право на административные приваты.
@@ -27,7 +29,8 @@ Messages:
   PlayerNotFound2:
     Text: Игрок с таким ником давно не заходил на сервер.
   TransferTopLevel:
-    Text: Передать можно только основной приват (не подзону). Выйдите из подзоны и попробуйте снова.
+    Text: Передать можно только основной приват (не подзону). Выйдите из подзоны и
+      попробуйте снова.
   TransferSuccess:
     Text: Приват передан.
   TrustListNoClaim:
@@ -35,17 +38,21 @@ Messages:
   ClearPermsOwnerOnly:
     Text: Только владелец привата может сбросить все права.
   UntrustIndividualAllClaims:
-    Text: У игрока {0} отобран доступ ко ВСЕМ вашим приватам. Чтобы настроить права одного привата, встаньте внутри него.
+    Text: У игрока {0} отобран доступ ко ВСЕМ вашим приватам. Чтобы настроить права
+      одного привата, встаньте внутри него.
     Notes: '0: untrusted player'
   UntrustEveryoneAllClaims:
-    Text: Права во ВСЕХ ваших приватах сброшены. Чтобы настроить права одного привата, встаньте внутри него.
+    Text: Права во ВСЕХ ваших приватах сброшены. Чтобы настроить права одного привата,
+      встаньте внутри него.
   NoPermissionTrust:
     Text: У вас нет разрешения от {0} управлять правами здесь.
     Notes: '0: claim owner''s name'
   ClearPermissionsOneClaim:
-    Text: Права в этом привате сброшены. Чтобы изменить права во ВСЕХ приватах, выйдите за их пределы.
+    Text: Права в этом привате сброшены. Чтобы изменить права во ВСЕХ приватах, выйдите
+      за их пределы.
   UntrustIndividualSingleClaim:
-    Text: У игрока {0} отобран доступ к этому привату. Чтобы изменить права во ВСЕХ приватах, выйдите за их пределы.
+    Text: У игрока {0} отобран доступ к этому привату. Чтобы изменить права во ВСЕХ
+      приватах, выйдите за их пределы.
     Notes: '0: untrusted player'
   OnlySellBlocks:
     Text: Блоки привата можно только продать, но не купить.
@@ -74,18 +81,21 @@ Messages:
     Text: Зачислено {0}. Теперь у вас {1} свободных блоков привата.
     Notes: '0: amount deposited; 1: remaining blocks'
   AdminClaimsMode:
-    Text: Режим административных приватов. Созданные приваты бесплатны и доступны для изменения другим администраторам.
+    Text: Режим административных приватов. Созданные приваты бесплатны и доступны
+      для изменения другим администраторам.
   BasicClaimsMode:
     Text: Возврат к обычному режиму создания приватов.
   SubdivisionMode:
-    Text: Режим подзон. Используйте лопату, чтобы создавать подзоны внутри своих приватов. /basicclaims — выйти.
+    Text: Режим подзон. Используйте лопату, чтобы создавать подзоны внутри своих приватов.
+      /basicclaims — выйти.
   SubdivisionVideo2:
     Text: 'Справка по подзонам: {0}'
     Notes: 0:video URL
   DeleteClaimMissing:
     Text: Здесь нет привата.
   DeletionSubdivisionWarning:
-    Text: В этом привате есть подзоны. Если вы уверены, что хотите удалить его, введите /deleteclaim ещё раз.
+    Text: В этом привате есть подзоны. Если вы уверены, что хотите удалить его, введите
+      /deleteclaim ещё раз.
   DeleteSuccess:
     Text: Приват удалён.
   CantDeleteAdminClaim:
@@ -98,7 +108,8 @@ Messages:
   AllAdminDeleted:
     Text: Все административные приваты удалены.
   AdjustBlocksSuccess:
-    Text: 'Бонусные блоки привата игрока {0} изменены на {1}. Теперь бонусных блоков: {2}.'
+    Text: 'Бонусные блоки привата игрока {0} изменены на {1}. Теперь бонусных блоков:
+      {2}.'
     Notes: '0: player; 1: adjustment; 2: new total'
   NotTrappedHere:
     Text: Здесь вы можете строить — выберитесь самостоятельно.
@@ -127,22 +138,26 @@ Messages:
   SiegeOnCooldown:
     Text: Осада этого игрока или привата пока недоступна (перезарядка).
   SiegeAlert:
-    Text: Вас осаждают! Если вы выйдете из игры, вы погибнете. Победите {0}, дождитесь, пока он сдастся, или сбегите.
+    Text: Вас осаждают! Если вы выйдете из игры, вы погибнете. Победите {0}, дождитесь,
+      пока он сдастся, или сбегите.
     Notes: '0: attacker name'
   SiegeConfirmed:
-    Text: Осада началась! Если вы выйдете из игры, вы погибнете. Победите {0}, прогоните его или признайте поражение и уйдите.
+    Text: Осада началась! Если вы выйдете из игры, вы погибнете. Победите {0}, прогоните
+      его или признайте поражение и уйдите.
     Notes: '0: defender name'
   AbandonClaimMissing:
     Text: Встаньте в приват, который хотите удалить, или используйте /abandonallclaims.
   NotYourClaim:
     Text: Это не ваш приват.
   DeleteTopLevelClaim:
-    Text: Чтобы удалить подзону, встаньте внутри неё. Иначе используйте /abandontoplevelclaim, чтобы удалить приват вместе со всеми подзонами.
+    Text: Чтобы удалить подзону, встаньте внутри неё. Иначе используйте /abandontoplevelclaim,
+      чтобы удалить приват вместе со всеми подзонами.
   AbandonSuccess:
     Text: Приват удалён. Теперь у вас {0} свободных блоков привата.
     Notes: '0: remaining claim blocks'
   ConfirmAbandonAllClaims:
-    Text: Вы уверены, что хотите удалить ВСЕ свои приваты? Подтвердите командой /abandonallclaims confirm
+    Text: Вы уверены, что хотите удалить ВСЕ свои приваты? Подтвердите командой /abandonallclaims
+      confirm
   CantGrantThatPermission:
     Text: Нельзя выдать право, которого нет у вас самих.
   GrantPermissionNoClaim:
@@ -182,7 +197,8 @@ Messages:
   PlayerTooCloseForFire2:
     Text: Нельзя разжигать огонь так близко к другому игроку.
   TooDeepToClaim:
-    Text: Этот сундук нельзя защитить — он слишком глубоко под землёй. Переставьте его повыше.
+    Text: Этот сундук нельзя защитить — он слишком глубоко под землёй. Переставьте
+      его повыше.
   ChestClaimConfirmation:
     Text: Этот сундук под защитой.
   AutomaticClaimNotification:
@@ -190,7 +206,8 @@ Messages:
   AutomaticClaimOtherClaimTooClose:
     Text: 'Не удалось создать приват для сундука: рядом слишком близко чужой приват!'
   UnprotectedChestWarning:
-    Text: Этот сундук НЕ защищён. Расширьте существующий приват или создайте новый золотой лопатой.
+    Text: Этот сундук НЕ защищён. Расширьте существующий приват или создайте новый
+      золотой лопатой.
   ThatPlayerPvPImmune:
     Text: Нельзя атаковать беззащитных игроков.
   CantFightWhileImmune:
@@ -211,7 +228,8 @@ Messages:
     Notes: '{0}: video URL'
   TrappedChatKeyword:
     Text: trapped;stuck;застрял;застряла;застрял в привате
-    Notes: When mentioned in chat, players get information about the /trapped command (multiple words can be separated with semi-colons)
+    Notes: When mentioned in chat, players get information about the /trapped command
+      (multiple words can be separated with semi-colons)
   TrappedInstructions:
     Text: Застряли в чужом привате? Используйте команду /trapped.
   PvPNoDrop:
@@ -252,16 +270,19 @@ Messages:
     Text: Не хватает блоков привата для такого размера. Нужно ещё {0}.
     Notes: '0: how many needed'
   NoCreativeUnClaim:
-    Text: Эту территорию нельзя освободить. Можно только увеличить приват или создать дополнительный.
+    Text: Эту территорию нельзя освободить. Можно только увеличить приват или создать
+      дополнительный.
   ClaimResizeSuccess:
     Text: 'Размер привата изменён. Осталось свободных блоков привата: {0}.'
     Notes: '0: remaining blocks'
   ResizeFailOverlap:
     Text: 'Нельзя изменить размер: приват пересечётся с соседним приватом.'
   ResizeStart:
-    Text: Изменение размера привата. Нажмите лопатой ещё раз в новом месте для этого угла.
+    Text: Изменение размера привата. Нажмите лопатой ещё раз в новом месте для этого
+      угла.
   ResizeFailOverlapSubdivision:
-    Text: 'Нельзя создать подзону здесь: она пересекается с другой подзоной. Удалите её через /abandonclaim или измените её размер лопатой за угол.'
+    Text: 'Нельзя создать подзону здесь: она пересекается с другой подзоной. Удалите
+      её через /abandonclaim или измените её размер лопатой за угол.'
   SubdivisionStart:
     Text: Угол подзоны установлен! Нажмите лопатой на противоположный угол новой подзоны.
   CreateSubdivisionOverlap:
@@ -269,14 +290,17 @@ Messages:
   SubdivisionSuccess:
     Text: Подзона создана! Используйте /trust, чтобы поделиться ею с друзьями.
   CreateClaimFailOverlap:
-    Text: 'Нельзя создать приват здесь: он пересечётся с вашим другим приватом. Удалите его через /abandonclaim или измените размер лопатой за угол.'
+    Text: 'Нельзя создать приват здесь: он пересечётся с вашим другим приватом. Удалите
+      его через /abandonclaim или измените размер лопатой за угол.'
   CreateClaimFailOverlapOtherPlayer:
     Text: 'Нельзя создать приват здесь: он пересечётся с приватом игрока {0}.'
     Notes: '0: other claim owner'
   ClaimsDisabledWorld:
     Text: В этом мире приваты отключены.
   ClaimStart:
-    Text: Первый угол привата установлен! Нажмите лопатой на противоположный угол, чтобы заприватить прямоугольную область. Чтобы отменить — уберите лопату из руки.
+    Text: Первый угол привата установлен! Нажмите лопатой на противоположный угол,
+      чтобы заприватить прямоугольную область. Чтобы отменить — уберите лопату из
+      руки.
   NewClaimTooNarrow:
     Text: Приват получится слишком маленьким. Минимальная ширина привата — {0} блоков.
     Notes: '0: minimum claim width'
@@ -326,38 +350,45 @@ Messages:
     Notes: as in 'You don't have an administrator's permission to build here.'
   UnknownPlayerName:
     Text: кто-то
-    Notes: 'Name used for unknown players. UUID will be appended if available: "someone (01234567-0123-0123-0123-0123456789ab)"'
+    Notes: 'Name used for unknown players. UUID will be appended if available: "someone
+      (01234567-0123-0123-0123-0123456789ab)"'
   ClaimTooSmallForEntities:
     Text: Приват слишком мал для этого. Попробуйте его расширить.
   TooManyEntitiesInClaim:
-    Text: В этом привате уже слишком много сущностей. Расширьте приват или уберите часть животных, мобов, картин или вагонеток.
+    Text: В этом привате уже слишком много сущностей. Расширьте приват или уберите
+      часть животных, мобов, картин или вагонеток.
   YouHaveNoClaims:
     Text: У вас нет приватов.
   ConfirmFluidRemoval:
-    Text: При удалении этого привата лава внутри него будет убрана. Если вы уверены, введите /abandonclaim ещё раз.
+    Text: При удалении этого привата лава внутри него будет убрана. Если вы уверены,
+      введите /abandonclaim ещё раз.
   AutoBanNotify:
     Text: Автоматически заблокирован {0} ({1}). Подробности — в логах.
   AdjustGroupBlocksSuccess:
-    Text: 'Бонусные блоки привата для игроков с правом {0} изменены на {1}. Итого: {2}.'
+    Text: 'Бонусные блоки привата для игроков с правом {0} изменены на {1}. Итого:
+      {2}.'
     Notes: '0: permission; 1: adjustment amount; 2: new total bonus'
   InvalidPermissionID:
     Text: Укажите ник игрока или право в [квадратных скобках].
   HowToClaimRegex:
     Text: (^|.*\W)how\W.*\W(claim|protect|lock)(\W.*|$)|.*(как|где).*(приват|заприват|защит).*
-    Notes: This is a Java Regular Expression.  Look it up before editing!  It's used to tell players about the demo video when they ask how to claim land.
+    Notes: This is a Java Regular Expression.  Look it up before editing!  It's used
+      to tell players about the demo video when they ask how to claim land.
   NoBuildOutsideClaims:
     Text: Здесь нельзя строить, пока вы не заприватите территорию.
   PlayerOfflineTime:
     Text: '  Последний вход: {0} дн. назад.'
     Notes: '0: number of full days since last login'
   BuildingOutsideClaims:
-    Text: Здесь могут строить и другие игроки. Заприватьте территорию золотой лопатой, чтобы защитить свою постройку!
+    Text: Здесь могут строить и другие игроки. Заприватьте территорию золотой лопатой,
+      чтобы защитить свою постройку!
   TrappedWontWorkHere:
     Text: Не удалось найти безопасное место для телепортации. Обратитесь к администрации.
   CommandBannedInPvP:
     Text: Эту команду нельзя использовать во время PvP-боя.
   UnclaimCleanupWarning:
-    Text: Освобождённую территорию могут изменить другие игроки или очистить администрация. Если там есть ценная постройка — заприватьте её снова.
+    Text: Освобождённую территорию могут изменить другие игроки или очистить администрация.
+      Если там есть ценная постройка — заприватьте её снова.
   BuySellNotConfigured:
     Text: Покупка и продажа блоков привата отключена.
   NoTeleportPvPCombat:
@@ -373,9 +404,11 @@ Messages:
   ClaimsListNoPermission:
     Text: У вас нет прав смотреть приваты других игроков.
   ExplosivesDisabled:
-    Text: Теперь этот приват защищён от взрывов. Повторите /claimexplosions, чтобы отключить защиту.
+    Text: Теперь этот приват защищён от взрывов. Повторите /claimexplosions, чтобы
+      отключить защиту.
   ExplosivesEnabled:
-    Text: Теперь взрывы могут разрушать блоки в этом привате. Повторите /claimexplosions, чтобы снова включить защиту.
+    Text: Теперь взрывы могут разрушать блоки в этом привате. Повторите /claimexplosions,
+      чтобы снова включить защиту.
   ClaimExplosivesAdvertisement:
     Text: Чтобы взрывчатка могла разрушать блоки в этом привате, используйте /claimexplosions.
   PlayerInPvPSafeZone:
@@ -389,19 +422,23 @@ Messages:
     Text: С игрока {0} снято тихое заглушение.
     Notes: '0: The changed player''s name.'
   DropUnlockAdvertisement:
-    Text: Другие игроки не смогут подобрать ваши выпавшие вещи, пока вы не введёте /unlockdrops.
+    Text: Другие игроки не смогут подобрать ваши выпавшие вещи, пока вы не введёте
+      /unlockdrops.
   PickupBlockedExplanation:
     Text: Вы не можете подобрать это, пока {0} не введёт /unlockdrops.
     Notes: '0: The item stack''s owner.'
   DropUnlockConfirmation:
-    Text: Ваши вещи разблокированы. Теперь их могут подобрать другие игроки (до вашей следующей смерти).
+    Text: Ваши вещи разблокированы. Теперь их могут подобрать другие игроки (до вашей
+      следующей смерти).
   DropUnlockOthersConfirmation:
     Text: Вещи игрока {0} разблокированы.
     Notes: '0: The owner of the unlocked drops.'
   AdvertiseACandACB:
-    Text: Используйте /acb, чтобы выдать себе блоки привата, или /adminclaims, чтобы создать бесплатный административный приват.
+    Text: Используйте /acb, чтобы выдать себе блоки привата, или /adminclaims, чтобы
+      создать бесплатный административный приват.
   AdvertiseAdminClaims:
-    Text: Вместо этого можно создать административный приват через /adminclaims — он будет общим для всех администраторов.
+    Text: Вместо этого можно создать административный приват через /adminclaims —
+      он будет общим для всех администраторов.
   AdvertiseACB:
     Text: Используйте /acb, чтобы выдать себе дополнительные блоки привата.
   NotYourPet:
@@ -412,13 +449,15 @@ Messages:
   PetTransferCancellation:
     Text: Передача питомца отменена.
   ReadyToTransferPet:
-    Text: Готово к передаче! Нажмите ПКМ по питомцу, которого хотите отдать, или отмените командой /givepet cancel.
+    Text: Готово к передаче! Нажмите ПКМ по питомцу, которого хотите отдать, или отмените
+      командой /givepet cancel.
   AvoidGriefClaimLand:
     Text: Защитите свои постройки от гриферов! Заприватьте территорию золотой лопатой.
   BecomeMayor:
     Text: Разделите свой приват на подзоны и станьте мэром!
   ClaimCreationFailedOverClaimCountLimit:
-    Text: Вы достигли лимита количества приватов. Удалите один через /abandonclaim, прежде чем создавать новый.
+    Text: Вы достигли лимита количества приватов. Удалите один через /abandonclaim,
+      прежде чем создавать новый.
   CreateClaimFailOverlapRegion:
     Text: 'Нельзя заприватить всю эту область: здесь вам запрещено строить.'
   ResizeFailOverlapRegion:
@@ -427,7 +466,8 @@ Messages:
     Text: 'Найдено приватов: {0}.'
     Notes: '0: Number of claims found.'
   NoChatUntilMove:
-    Text: Чтобы писать в чат, сначала немного пройдитесь — это защита от спам-ботов. :)
+    Text: Чтобы писать в чат, сначала немного пройдитесь — это защита от спам-ботов.
+      :)
   SiegeImmune:
     Text: Этот игрок защищён от /siege.
   SetClaimBlocksSuccess:
@@ -476,7 +516,9 @@ Messages:
   BookTitle:
     Text: Как заприватить территорию
   BookIntro:
-    Text: Заприватьте территорию, чтобы защитить свои вещи! Возьмите золотую лопату и нажмите ПКМ по двум противоположным углам участка. Палка (ПКМ) показывает границы приватов.
+    Text: Заприватьте территорию, чтобы защитить свои вещи! Возьмите золотую лопату
+      и нажмите ПКМ по двум противоположным углам участка. Палка (ПКМ) показывает
+      границы приватов.
   BookDisabledChestClaims:
     Text: '  На этом сервере установка сундука НЕ создаёт приват автоматически.'
   BookUsefulCommands:
@@ -498,7 +540,8 @@ Messages:
   PlayerNotIgnorable:
     Text: Этого игрока нельзя игнорировать.
   NoEnoughBlocksForChestClaim:
-    Text: У вас нет свободных блоков привата, поэтому автоматический приват не создан. Проверить баланс блоков можно командой /claimslist.
+    Text: У вас нет свободных блоков привата, поэтому автоматический приват не создан.
+      Проверить баланс блоков можно командой /claimslist.
   IsIgnoringYou:
     Text: Этот игрок вас игнорирует.
   MustHoldModificationToolForThat:
@@ -513,9 +556,11 @@ Messages:
     Text: Минимальный радиус — {0}.
     Notes: '0: minimum radius'
   ClaimTooSmallForActiveBlocks:
-    Text: Приват слишком мал для активных блоков (воронки, спавнеры, маяки...). Сначала увеличьте приват.
+    Text: Приват слишком мал для активных блоков (воронки, спавнеры, маяки...). Сначала
+      увеличьте приват.
   TooManyActiveBlocksInClaim:
-    Text: В привате достигнут лимит активных блоков (воронки, спавнеры, маяки...). Увеличьте приват или уберите другие активные блоки.
+    Text: В привате достигнут лимит активных блоков (воронки, спавнеры, маяки...).
+      Увеличьте приват или уберите другие активные блоки.
   ConsoleOnlyCommand:
     Text: Эту команду можно выполнить только из консоли сервера.
   WorldNotFound:
@@ -532,5 +577,6 @@ Messages:
   SubclaimUnrestricted:
     Text: Права этой подзоны снова наследуются от основного привата
   NetherPortalTrapDetectionMessage:
-    Text: Похоже, вы застряли в портале в Незер. Если это так, через несколько секунд мы вас спасём!
+    Text: Похоже, вы застряли в портале в Незер. Если это так, через несколько секунд
+      мы вас спасём!
     Notes: Sent to player on join, if they left while inside a nether portal.

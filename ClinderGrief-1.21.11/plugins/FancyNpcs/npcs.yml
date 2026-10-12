@@ -6,9 +6,9 @@ npcs:
     type: VILLAGER
     location:
       world: world
-      x: -13.5
+      x: -21.5
       y: 101.0
-      z: -13.5
+      z: -21.5
       yaw: -45.0
       pitch: 0.0
     showInTab: false
@@ -38,9 +38,9 @@ npcs:
     type: VILLAGER
     location:
       world: world
-      x: 14.5
+      x: 22.5
       y: 101.0
-      z: -13.5
+      z: -21.5
       yaw: 45.0
       pitch: 0.0
     showInTab: false
@@ -70,9 +70,9 @@ npcs:
     type: VILLAGER
     location:
       world: world
-      x: -13.5
+      x: -21.5
       y: 101.0
-      z: 14.5
+      z: 22.5
       yaw: -135.0
       pitch: 0.0
     showInTab: false
@@ -102,9 +102,9 @@ npcs:
     type: VILLAGER
     location:
       world: world
-      x: 14.5
+      x: 22.5
       y: 101.0
-      z: 14.5
+      z: 22.5
       yaw: 135.0
       pitch: 0.0
     showInTab: false
@@ -127,3 +127,155 @@ npcs:
         '1':
           action: player_command
           value: menu
+  757e2bcd-4aae-4e88-a41c-b210aff335d2:
+    name: clans
+    creator: c6391d1e-5894-3948-affd-f29e6fd31f2f
+    displayName: <gradient:#ff6b6b:#ffb347><bold>Кланы</bold></gradient>
+    type: PILLAGER
+    location:
+      world: world
+      x: 7.5
+      y: 101.0
+      z: -18.5
+      yaw: -180.0
+      pitch: -0.0
+    showInTab: false
+    spawnEntity: true
+    collidable: true
+    glowing: false
+    glowingColor: white
+    turnToPlayer: true
+    turnToPlayerDistance: -1
+    interactionCooldown: 1.0
+    scale: 1.0
+    visibility_distance: -1
+    visibility: ALL
+    skin:
+      mirrorSkin: false
+    actions:
+      ANY_CLICK:
+        '1':
+          action: player_command
+          value: clan
+  4bf5fceb-9b90-4c65-ba81-23a8db9e9199:
+    name: events
+    creator: c6391d1e-5894-3948-affd-f29e6fd31f2f
+    displayName: <gradient:#d18cff:#6bcbff><bold>Ивенты</bold></gradient>
+    type: WITCH
+    location:
+      world: world
+      x: -18.5
+      y: 101.0
+      z: 7.5
+      yaw: -180.0
+      pitch: -0.0
+    showInTab: false
+    spawnEntity: true
+    collidable: true
+    glowing: false
+    glowingColor: white
+    turnToPlayer: true
+    turnToPlayerDistance: -1
+    interactionCooldown: 1.0
+    scale: 1.0
+    visibility_distance: -1
+    visibility: ALL
+    skin:
+      mirrorSkin: false
+    actions:
+      ANY_CLICK:
+        '1':
+          action: player_command
+          value: event
+  0988a846-5d81-4e4f-9134-e3f63e89bf56:
+    name: auction
+    creator: c6391d1e-5894-3948-affd-f29e6fd31f2f
+    displayName: <gradient:#ffd000:#ff8a00><bold>Аукцион</bold></gradient>
+    type: WANDERING_TRADER
+    location:
+      world: world
+      x: -6.5
+      y: 101.0
+      z: -18.5
+      yaw: -180.0
+      pitch: -0.0
+    showInTab: false
+    spawnEntity: true
+    collidable: true
+    glowing: false
+    glowingColor: white
+    turnToPlayer: true
+    turnToPlayerDistance: -1
+    interactionCooldown: 1.0
+    scale: 1.0
+    visibility_distance: -1
+    visibility: ALL
+    skin:
+      mirrorSkin: false
+    actions:
+      ANY_CLICK:
+        '1':
+          action: player_command
+          value: ah
+  f09a3bba-308c-4ac3-8da7-f2aff72d76b8:
+    name: mine
+    creator: c6391d1e-5894-3948-affd-f29e6fd31f2f
+    displayName: <gradient:#c0c0c0:#6bcbff><bold>Шахта</bold></gradient>
+    type: VILLAGER
+    location:
+      world: world
+      x: 19.5
+      y: 101.0
+      z: -6.5
+      yaw: -180.0
+      pitch: -0.0
+    showInTab: false
+    spawnEntity: true
+    collidable: true
+    glowing: false
+    glowingColor: white
+    turnToPlayer: true
+    turnToPlayerDistance: -1
+    interactionCooldown: 1.0
+    scale: 1.0
+    visibility_distance: -1
+    visibility: ALL
+    skin:
+      mirrorSkin: false
+    attributes:
+      profession: armorer
+    actions:
+      ANY_CLICK:
+        '1':
+          action: player_command
+          value: warp mine
+  f38aaddd-7905-4082-9153-a80f1ec4535c:
+    name: arena
+    creator: c6391d1e-5894-3948-affd-f29e6fd31f2f
+    displayName: <gradient:#ff2a00:#ff6b6b><bold>PvP-Арена</bold></gradient>
+    type: PIGLIN_BRUTE
+    location:
+      world: world
+      x: -18.5
+      y: 101.0
+      z: -6.5
+      yaw: -180.0
+      pitch: -0.0
+    showInTab: false
+    spawnEntity: true
+    collidable: true
+    glowing: false
+    glowingColor: white
+    turnToPlayer: true
+    turnToPlayerDistance: -1
+    interactionCooldown: 1.0
+    scale: 1.0
+    visibility_distance: -1
+    visibility: ALL
+    skin:
+      mirrorSkin: false
+    actions:
+      ANY_CLICK:
+        '1':
+          action: player_command
+          value: warp arena

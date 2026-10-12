@@ -1,5 +1,5 @@
 name: ClinderCore
-version: '1.0.0'
+version: '1.1.0'
 main: ru.clindergrief.core.ClinderCore
 api-version: '1.21'
 description: Собственные системы сервера ClinderGrief (награды, титулы, жалобы, награды за головы, топы, объявления, фильтр чата)
@@ -27,6 +27,17 @@ commands:
   top:
     description: Топы игроков
     aliases: [tops, leaderboard]
+  ah:
+    description: Аукцион
+    aliases: [auction, auc, aukcion]
+  clan:
+    description: Кланы
+    aliases: [clans, klan]
+  cc:
+    description: Клановый чат
+  event:
+    description: Ивент «Мистический сундук»
+    aliases: [events, ivent]
   clindercore:
     description: Управление ClinderCore
     aliases: [cg]
@@ -50,5 +61,7 @@ permissions:
     default: op
   clindercore.chatfilter.bypass:
     default: op
+  clindercore.combat.bypass:
+    default: false
   clindercore.admin:
     default: op

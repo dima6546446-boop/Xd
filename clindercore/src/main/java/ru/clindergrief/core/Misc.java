@@ -39,11 +39,14 @@ public final class Misc implements CommandExecutor, TabCompleter {
                 }
             }
             case "clindercore" -> {
-                if (args.length > 0 && args[0].equalsIgnoreCase("reload")) {
+                if (args.length > 0 && args[0].equalsIgnoreCase("mine")) {
+                    plugin.mine().reset();
+                    sender.sendMessage(Text.of("&aШахта обновлена."));
+                } else if (args.length > 0 && args[0].equalsIgnoreCase("reload")) {
                     plugin.reload();
                     sender.sendMessage(plugin.msg("reloaded"));
                 } else {
-                    sender.sendMessage(Text.of("&7ClinderCore " + plugin.getPluginMeta().getVersion() + " &8| &f/cg reload"));
+                    sender.sendMessage(Text.of("&7ClinderCore " + plugin.getPluginMeta().getVersion() + " &8| &f/cg reload, /cg mine"));
                 }
             }
             default -> {
@@ -59,7 +62,7 @@ public final class Misc implements CommandExecutor, TabCompleter {
             return List.of("money", "playtime", "kills");
         }
         if (args.length == 1 && command.getName().equalsIgnoreCase("clindercore")) {
-            return List.of("reload");
+            return List.of("reload", "mine");
         }
         return List.of();
     }

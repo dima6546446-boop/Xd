@@ -174,6 +174,7 @@ write("plugins/Essentials/motd.txt", """
 &#ff5e00&l✦ &fДобро пожаловать на &#ff8a00&lClinderGrief&f, &#ffd000{PLAYER}&f! &#ff5e00&l✦
 &7Сейчас онлайн: &f{ONLINE}
 &7Главное меню сервера: &a/menu  &8•  &7Награда дня: &e/daily
+&7Аукцион: &e/ah  &8•  &7Кланы: &e/clan  &8•  &7Ивенты: &e/event
 &7Случайная телепортация в дикий мир: &a/tpr &7(или &a/rtp&7)
 &7Защитить постройку: &eзолотая лопата &7(подробно в &a/menu&7)
 &7Правила сервера: &a/rules
@@ -227,7 +228,9 @@ def gp_cfg(d):
     # защиту от частых перезаходов выполняет Paper (connection-throttle, сообщение переведено).
     g["Spam"]["LoginCooldownSeconds"] = 0
     g["Spam"]["AllowedIpAddresses"] = ""
-    g["PvP"]["BlockedSlashCommands"] = "/home;/vanish;/spawn;/tpa;/tpr;/rtp;/warp;/back"
+    # Логику боя (запрет команд, смерть при выходе) выполняет «режим боя» ClinderCore
+    g["PvP"]["BlockedSlashCommands"] = ""
+    g["PvP"]["PunishLogout"] = False
 
 
 edit("plugins/GriefPreventionData/config.yml", gp_cfg)
@@ -236,22 +239,31 @@ edit("plugins/GriefPreventionData/config.yml", gp_cfg)
 edit("plugins/PlayerParticles/config.yml", lambda d: d.__setitem__("locale", "ru_RU"))
 
 # ---------------------------------------------------------------- ClinderCore (собственный плагин)
-cc_jar = os.path.join(os.path.dirname(__file__), "..", "clindercore", "build", "ClinderCore-1.0.0.jar")
+cc_jar = os.path.join(os.path.dirname(__file__), "..", "clindercore", "build", "ClinderCore-1.1.0.jar")
 if os.path.exists(cc_jar):
-    shutil.copyfile(cc_jar, os.path.join(P, "ClinderCore-1.0.0.jar"))
+    for old in os.listdir(P):
+        if old.startswith("ClinderCore-") and old.endswith(".jar"):
+            os.remove(os.path.join(P, old))
+    shutil.copyfile(cc_jar, os.path.join(P, "ClinderCore-1.1.0.jar"))
+os.makedirs(os.path.join(P, "ClinderCore"), exist_ok=True)
+shutil.copyfile(os.path.join(os.path.dirname(__file__), "..", "clindercore", "src", "main", "resources", "config.yml"),
+                os.path.join(P, "ClinderCore", "config.yml"))
 
 # ---------------------------------------------------------------- DecentHolograms: живые топы у фонтана
 TOPS = {
-    "top_money": ("money", "&#ffd000&l⛁ Топ богачей", "&a", "world:-8.5:105.6:0.5", 90.0),
-    "top_playtime": ("playtime", "&#6bcbff&l⌚ Топ по времени в игре", "&b", "world:9.5:105.6:0.5", -90.0),
-    "top_kills": ("kills", "&#ff6b6b&l⚔ Топ убийц", "&c", "world:0.5:105.6:-8.5", 0.0),
+    "top_money": ("money", "&#ffd000&l⛁ Топ богачей", "&a", "world:-11.5:106.0:0.5", 90.0),
+    "top_playtime": ("playtime", "&#6bcbff&l⌚ Топ по времени в игре", "&b", "world:12.5:106.0:0.5", -90.0),
+    "top_kills": ("kills", "&#ff6b6b&l⚔ Топ убийц", "&c", "world:0.5:106.0:-11.5", 0.0),
+    "top_clans": ("clans", "&#ffb347&l⚑ Топ кланов", "&c", "world:0.5:106.5:-25.5", 0.0),
 }
 os.makedirs(os.path.join(P, "DecentHolograms/holograms"), exist_ok=True)
 for name, (typ, title, col, loc, facing) in TOPS.items():
     lines = [{"content": title, "height": 0.35}, {"content": "&8&m                    ", "height": 0.3}]
     medals = {1: "&#ffd700", 2: "&#c0c0c0", 3: "&#cd7f32"}
     for n in range(1, 11):
-        lines.append({"content": f"{medals.get(n, '&7')}{n}. &f%clinder_top_{typ}_name_{n}% &8— {col}%clinder_top_{typ}_value_{n}%",
+        name_ph = f"%clinder_top_{typ}_name_{n}%" if typ != "clans" else f"%clinder_top_clans_name_{n}%"
+        value_ph = f"%clinder_top_{typ}_value_{n}%" if typ != "clans" else f"%clinder_top_clans_value_{n}%"
+        lines.append({"content": f"{medals.get(n, '&7')}{n}. &f{name_ph} &8— {col}{value_ph}",
                       "height": 0.27})
     lines.append({"content": "&8&m                    ", "height": 0.3})
     lines.append({"content": "&7Обновление каждые 5 мин &8• &7/top", "height": 0.3})
@@ -332,13 +344,13 @@ def tab(d):
             "",
             "&#ffb347▶ &fНик: &#ffb347%player%",
             "&#ffb347▶ &fРанг: %luckperms_meta_rank%",
+            "&#ffb347▶ &fКлан: &#ffb347%clinder_clan_name%",
             "&#ffb347▶ &fТитул: %clinder_tag%",
             "",
             "&#a0ff6b$ &fБаланс: &#a0ff6b%vault_eco_balance_formatted%$",
             "&#ffd36b✦ &fСерия наград: &#ffd36b%clinder_streak% дн.",
             "",
-            "&#ff6b6b⚔ &fУбийств: &#ff6b6b%clinder_kills%",
-            "&#9e9e9e☠ &fСмертей: &#9e9e9e%clinder_deaths%",
+            "&#ff6b6b⚔ &fУбийств/смертей: &#ff6b6b%clinder_kills%&7/&#9e9e9e%clinder_deaths%",
             "&#6bcbff⌚ &fВ игре: &#6bcbff%clinder_playtime%",
             "",
             "&#a0ff6b● &fОнлайн: &#a0ff6b%online%",
@@ -347,7 +359,8 @@ def tab(d):
     }}
     d["placeholders"]["locale"] = "ru-RU"
     d["placeholders"]["time-format"] = "HH:mm"
-    d["placeholder-output-replacements"] = {"%clinder_tag%": {"": "&7нет &8(/tags)"}}
+    d["placeholder-output-replacements"] = {"%clinder_tag%": {"": "&7нет &8(/tags)"},
+                                            "%clinder_clan_name%": {"": "&7нет &8(/clan)"}}
     d["primary-group-finding-list"] = ["admin", "moder", "helper", "god", "imperator", "titan", "legend", "elite", "premium", "vip", "default"]
 
 
@@ -373,8 +386,8 @@ with open(os.path.join(P, "TAB/animations.yml"), "w", encoding="utf-8") as fh:
 write("plugins/TAB/groups.yml", """
 # Префиксы берутся из LuckPerms (команды /lp group <группа> meta setprefix ...)
 _DEFAULT_:
-  tabprefix: "%luckperms-prefix%"
-  tagprefix: "%luckperms-prefix%"
+  tabprefix: "%clinder_clan%%luckperms-prefix%"
+  tagprefix: "%clinder_clan%%luckperms-prefix%"
   customtabname: "%player%"
   tabsuffix: "%luckperms-suffix%"
   tagsuffix: "%luckperms-suffix%"

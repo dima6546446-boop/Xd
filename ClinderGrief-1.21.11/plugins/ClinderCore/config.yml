@@ -59,6 +59,10 @@ broadcast:
     - "&#d18cff✦ &fТитулы за время в игре и для привилегий: &#d18cff/tags"
     - "&#ffd36b✦ &fУвидел нарушителя? &#ffd36b/report <ник> <причина>"
     - "&#ff8800✦ &fПоддержать сервер и получить косметику: &#ff8800/donate"
+    - "&#ffd000✦ &fПокупай и продавай предметы на аукционе: &#ffd000/ah"
+    - "&#ff6b6b✦ &fСобери друзей в клан: &#ff6b6b/clan create <тег>"
+    - "&#d18cff✦ &fКаждый час — мистический сундук с лутом! &#d18cff/event"
+    - "&#c0c0c0✦ &fОбщая шахта обновляется каждые 10 минут: &#c0c0c0/warp mine"
 
 # ---------------------------------------------------------------------
 # Фильтр чата: регулярные выражения (без учёта регистра).
@@ -182,3 +186,142 @@ messages:
   top-header: "&#ffb347&lТоп — {type}:"
   top-line: "&f{n}. &e{name} &7— &a{value}"
   top-usage: "&cИспользование: /top <money|playtime|kills>"
+  ah-title: "&8&lАукцион"
+  ah-storage-title: "&8&lХранилище аукциона"
+  ah-usage: "&cИспользование: &f/ah &7— открыть, &f/ah sell <цена> &7— продать предмет в руке, &f/ah storage &7— хранилище"
+  ah-empty-hand: "&cВозьмите предмет в руку."
+  ah-price-range: "&cЦена должна быть от {min}$ до {max}$."
+  ah-limit: "&cУ вас уже максимум лотов ({limit})."
+  ah-listed: "&aЛот выставлен: &f{amount} шт. &aза &e{price}$&a. Срок — 48 ч."
+  ah-gone: "&cЭтот лот уже продан или снят."
+  ah-removed: "&7Лот снят и перемещён в хранилище: &f/ah storage"
+  ah-confirm-hint: "&7Чтобы купить, нажмите &eShift + ЛКМ&7."
+  ah-no-money: "&cНедостаточно денег."
+  ah-bought: "&aВы купили лот за &e{price}$ &aу &f{seller}&a."
+  ah-sold: "&aВаш лот купил &f{buyer}&a! Получено &e{price}$ &7(налог {tax}$)."
+  ah-expired: "&7Срок одного из ваших лотов истёк — заберите его: &f/ah storage"
+  combat-start: "&c⚔ Вы в режиме боя на {seconds} сек. Не выходите из игры — погибнете!"
+  combat-end: "&aВы вышли из режима боя."
+  combat-bar: "&c&l⚔ Режим боя &7— &f{seconds} сек"
+  combat-blocked: "&cЭто нельзя сделать в режиме боя!"
+  combat-logout: "&c☠ {player} вышел из игры во время боя и погиб."
+  clan-none: "&cВы не состоите в клане."
+  clan-already: "&cВы уже в клане."
+  clan-not-leader: "&cЭто может только глава клана."
+  clan-bad-tag: "&cТег — 2–6 букв или цифр. &f/clan create <тег> [название]"
+  clan-tag-taken: "&cТакой тег уже занят."
+  clan-no-money: "&cДля создания клана нужно {cost}$."
+  clan-created: "&#ffb347⚑ &f{player} &7основал клан &8[&#ffb347{tag}&8] &f{name}&7!"
+  clan-target-in-clan: "&cЭтот игрок уже состоит в клане."
+  clan-full: "&cВ клане максимум участников."
+  clan-invited: "&aПриглашение отправлено игроку {player}."
+  clan-invite: "&#ffb347⚑ &f{player} &7приглашает вас в клан &8[&#ffb347{tag}&8] &f{name}&7. &a/clan accept &7или &c/clan deny"
+  clan-no-invite: "&cУ вас нет приглашений."
+  clan-denied: "&7Приглашение отклонено."
+  clan-joined: "&a{player} вступил в клан [{tag}]!"
+  clan-leader-leave: "&cГлава не может выйти. Распустите клан: &f/clan disband confirm"
+  clan-left: "&7Вы вышли из клана [{tag}]."
+  clan-member-left: "&7{player} покинул клан."
+  clan-kicked: "&c{player} исключён из клана."
+  clan-you-kicked: "&cВас исключили из клана [{tag}]."
+  clan-disband-confirm: "&cВы уверены? Введите &f/clan disband confirm"
+  clan-disbanded: "&cКлан [{tag}] распущен."
+  clan-not-found: "&cКлан не найден."
+  clan-info: "&#ffb347&lКлан &8[&#ffb347{tag}&8] &f{name}\n &7Глава: &f{leader}\n &7Участников: &f{count} &8• &7Убийств: &c{kills}\n &7Состав: {members}"
+  clan-top-header: "&#ffb347&lТоп кланов &7(по убийствам):"
+  clan-top-line: "&f{n}. &8[&#ffb347{tag}&8] &f{name} &7— &c{kills} &8(участников: {count})"
+  clan-chat-usage: "&cИспользование: /cc <текст>"
+  clan-chat-format: "&8[&#ffb347Клан {tag}&8] &f{player}&8: &f"
+  event-start: "&#d18cff&l✦ Мистический сундук &fпоявился на &#d18cff{xyz}&f! Откроется через &e{seconds} сек&f. Успей первым!"
+  event-unlocked: "&#d18cff&l✦ Мистический сундук &fна &#d18cff{xyz} &aоткрыт&f! Забирай лут!"
+  event-end: "&7Мистический сундук исчез. Следующий — через час."
+  event-locked: "&cСундук ещё заперт: &f{seconds} сек."
+  event-bar-locked: "&d&l✦ Мистический сундук &7{xyz} &8— &fоткроется через &e{time}"
+  event-bar-open: "&d&l✦ Мистический сундук &7{xyz} &8— &aоткрыт &7(исчезнет через {time})"
+  event-info-active: "&#d18cff✦ &fМистический сундук сейчас на &#d18cff{xyz}"
+  event-info-next: "&#d18cff✦ &fСледующий мистический сундук через &e{time}"
+  event-cant-start: "&cНе удалось запустить: ивент уже идёт или нет подходящего места."
+  mine-warning: "&e⛏ Шахта обновится через 30 секунд!"
+  mine-reset: "&a⛏ Шахта обновлена! Следующее обновление через {minutes} мин."
+
+# =====================================================================
+#  Системы в стиле ReallyWorld / FunTime / HolyWorld
+# =====================================================================
+
+# Аукцион /ah. Налог с продажи (%) списывается с продавца — это «сжигание» денег в экономике.
+auction:
+  max-lots-per-player: 7
+  duration-hours: 48
+  min-price: 1
+  max-price: 100000000
+  tax-percent: 5
+
+# Режим боя: после удара по игроку — таймер, запрет команд, смерть при выходе из игры.
+combat:
+  enabled: true
+  seconds: 15
+  kill-on-logout: true
+  blocked-commands: [spawn, home, homes, tpa, tpahere, tpaccept, tpr, rtp, wild, warp, warps, back, ah, auction, auc, menu, m, gui, ec, enderchest, kit, kits]
+
+# Кланы /clan
+clans:
+  create-cost: 5000
+  max-members: 15
+  friendly-fire: false
+  tag-format: "&8[&#ffb347{tag}&8] "
+  help:
+    - "&#ffb347&lКланы &8— &7команды:"
+    - " &e/clan create <тег> [название] &7— создать клан (5000$)"
+    - " &e/clan invite <ник> &7— пригласить, &e/clan kick <ник> &7— выгнать"
+    - " &e/clan accept &7/ &e/clan deny &7— принять или отклонить приглашение"
+    - " &e/clan info [тег] &7— информация, &e/clan top &7— топ кланов"
+    - " &e/clan leave &7— выйти, &e/clan disband confirm &7— распустить"
+    - " &e/cc <текст> &7— клановый чат. Соклановцы не наносят друг другу урон."
+
+# Ивент «Мистический сундук» (аирдроп): появляется в мире по таймеру.
+events:
+  enabled: true
+  world: world
+  interval-minutes: 60
+  min-players: 2
+  unlock-seconds: 120
+  open-minutes: 10
+  min-distance: 300
+  max-distance: 1500
+  # item — материал, chance — шанс в %, min/max — количество
+  loot:
+    - {item: DIAMOND, chance: 70, min: 2, max: 6}
+    - {item: GOLDEN_APPLE, chance: 60, min: 1, max: 4}
+    - {item: ENCHANTED_GOLDEN_APPLE, chance: 8, min: 1, max: 1}
+    - {item: EXPERIENCE_BOTTLE, chance: 80, min: 8, max: 32}
+    - {item: ENDER_PEARL, chance: 60, min: 2, max: 8}
+    - {item: IRON_INGOT, chance: 90, min: 8, max: 24}
+    - {item: GOLD_INGOT, chance: 70, min: 4, max: 16}
+    - {item: EMERALD, chance: 50, min: 4, max: 12}
+    - {item: NETHERITE_SCRAP, chance: 12, min: 1, max: 2}
+    - {item: TOTEM_OF_UNDYING, chance: 10, min: 1, max: 1}
+    - {item: SHULKER_SHELL, chance: 15, min: 1, max: 2}
+    - {item: NAME_TAG, chance: 30, min: 1, max: 2}
+    - {item: SADDLE, chance: 25, min: 1, max: 1}
+    - {item: ENCHANTED_BOOK, chance: 35, min: 1, max: 2}
+    - {item: BLAZE_ROD, chance: 40, min: 2, max: 6}
+
+# Общественная шахта (/warp mine): кубоид ниже заполняется рудой каждые reset-minutes
+mine:
+  enabled: true
+  world: world
+  min: [-10, 85, 110]
+  max: [10, 99, 130]
+  safe-spot: [0, 101, 104]
+  reset-minutes: 10
+  composition:
+    STONE: 52
+    ANDESITE: 6
+    COAL_ORE: 13
+    IRON_ORE: 10
+    COPPER_ORE: 7
+    GOLD_ORE: 3.5
+    REDSTONE_ORE: 3.5
+    LAPIS_ORE: 3
+    DIAMOND_ORE: 1.2
+    EMERALD_ORE: 0.8

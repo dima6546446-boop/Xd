@@ -78,10 +78,10 @@ GriefPrevention:
       world_nether: true
       world_the_end: true
     ProtectFreshSpawns: true
-    PunishLogout: true
+    PunishLogout: false
     CombatTimeoutSeconds: 15
     AllowCombatItemDrop: false
-    BlockedSlashCommands: /home;/vanish;/spawn;/tpa;/tpr;/rtp;/warp;/back
+    BlockedSlashCommands: ''
     ProtectPlayersInLandClaims:
       PlayerOwnedClaims: true
       AdministrativeClaims: true

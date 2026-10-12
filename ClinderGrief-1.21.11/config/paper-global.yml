@@ -72,10 +72,12 @@ logging:
 messages:
   kick:
     authentication-servers-down: <lang:multiplayer.disconnect.authservers_down>
-    connection-throttle: Слишком частые подключения! Подождите немного и попробуйте снова.
+    connection-throttle: Слишком частые подключения! Подождите немного и попробуйте
+      снова.
     flying-player: <lang:multiplayer.disconnect.flying>
     flying-vehicle: <lang:multiplayer.disconnect.flying>
-  no-permission: <red>У вас нет прав на эту команду. Если это ошибка — обратитесь к администрации.
+  no-permission: <red>У вас нет прав на эту команду. Если это ошибка — обратитесь
+    к администрации.
   use-display-name-in-quit-message: false
 misc:
   chat-threads:

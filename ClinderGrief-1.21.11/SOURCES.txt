@@ -64,8 +64,8 @@ Vault.jar  (Vault 1.7.3)
   sha256: a6b5ed97f43a5cf5bbaf00a7c8cd23c5afc9bd003f849875af8b36e6cf77d01d
 
 [Собственный плагин]
-ClinderCore-1.0.0.jar — собран из исходного кода (папка clindercore в репозитории, скрипт build.sh)
-  sha256: 48244af200145428599fec25ddadf7a75d986da1ebd8447bbb51240fece00427
+ClinderCore-1.1.0.jar — собран из исходного кода (папка clindercore в репозитории, скрипт build.sh)
+  sha256: d44d7bb91a71bc78d9de666abea8d19aad518074a58cb8d14ac69a436a74be02
 
 [Расширения PlaceholderAPI — eCloud, загружены командой /papi ecloud download]
 Expansion-luckperms.jar

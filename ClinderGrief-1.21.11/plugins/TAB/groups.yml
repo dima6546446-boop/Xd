@@ -1,7 +1,7 @@
 # Префиксы берутся из LuckPerms (команды /lp group <группа> meta setprefix ...)
 _DEFAULT_:
-  tabprefix: "%luckperms-prefix%"
-  tagprefix: "%luckperms-prefix%"
+  tabprefix: "%clinder_clan%%luckperms-prefix%"
+  tagprefix: "%clinder_clan%%luckperms-prefix%"
   customtabname: "%player%"
   tabsuffix: "%luckperms-suffix%"
   tagsuffix: "%luckperms-suffix%"

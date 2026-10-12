@@ -277,48 +277,117 @@ items:
     left_click_commands: &id014
     - '[openguimenu] help_shops'
     right_click_commands: *id014
+  auction:
+    material: GOLD_NUGGET
+    slot: 37
+    display_name: '&6&lАукцион'
+    lore:
+    - ''
+    - '&7Покупай и продавай предметы'
+    - '&7Продать: &f/ah sell <цена>'
+    - ''
+    - '&aНажмите'
+    left_click_commands: &id015
+    - '[close]'
+    - '[player] ah'
+    right_click_commands: *id015
+  clans:
+    material: WHITE_BANNER
+    slot: 38
+    display_name: '&c&lКланы'
+    lore:
+    - ''
+    - '&7Создай клан или вступи в него'
+    - '&7Тег клана — перед ником'
+    - ''
+    - '&aНажмите'
+    left_click_commands: &id016
+    - '[close]'
+    - '[player] clan'
+    right_click_commands: *id016
+  event:
+    material: ENDER_CHEST
+    slot: 39
+    display_name: '&5&lМистический сундук'
+    lore:
+    - ''
+    - '&7Ивент каждый час'
+    - '&7Лут для самых быстрых!'
+    - ''
+    - '&aНажмите'
+    left_click_commands: &id017
+    - '[close]'
+    - '[player] event'
+    right_click_commands: *id017
   rules:
     material: BOOK
-    slot: 39
+    slot: 40
     display_name: '&f&lПравила'
     lore:
     - ''
     - '&7Правила сервера'
     - ''
     - '&aНажмите'
-    left_click_commands: &id015
+    left_click_commands: &id018
     - '[close]'
     - '[player] rules'
-    right_click_commands: *id015
+    right_click_commands: *id018
+  mine:
+    material: IRON_PICKAXE
+    slot: 41
+    display_name: '&7&lШахта'
+    lore:
+    - ''
+    - '&7Общая шахта с рудой'
+    - '&7Обновляется каждые 10 минут'
+    - ''
+    - '&aНажмите'
+    left_click_commands: &id019
+    - '[close]'
+    - '[player] warp mine'
+    right_click_commands: *id019
+  arena:
+    material: NETHERITE_SWORD
+    slot: 42
+    display_name: '&4&lPvP-Арена'
+    lore:
+    - ''
+    - '&7Сражения с другими игроками'
+    - ''
+    - '&aНажмите'
+    left_click_commands: &id020
+    - '[close]'
+    - '[player] warp arena'
+    right_click_commands: *id020
   help:
     material: OAK_SIGN
-    slot: 40
+    slot: 43
     display_name: '&7&lКоманды'
     lore:
     - ''
     - '&7Полезные команды'
     - ''
     - '&aНажмите'
-    left_click_commands: &id016
+    left_click_commands: &id021
     - '[openguimenu] help_commands'
-    right_click_commands: *id016
+    right_click_commands: *id021
   links:
     material: PAPER
-    slot: 41
+    slot: 47
     display_name: '&9&lНаши ссылки'
     lore:
     - ''
     - '&7Discord, ВК, Telegram, сайт'
     - ''
     - '&aНажмите'
-    left_click_commands: &id017
+    left_click_commands: &id022
     - '[close]'
     - '[player] links'
-    right_click_commands: *id017
+    right_click_commands: *id022
   close:
     material: BARRIER
     slot: 49
     display_name: '&cЗакрыть'
-    left_click_commands: &id018
+    left_click_commands: &id023
     - '[close]'
-    right_click_commands: *id018
+    right_click_commands: *id023

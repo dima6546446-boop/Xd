@@ -20,6 +20,11 @@ public final class ClinderCore extends JavaPlugin {
     private Activity activity;
     private Tags tags;
     private Bounties bounties;
+    private Auction auction;
+    private Clans clans;
+    private Events events;
+    private Combat combat;
+    private Mine mine;
 
     @Override
     public void onEnable() {
@@ -37,6 +42,11 @@ public final class ClinderCore extends JavaPlugin {
         bounties = new Bounties(this);
         leaderboards = new Leaderboards(this);
 
+        combat = new Combat(this);
+        auction = new Auction(this);
+        clans = new Clans(this);
+        events = new Events(this);
+        mine = new Mine(this);
         Daily daily = new Daily(this);
         Reports reports = new Reports(this);
         Misc misc = new Misc(this);
@@ -48,6 +58,10 @@ public final class ClinderCore extends JavaPlugin {
         bind("links", misc);
         bind("top", misc);
         bind("clindercore", misc);
+        bind("ah", auction);
+        bind("clan", clans);
+        bind("cc", clans);
+        bind("event", events);
 
         var pm = getServer().getPluginManager();
         pm.registerEvents(activity, this);
@@ -55,6 +69,10 @@ public final class ClinderCore extends JavaPlugin {
         pm.registerEvents(bounties, this);
         pm.registerEvents(new ChatFilter(this), this);
         pm.registerEvents(new JoinAnnouncer(this), this);
+        pm.registerEvents(combat, this);
+        pm.registerEvents(auction, this);
+        pm.registerEvents(clans, this);
+        pm.registerEvents(events, this);
 
         activity.start();
         leaderboards.start();
@@ -69,6 +87,9 @@ public final class ClinderCore extends JavaPlugin {
 
     @Override
     public void onDisable() {
+        if (events != null) {
+            events.shutdown();
+        }
         if (store != null) {
             store.save();
         }
@@ -119,6 +140,22 @@ public final class ClinderCore extends JavaPlugin {
 
     public Bounties bounties() {
         return bounties;
+    }
+
+    public Combat combat() {
+        return combat;
+    }
+
+    public Clans clans() {
+        return clans;
+    }
+
+    public Mine mine() {
+        return mine;
+    }
+
+    public Auction auction() {
+        return auction;
     }
 
     public Activity activity() {

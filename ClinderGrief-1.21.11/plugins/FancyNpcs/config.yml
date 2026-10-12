@@ -14,8 +14,8 @@ mineskin_api_key: '' # The API key for the MineSkin API. This will be used to lo
 remove_npcs_from_playerlist_delay: 2000 # The delay in milliseconds to remove NPCs from the player list. Increase this value if you have problems with skins not loading correctly when joining or switching worlds. You can set it to -1, if you don't have any npcs using the show_in_tab feature.
 swing_arm_on_update: true # Whether NPCs should swing arm on update.
 blocked_commands: # The commands that are blocked for NPCs in the message.
-- op
-- ban
+  - op
+  - ban
 max-npcs: # The maximum number of NPCs per permission. (for the 'player-npcs' feature flag only)
-- fancynpcs.max-npcs.5: 5
-- fancynpcs.max-npcs.10: 10
+  - fancynpcs.max-npcs.5: 5
+  - fancynpcs.max-npcs.10: 10

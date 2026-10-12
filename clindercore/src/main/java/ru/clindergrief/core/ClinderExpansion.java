@@ -43,6 +43,16 @@ public final class ClinderExpansion extends PlaceholderExpansion {
     @Override
     public String onRequest(OfflinePlayer player, String params) {
         String p = params.toLowerCase();
+        if (p.startsWith("top_clans_")) {
+            return clanTop(p.substring("top_clans_".length()));
+        }
+        if (p.equals("mine_reset")) {
+            long s = plugin.mine().secondsLeft();
+            return String.format("%d:%02d", s / 60, s % 60);
+        }
+        if (p.equals("ah_lots")) {
+            return String.valueOf(plugin.auction().lotCount());
+        }
         if (p.startsWith("top_")) {
             return top(p.substring(4));
         }
@@ -56,6 +66,12 @@ public final class ClinderExpansion extends PlaceholderExpansion {
             case "playtime" -> Text.duration(player.getStatistic(Statistic.PLAY_ONE_MINUTE) / 20L);
             case "kills" -> String.valueOf(player.getStatistic(Statistic.PLAYER_KILLS));
             case "deaths" -> String.valueOf(player.getStatistic(Statistic.DEATHS));
+            case "clan" -> plugin.clans().tagOf(player.getUniqueId());
+            case "clan_name" -> {
+                Clans.Clan c = plugin.clans().of(player.getUniqueId());
+                yield c == null ? "" : c.name;
+            }
+            case "combat" -> player instanceof Player online && plugin.combat().inCombat(online) ? "&c⚔ В бою" : "";
             case "afk" -> player instanceof Player online && plugin.activity().isAfk(online) ? "AFK" : "";
             default -> null;
         };
@@ -67,6 +83,26 @@ public final class ClinderExpansion extends PlaceholderExpansion {
             return "";
         }
         return plugin.getConfig().getString("tags.list." + id + ".display", "");
+    }
+
+    /** name_1 / value_1 — топ кланов по убийствам */
+    private String clanTop(String rest) {
+        String[] parts = rest.split("_");
+        if (parts.length != 2) {
+            return null;
+        }
+        int pos;
+        try {
+            pos = Integer.parseInt(parts[1]);
+        } catch (NumberFormatException e) {
+            return null;
+        }
+        List<Clans.Clan> top = plugin.clans().top();
+        if (pos < 1 || pos > top.size()) {
+            return parts[0].equals("name") ? "—" : "";
+        }
+        Clans.Clan c = top.get(pos - 1);
+        return parts[0].equals("name") ? "[" + c.tag + "] " + c.name : c.kills + " убийств";
     }
 
     /** money_name_1 / playtime_value_3 ... */
