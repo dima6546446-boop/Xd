@@ -68,6 +68,7 @@ public class ModuleManager {
         add(new WorldColor());
         add(new CustomSky());
         add(new BreakEffects());
+        add(new ChunkAnimator());
         // Misc
         add(new Theme());
         add(new ClickGui());

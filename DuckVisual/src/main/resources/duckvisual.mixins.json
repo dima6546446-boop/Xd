@@ -26,7 +26,8 @@
     "PlayerListHudMixin",
     "TitleScreenMixin",
     "ChatHudMixin",
-    "ItemEntityRendererMixin"
+    "ItemEntityRendererMixin",
+    "WorldRendererMixin"
   ],
   "injectors": {
     "defaultRequire": 1

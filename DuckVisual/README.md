@@ -89,6 +89,7 @@ ClickGUI, HUD, China Hat, Jump Circles, Trails, Target ESP, Hit Particles, ка�
 - **TimeChanger** — время суток на клиенте (фикс. или цикл).
 - **WorldParticles** — светящиеся частицы вокруг (Fireflies / Snow / Rise).
 - **CustomSky** — звёздное небо с северным сиянием в цветах темы (Night / Aurora).
+- **ChunkAnimator** — чанки плавно выезжают снизу (или падают сверху) при прогрузке.
 - **BreakEffects** — светящиеся частицы и вспышка при ломании блока.
 - **WorldColor** — окрашивает небо, туман и облака в цвет темы или свой.
 
@@ -120,7 +121,7 @@ ClickGUI, HUD, China Hat, Jump Circles, Trails, Target ESP, Hit Particles, ка�
 
 Готовый мод: `build/libs/duck-visual-1.0.0.jar`.
 
-Готовая сборка лежит в [`release/duck-visual-1.0.0.jar`](release/duck-visual-1.0.0.jar).
+Всего модулей: **59**. Готовая сборка лежит в [`release/duck-visual-1.0.0.jar`](release/duck-visual-1.0.0.jar).
 
 ## Скриншоты
 
