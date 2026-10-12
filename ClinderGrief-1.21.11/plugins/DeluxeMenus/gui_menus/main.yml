@@ -384,10 +384,38 @@ items:
     - '[close]'
     - '[player] links'
     right_click_commands: *id022
+  cases:
+    material: TRIPWIRE_HOOK
+    slot: 46
+    display_name: '&6&lКейсы'
+    lore:
+    - ''
+    - '&7Обычный, редкий и донатный'
+    - '&7Шансы видны по ПКМ'
+    - ''
+    - '&aНажмите'
+    left_click_commands: &id023
+    - '[close]'
+    - '[player] cases'
+    right_click_commands: *id023
+  quests:
+    material: WRITABLE_BOOK
+    slot: 48
+    display_name: '&a&lЗадания дня'
+    lore:
+    - ''
+    - '&73 задания каждый день'
+    - '&7Награда — монеты и ключи'
+    - ''
+    - '&aНажмите'
+    left_click_commands: &id024
+    - '[close]'
+    - '[player] quests'
+    right_click_commands: *id024
   close:
     material: BARRIER
     slot: 49
     display_name: '&cЗакрыть'
-    left_click_commands: &id023
+    left_click_commands: &id025
     - '[close]'
-    right_click_commands: *id023
+    right_click_commands: *id025

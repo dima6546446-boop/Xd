@@ -1,5 +1,5 @@
 name: ClinderCore
-version: '1.1.0'
+version: '1.2.0'
 main: ru.clindergrief.core.ClinderCore
 api-version: '1.21'
 description: Собственные системы сервера ClinderGrief (награды, титулы, жалобы, награды за головы, топы, объявления, фильтр чата)
@@ -38,6 +38,12 @@ commands:
   event:
     description: Ивент «Мистический сундук»
     aliases: [events, ivent]
+  cases:
+    description: Кейсы
+    aliases: [case, keys, kejsy, keisy]
+  quests:
+    description: Ежедневные задания
+    aliases: [quest, tasks, zadaniya]
   clindercore:
     description: Управление ClinderCore
     aliases: [cg]
@@ -63,5 +69,7 @@ permissions:
     default: op
   clindercore.combat.bypass:
     default: false
+  clindercore.cases.admin:
+    default: op
   clindercore.admin:
     default: op

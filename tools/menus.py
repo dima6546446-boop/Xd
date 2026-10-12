@@ -142,6 +142,8 @@ def main_menu():
         "arena": btn("NETHERITE_SWORD", 42, "&4&lPvP-Арена", ["&7Сражения с другими игроками"], ["[close]", "[player] warp arena"]),
         "help": btn("OAK_SIGN", 43, "&7&lКоманды", ["&7Полезные команды"], ["[openguimenu] help_commands"]),
         "links": btn("PAPER", 47, "&9&lНаши ссылки", ["&7Discord, ВК, Telegram, сайт"], ["[close]", "[player] links"]),
+        "cases": btn("TRIPWIRE_HOOK", 46, "&6&lКейсы", ["&7Обычный, редкий и донатный", "&7Шансы видны по ПКМ"], ["[close]", "[player] cases"]),
+        "quests": btn("WRITABLE_BOOK", 48, "&a&lЗадания дня", ["&73 задания каждый день", "&7Награда — монеты и ключи"], ["[close]", "[player] quests"]),
         "close": close_item(49),
     }
     return {"menu_title": "&8&lClinder&6&lGrief &8— меню", "open_command": ["menu", "m", "gui"], "register_command": True,
@@ -257,6 +259,7 @@ HELP = {
         "&e/report <ник> <причина> &7— жалоба",
         "&e/ah &7— аукцион, &e/clan &7— кланы, &e/event &7— ивенты",
         "&e/warp mine &7— шахта, &e/warp arena &7— PvP-арена",
+        "&e/cases &7— кейсы, &e/quests &7— задания дня",
         "&e/spawn &7— на спавн",
         "&e/tpr &7(или &e/rtp&7) — случайная телепортация",
         "&e/sethome, /home &7— дом (до 3 точек)",

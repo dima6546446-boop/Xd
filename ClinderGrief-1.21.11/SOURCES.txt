@@ -63,9 +63,28 @@ Vault.jar  (Vault 1.7.3)
   url: https://github.com/MilkBowl/Vault/releases/download/1.7.3/Vault.jar
   sha256: a6b5ed97f43a5cf5bbaf00a7c8cd23c5afc9bd003f849875af8b36e6cf77d01d
 
-[Собственный плагин]
-ClinderCore-1.1.0.jar — собран из исходного кода (папка clindercore в репозитории, скрипт build.sh)
-  sha256: d44d7bb91a71bc78d9de666abea8d19aad518074a58cb8d14ac69a436a74be02
+[Прокси Velocity и регистрация — папка velocity]
+velocity-3.5.1-615.jar  (Velocity 3.5.1, build 615)
+  источник: https://fill.papermc.io/v3/projects/velocity
+  url: https://fill-data.papermc.io/v1/objects/b4e3164df5377346854dc6cb9e6a78022b1946ff69e89676313f5f6f1c6f0fb3/velocity-3.5.1-615.jar
+  sha256: b4e3164df5377346854dc6cb9e6a78022b1946ff69e89676313f5f6f1c6f0fb3
+plugins/limboapi-1.1.27-SNAPSHOT-013034d.jar  (LimboAPI 1.1.27, git 013034d, автор Elytrium;
+  последняя сборка под Java 21 — более новые требуют Java 25)
+  url: https://cdn.modrinth.com/data/TZOteSf2/versions/aVJOZwdS/limboapi-1.1.27-SNAPSHOT.jar
+  sha256: 1011bd362a6e9c3de5e6a2d7f8e59065f2c6ee7c99d09318f8dd713e89e01a18
+plugins/limboauth-1.1.14.jar  (LimboAuth 1.1.14, автор Elytrium)
+  url: https://cdn.modrinth.com/data/4iChqdl8/versions/gFiH3Z6K/limboauth-1.1.14.jar
+  sha256: 38ffe327987a54a38fb07e467a17a95b8e80989123f9f17aa2e75562ca8224fc
+libraries/com/h2database/h2/2.1.214/h2-2.1.214.jar  (база данных H2 для LimboAuth; LimboAuth
+  сам скачивает её при первом запуске с Maven Central — включена, чтобы не зависеть от сети)
+  url: https://repo1.maven.org/maven2/com/h2database/h2/2.1.214/h2-2.1.214.jar
+  sha256: d623cdc0f61d218cf549a8d09f1c391ff91096116b22e2475475fce4fbe72bd0
+
+[Собственные плагины — собраны из исходного кода в репозитории (build.sh)]
+ClinderCore-1.2.0.jar  (папка clindercore)
+  sha256: da3906f4ba53945f7fc2caa35c4209e3f0df6b5c19597ee3ed56951fa88ddddf
+ClinderAC-1.0.0.jar  (папка clinderac, античит)
+  sha256: 4f35f9f9453e468be2049efac70d75850e5f46b85e9741b61296440b1186c241
 
 [Расширения PlaceholderAPI — eCloud, загружены командой /papi ecloud download]
 Expansion-luckperms.jar

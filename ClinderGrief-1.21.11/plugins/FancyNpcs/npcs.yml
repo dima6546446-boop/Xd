@@ -279,3 +279,34 @@ npcs:
         '1':
           action: player_command
           value: warp arena
+  5c1d9e2a-7b44-4c3e-9a1f-c4535e0ca5e5:
+    name: cases
+    creator: c6391d1e-5894-3948-affd-f29e6fd31f2f
+    displayName: <gradient:#ffd36b:#ff8a00><bold>Кейсы</bold></gradient>
+    type: ALLAY
+    location:
+      world: world
+      x: 19.5
+      y: 101.0
+      z: 7.5
+      yaw: 90.0
+      pitch: 0.0
+    showInTab: false
+    spawnEntity: true
+    collidable: true
+    glowing: true
+    glowingColor: gold
+    turnToPlayer: true
+    turnToPlayerDistance: -1
+    interactionCooldown: 1.0
+    scale: 1.0
+    visibility_distance: -1
+    visibility: ALL
+    skin:
+      mirrorSkin: false
+    attributes: {}
+    actions:
+      ANY_CLICK:
+        '1':
+          action: player_command
+          value: cases

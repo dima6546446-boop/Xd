@@ -238,6 +238,7 @@ PADS = {
     "clans": (7, -19, [("Кланы", ["#ff6b6b", "#ffb347"], True), ("Создай свой клан", "white", False), ("/clan", "yellow", False)]),
     "events": (-19, 7, [("Ивенты", ["#d18cff", "#6bcbff"], True), ("Мистический сундук", "white", False), ("/event", "yellow", False)]),
     "mine": (19, -7, [("Шахта", ["#c0c0c0", "#6bcbff"], True), ("Обновляется каждые 10 мин", "white", False), ("/warp mine", "yellow", False)]),
+    "cases": (19, 7, [("Кейсы", ["#ffd36b", "#ff8a00"], True), ("Обычный • Редкий • Донатный", "white", False), ("/cases", "yellow", False)]),
     "arena": (-19, -7, [("PvP-Арена", ["#ff2a00", "#ff6b6b"], True), ("Сражайся без потери спавна", "white", False), ("/warp arena", "yellow", False)]),
 }
 for key, (px, pz, label) in PADS.items():

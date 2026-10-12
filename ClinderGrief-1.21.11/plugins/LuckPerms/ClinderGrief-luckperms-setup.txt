@@ -1,4 +1,4 @@
-﻿# Команды настройки групп LuckPerms для сборки ClinderGrief.
+# Команды настройки групп LuckPerms для сборки ClinderGrief.
 # Уже применены в поставляемой базе (plugins/LuckPerms/luckperms-h2-v2.mv.db).
 # Если нужно пересоздать группы — вставьте строки (без комментариев) в консоль сервера.
 
@@ -184,6 +184,8 @@ lp group god permission set playerparticles.fixed.max.5 true
 # ===== Хелпер =====
 lp group helper permission set essentials.mute true
 lp group helper permission set essentials.kick true
+lp group helper permission set clinderac.staff true
+lp group helper permission set clinderac.alerts true
 lp group helper permission set essentials.tempban true
 lp group helper permission set essentials.jail true
 lp group helper permission set essentials.togglejail true

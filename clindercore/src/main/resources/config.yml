@@ -17,6 +17,8 @@ daily:
   # Каждый N-й день серии — дополнительный бонус
   milestone-every: 7
   milestone-bonus: 1000
+  # ключ какого кейса давать за каждый milestone-every-й день серии (пусто — не давать)
+  milestone-key: rare
 
 # ---------------------------------------------------------------------
 # Награда за активную игру: каждые interval-minutes активных минут.
@@ -63,6 +65,8 @@ broadcast:
     - "&#ff6b6b✦ &fСобери друзей в клан: &#ff6b6b/clan create <тег>"
     - "&#d18cff✦ &fКаждый час — мистический сундук с лутом! &#d18cff/event"
     - "&#c0c0c0✦ &fОбщая шахта обновляется каждые 10 минут: &#c0c0c0/warp mine"
+    - "&#a0ff6b✦ &fЕжедневные задания с наградами и ключами: &#a0ff6b/quests"
+    - "&#ffd36b✦ &fОткрывай кейсы — шансы видны по ПКМ: &#ffd36b/cases"
 
 # ---------------------------------------------------------------------
 # Фильтр чата: регулярные выражения (без учёта регистра).
@@ -131,6 +135,9 @@ tags:
     demon:       { display: "&#ff1a1a[☠ Демон]",            permission: clindercore.tag.titan,     icon: WITHER_SKELETON_SKULL }
     crown:       { display: "&#ffaa00[♛ Корона]",           permission: clindercore.tag.imperator, icon: GOLDEN_HELMET }
     divine:      { display: "&#00e5ff[⚡ Божество]",         permission: clindercore.tag.god,       icon: TRIDENT }
+    phoenix:     { display: "&#ff6a00[✹ Феникс]",           permission: clindercore.tag.case_phoenix, icon: FIRE_CHARGE }
+    ghost:       { display: "&#b8f3ff[☁ Призрак]",          permission: clindercore.tag.case_ghost,   icon: PHANTOM_MEMBRANE }
+    caseking:    { display: "&#ffd700[♔ Король кейсов]",    permission: clindercore.tag.case_king,    icon: GOLDEN_HELMET }
 
 # ---------------------------------------------------------------------
 # Ссылки /links
@@ -243,6 +250,18 @@ messages:
   event-cant-start: "&cНе удалось запустить: ивент уже идёт или нет подходящего места."
   mine-warning: "&e⛏ Шахта обновится через 30 секунд!"
   mine-reset: "&a⛏ Шахта обновлена! Следующее обновление через {minutes} мин."
+  cases-title: "&8&lКейсы"
+  cases-usage: "&cИспользование: &f/cases &7или &f/cases give <ник> <кейс> <кол-во>"
+  cases-unknown: "&cТакого кейса нет (common, rare, donate)."
+  cases-given: "&aВыдано {amount} ключ(ей) «{case}&a» игроку {player}."
+  cases-received: "&#ffd36b✦ &fВы получили ключ: {case} &fx{amount}! &7Открыть: &e/cases"
+  cases-no-keys: "&cНет ключей: {case}&c. Их дают за задания (&f/quests&c) и серию &f/daily&c."
+  cases-won: "&#ffd36b✦ &fВы выиграли: {reward} &7({case}&7)"
+  cases-duplicate: "&7У вас уже есть {reward}&7 — вместо него выданы ключи редкого кейса."
+  cases-broadcast: "&#ffd36b✦ &f{player} &7выбил {reward} &7из {case}&7!"
+  quests-title: "&8&lЗадания на сегодня"
+  quest-done: "&a✔ Задание выполнено: &f{quest} &7(+{money}$)"
+  quest-all-done: "&#ffd36b&l✦ Все задания дня выполнены! &fБонус: ключ редкого кейса."
 
 # =====================================================================
 #  Системы в стиле ReallyWorld / FunTime / HolyWorld
@@ -325,3 +344,83 @@ mine:
     LAPIS_ORE: 3
     DIAMOND_ORE: 1.2
     EMERALD_ORE: 0.8
+
+# =====================================================================
+#  Кейсы /cases. Ключи — виртуальные. Выдать ключи: /cases give <ник> <кейс> <кол-во>
+#  (эту же команду указывайте в магазине доната, например в Tebex: cases give {username} donate 1).
+#  weight — вес (шанс = вес / сумма весов, игрок видит шансы по ПКМ).
+#  Награда: money, item+amount, commands (от консоли, {player} — ник), keys (ключи других кейсов).
+#  unless-permission + fallback-keys — защита от дубликата косметики.
+#  ВАЖНО: донатный кейс содержит ТОЛЬКО косметику (временные ранги, титулы, частицы) — по правилам Minecraft.
+# =====================================================================
+cases:
+  types:
+    common:
+      name: "&a&lОбычный кейс"
+      icon: CHEST
+      description: ["&7Ресурсы и монеты", "&7Ключи: задания, серия /daily"]
+      rewards:
+        - {name: "&a300$", icon: GOLD_NUGGET, weight: 25, money: 300}
+        - {name: "&a750$", icon: GOLD_INGOT, weight: 12, money: 750}
+        - {name: "&a1500$", icon: GOLD_BLOCK, weight: 5, money: 1500}
+        - {name: "&f16 железа", icon: IRON_INGOT, amount: 16, weight: 14, item: IRON_INGOT}
+        - {name: "&e8 золота", icon: GOLD_INGOT, amount: 8, weight: 10, item: GOLD_INGOT}
+        - {name: "&b3 алмаза", icon: DIAMOND, amount: 3, weight: 8, item: DIAMOND}
+        - {name: "&63 золотых яблока", icon: GOLDEN_APPLE, amount: 3, weight: 8, item: GOLDEN_APPLE}
+        - {name: "&a16 пузырьков опыта", icon: EXPERIENCE_BOTTLE, amount: 16, weight: 8, item: EXPERIENCE_BOTTLE}
+        - {name: "&58 жемчугов Края", icon: ENDER_PEARL, amount: 8, weight: 6, item: ENDER_PEARL}
+        - {name: "&d&lЗачарованное золотое яблоко", icon: ENCHANTED_GOLDEN_APPLE, weight: 1.5, item: ENCHANTED_GOLDEN_APPLE, broadcast: true}
+        - {name: "&8&lНезеритовый лом", icon: NETHERITE_SCRAP, weight: 1, item: NETHERITE_SCRAP, broadcast: true}
+        - {name: "&9Ключ редкого кейса", icon: TRIPWIRE_HOOK, weight: 2, keys: {rare: 1}}
+        - {name: "&6&lКлюч донатного кейса", icon: TRIPWIRE_HOOK, weight: 0.5, keys: {donate: 1}, broadcast: true}
+    rare:
+      name: "&9&lРедкий кейс"
+      icon: ENDER_CHEST
+      description: ["&7Ценные ресурсы", "&7Ключи: все задания дня, 7 дней /daily подряд"]
+      rewards:
+        - {name: "&a3000$", icon: GOLD_BLOCK, weight: 15, money: 3000}
+        - {name: "&b10 алмазов", icon: DIAMOND, amount: 10, weight: 15, item: DIAMOND}
+        - {name: "&864 пузырька опыта", icon: EXPERIENCE_BOTTLE, amount: 64, weight: 15, item: EXPERIENCE_BOTTLE}
+        - {name: "&a3 ключа обычного кейса", icon: TRIPWIRE_HOOK, weight: 12, keys: {common: 3}}
+        - {name: "&d4 панциря шалкера", icon: SHULKER_SHELL, amount: 4, weight: 10, item: SHULKER_SHELL}
+        - {name: "&82 незеритовых лома", icon: NETHERITE_SCRAP, amount: 2, weight: 8, item: NETHERITE_SCRAP}
+        - {name: "&d2 зачарованных яблока", icon: ENCHANTED_GOLDEN_APPLE, amount: 2, weight: 8, item: ENCHANTED_GOLDEN_APPLE}
+        - {name: "&eТотем бессмертия", icon: TOTEM_OF_UNDYING, weight: 8, item: TOTEM_OF_UNDYING}
+        - {name: "&b&lЭлитры", icon: ELYTRA, weight: 3, item: ELYTRA, broadcast: true}
+        - {name: "&f&lМаяк", icon: BEACON, weight: 2, item: BEACON, broadcast: true}
+        - {name: "&6&lКлюч донатного кейса", icon: TRIPWIRE_HOOK, weight: 4, keys: {donate: 1}, broadcast: true}
+    donate:
+      name: "&6&lДонатный кейс"
+      icon: NETHER_STAR
+      description: ["&7Только косметика: ранги, титулы, частицы", "&7Ключи: магазин сервера, редкий кейс"]
+      rewards:
+        - {name: "&aVIP на 7 дней", icon: LIME_DYE, weight: 30, commands: ["lp user {player} parent addtemp vip 7d accumulate"]}
+        - {name: "&bPremium на 3 дня", icon: LIGHT_BLUE_DYE, weight: 20, commands: ["lp user {player} parent addtemp premium 3d accumulate"]}
+        - {name: "&6Элита на 3 дня", icon: ORANGE_DYE, weight: 12, commands: ["lp user {player} parent addtemp elite 3d accumulate"]}
+        - {name: "&dЛегенда на 1 день", icon: MAGENTA_DYE, weight: 6, commands: ["lp user {player} parent addtemp legend 1d accumulate"], broadcast: true}
+        - {name: "&#00e5ff&lБОГ на 1 день", icon: NETHER_STAR, weight: 1.5, commands: ["lp user {player} parent addtemp god 1d accumulate"], broadcast: true}
+        - {name: "&#ff6a00Титул [✹ Феникс]", icon: FIRE_CHARGE, weight: 10, commands: ["lp user {player} permission set clindercore.tag.case_phoenix true"], unless-permission: clindercore.tag.case_phoenix, fallback-keys: {rare: 2}}
+        - {name: "&#b8f3ffТитул [☁ Призрак]", icon: PHANTOM_MEMBRANE, weight: 10, commands: ["lp user {player} permission set clindercore.tag.case_ghost true"], unless-permission: clindercore.tag.case_ghost, fallback-keys: {rare: 2}}
+        - {name: "&#ffd700&lТитул [♔ Король кейсов]", icon: GOLDEN_HELMET, weight: 3, commands: ["lp user {player} permission set clindercore.tag.case_king true"], unless-permission: clindercore.tag.case_king, fallback-keys: {rare: 3}, broadcast: true}
+        - {name: "&5Частицы «Дыхание дракона»", icon: DRAGON_BREATH, weight: 7.5, commands: ["lp user {player} permission set playerparticles.effect.dragon_breath true"], unless-permission: playerparticles.effect.dragon_breath, fallback-keys: {rare: 1}}
+
+# =====================================================================
+#  Ежедневные задания /quests: каждый день — per-day случайных заданий из пула.
+#  type: break (targets — блоки), kill (targets — мобы), fish (рыбалка)
+# =====================================================================
+quests:
+  per-day: 3
+  all-done-keys: {rare: 1}
+  pool:
+    - {id: coal, name: "Добыть 32 угля", type: break, targets: [COAL_ORE, DEEPSLATE_COAL_ORE], amount: 32, money: 300, keys: {common: 1}, icon: COAL}
+    - {id: iron, name: "Добыть 16 железной руды", type: break, targets: [IRON_ORE, DEEPSLATE_IRON_ORE], amount: 16, money: 400, keys: {common: 1}, icon: RAW_IRON}
+    - {id: diamond, name: "Добыть 3 алмазные руды", type: break, targets: [DIAMOND_ORE, DEEPSLATE_DIAMOND_ORE], amount: 3, money: 800, keys: {common: 1}, icon: DIAMOND}
+    - {id: stone, name: "Сломать 256 камня", type: break, targets: [STONE, DEEPSLATE, ANDESITE, DIORITE, GRANITE, TUFF], amount: 256, money: 300, keys: {common: 1}, icon: STONE_PICKAXE}
+    - {id: wood, name: "Нарубить 64 бревна", type: break, targets: [OAK_LOG, SPRUCE_LOG, BIRCH_LOG, JUNGLE_LOG, ACACIA_LOG, DARK_OAK_LOG, CHERRY_LOG, MANGROVE_LOG, PALE_OAK_LOG], amount: 64, money: 250, keys: {common: 1}, icon: IRON_AXE}
+    - {id: wheat, name: "Собрать 64 пшеницы", type: break, targets: [WHEAT], amount: 64, money: 250, keys: {common: 1}, icon: WHEAT}
+    - {id: zombie, name: "Убить 15 зомби", type: kill, targets: [ZOMBIE, ZOMBIE_VILLAGER, HUSK, DROWNED], amount: 15, money: 300, keys: {common: 1}, icon: ROTTEN_FLESH}
+    - {id: skeleton, name: "Убить 10 скелетов", type: kill, targets: [SKELETON, STRAY, BOGGED], amount: 10, money: 300, keys: {common: 1}, icon: BONE}
+    - {id: creeper, name: "Убить 5 криперов", type: kill, targets: [CREEPER], amount: 5, money: 350, keys: {common: 1}, icon: GUNPOWDER}
+    - {id: spider, name: "Убить 10 пауков", type: kill, targets: [SPIDER, CAVE_SPIDER], amount: 10, money: 300, keys: {common: 1}, icon: STRING}
+    - {id: enderman, name: "Убить 3 эндермена", type: kill, targets: [ENDERMAN], amount: 3, money: 500, keys: {common: 1}, icon: ENDER_PEARL}
+    - {id: fish, name: "Поймать 10 рыб", type: fish, targets: [], amount: 10, money: 300, keys: {common: 1}, icon: FISHING_ROD}

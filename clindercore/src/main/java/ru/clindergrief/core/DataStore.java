@@ -28,6 +28,11 @@ public final class DataStore {
         data = YamlConfiguration.loadConfiguration(file);
     }
 
+    /** Прямой доступ к data.yml (ключи кейсов, прогресс заданий). */
+    public YamlConfiguration raw() {
+        return data;
+    }
+
     public void save() {
         try {
             data.save(file);

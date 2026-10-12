@@ -100,10 +100,19 @@ if errorlevel 1 (
     >> eula.txt echo eula=true
 )
 
-rem ---- 3. Запуск ------------------------------------------------
+rem ---- 3. Прокси Velocity с регистрацией (отдельное окно) --------
+rem Игроки подключаются к Velocity (порт 25565), он проводит регистрацию/вход (LimboAuth)
+rem и пересылает на сервер выживания (127.0.0.1:25566, снаружи недоступен).
+if exist "velocity\velocity-3.5.1-615.jar" (
+    if not exist "velocity\.secret-generated" powershell -NoProfile -ExecutionPolicy Bypass -File "scripts\new-secret.ps1"
+    echo  Запуск прокси Velocity в отдельном окне...
+    start "ClinderGrief Velocity" /D "%CD%\velocity" "%JAVA%" -Xms256M -Xmx512M -Dfile.encoding=UTF-8 -Dstdout.encoding=UTF-8 -jar velocity-3.5.1-615.jar
+)
+
+rem ---- 4. Запуск ------------------------------------------------
 :run
 echo.
-echo  Запуск сервера... Для остановки введите в этом окне: stop
+echo  Запуск сервера... Для остановки введите в этом окне: stop  ^(в окне Velocity — end^)
 echo.
 "%JAVA%" -Xms%MIN_RAM% -Xmx%MAX_RAM% -XX:+AlwaysPreTouch -XX:+DisableExplicitGC -XX:+ParallelRefProcEnabled -XX:+PerfDisableSharedMem -XX:+UnlockExperimentalVMOptions -XX:+UseG1GC -XX:G1HeapRegionSize=8M -XX:G1HeapWastePercent=5 -XX:G1MaxNewSizePercent=40 -XX:G1MixedGCCountTarget=4 -XX:G1MixedGCLiveThresholdPercent=90 -XX:G1NewSizePercent=30 -XX:G1RSetUpdatingPauseTimePercent=5 -XX:G1ReservePercent=20 -XX:InitiatingHeapOccupancyPercent=15 -XX:MaxGCPauseMillis=200 -XX:MaxTenuringThreshold=1 -XX:SurvivorRatio=32 -Dfile.encoding=UTF-8 -Dstdout.encoding=UTF-8 -Dstderr.encoding=UTF-8 -jar "%SERVER_JAR%" --nogui
 echo.

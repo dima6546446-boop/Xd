@@ -18,3 +18,6 @@ optional-plugins/tebex-bukkit-2.4.2-19b0f2a.jar	https://cdn.modrinth.com/data/nR
 plugins/Vault.jar	https://github.com/MilkBowl/Vault/releases/download/1.7.3/Vault.jar	a6b5ed97f43a5cf5bbaf00a7c8cd23c5afc9bd003f849875af8b36e6cf77d01d
 plugins/PlayerParticles-8.13.jar	https://cdn.modrinth.com/data/LFI8sNdf/versions/pNqks5Iv/PlayerParticles-8.13.jar	64dbaba98b518e07a55e1b988254f33f28eb12fd271b2ced518c1f7d5e50fa84
 plugins/DecentHolograms-2.10.1.jar	https://cdn.modrinth.com/data/w02MKsTg/versions/Fva1FgWm/DecentHolograms-2.10.1.jar	e247b7362c277dad0596cb48b5d1570b1002fba014a5afd8458d978963a253b4
+velocity/velocity-3.5.1-615.jar	https://fill-data.papermc.io/v1/objects/b4e3164df5377346854dc6cb9e6a78022b1946ff69e89676313f5f6f1c6f0fb3/velocity-3.5.1-615.jar	b4e3164df5377346854dc6cb9e6a78022b1946ff69e89676313f5f6f1c6f0fb3
+velocity/plugins/limboapi-1.1.27-SNAPSHOT-013034d.jar	https://cdn.modrinth.com/data/TZOteSf2/versions/aVJOZwdS/limboapi-1.1.27-SNAPSHOT.jar	1011bd362a6e9c3de5e6a2d7f8e59065f2c6ee7c99d09318f8dd713e89e01a18
+velocity/plugins/limboauth-1.1.14.jar	https://cdn.modrinth.com/data/4iChqdl8/versions/gFiH3Z6K/limboauth-1.1.14.jar	38ffe327987a54a38fb07e467a17a95b8e80989123f9f17aa2e75562ca8224fc

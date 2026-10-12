@@ -21,7 +21,9 @@ rm -rf plugins/QuickShop-Hikari/cache
 rm -f plugins/CoreProtect/database.db plugins/ClinderCore/data.yml plugins/ClinderCore/auction.yml plugins/ClinderCore/clans.yml plugins/PlayerParticles/playerparticles.db
 : > plugins/TAB/playerdata.yml; : > plugins/TAB/users.yml
 rm -rf plugins/FancyNpcs/logs plugins/WorldEdit/sessions/* plugins/spark/tmp
-sed -i 's/^online-mode=.*/online-mode=true/' server.properties
+# Paper работает за Velocity: online-mode=false, авторизацию выполняет Velocity + LimboAuth
+sed -i 's/^online-mode=.*/online-mode=false/' server.properties
+rm -rf velocity/logs velocity/plugins/limboauth/limboauth-v2.mv.db velocity/plugins/limboauth/limboauth-v2.trace.db plugins/ClinderAC/violations.log velocity/.secret-generated
 sed -i '/^management-server-secret=/d' server.properties
 printf '# Чтобы запустить сервер, владелец должен принять EULA Minecraft: https://aka.ms/MinecraftEULA\n# start.bat спросит об этом при первом запуске. Вручную: замените false на true.\neula=false\n' > eula.txt
 echo "cleaned $S"

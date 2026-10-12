@@ -61,10 +61,12 @@ want = {
     "view-distance": "8",
     "simulation-distance": "6",
     "enable-command-block": "false",
-    "online-mode": "true",
+    # Paper работает за прокси Velocity: принимает подключения только с этого компьютера
+    "online-mode": "false",
+    "server-ip": "127.0.0.1",
     "white-list": "false",
     "allow-flight": "false",
-    "server-port": "25565",
+    "server-port": "25566",
 }
 out = []
 for ln in lines:
@@ -239,12 +241,18 @@ edit("plugins/GriefPreventionData/config.yml", gp_cfg)
 edit("plugins/PlayerParticles/config.yml", lambda d: d.__setitem__("locale", "ru_RU"))
 
 # ---------------------------------------------------------------- ClinderCore (собственный плагин)
-cc_jar = os.path.join(os.path.dirname(__file__), "..", "clindercore", "build", "ClinderCore-1.1.0.jar")
+cc_jar = os.path.join(os.path.dirname(__file__), "..", "clindercore", "build", "ClinderCore-1.2.0.jar")
 if os.path.exists(cc_jar):
     for old in os.listdir(P):
         if old.startswith("ClinderCore-") and old.endswith(".jar"):
             os.remove(os.path.join(P, old))
-    shutil.copyfile(cc_jar, os.path.join(P, "ClinderCore-1.1.0.jar"))
+    shutil.copyfile(cc_jar, os.path.join(P, "ClinderCore-1.2.0.jar"))
+ac_jar = os.path.join(os.path.dirname(__file__), "..", "clinderac", "build", "ClinderAC-1.0.0.jar")
+if os.path.exists(ac_jar):
+    shutil.copyfile(ac_jar, os.path.join(P, "ClinderAC-1.0.0.jar"))
+    os.makedirs(os.path.join(P, "ClinderAC"), exist_ok=True)
+    shutil.copyfile(os.path.join(os.path.dirname(__file__), "..", "clinderac", "src", "main", "resources", "config.yml"),
+                    os.path.join(P, "ClinderAC", "config.yml"))
 os.makedirs(os.path.join(P, "ClinderCore"), exist_ok=True)
 shutil.copyfile(os.path.join(os.path.dirname(__file__), "..", "clindercore", "src", "main", "resources", "config.yml"),
                 os.path.join(P, "ClinderCore", "config.yml"))
@@ -289,6 +297,25 @@ shutil.copyfile(os.path.join(os.path.dirname(__file__), "lang/coreprotect_ru.yml
 edit("plugins/Chunky/config.yml", lambda d: d.__setitem__("language", "ru"))
 # FancyNpcs 2.9.2 выбрана намеренно (последняя версия под Java 21) — уведомление об обновлении не нужно
 edit("plugins/FancyNpcs/config.yml", lambda d: d.__setitem__("mute_version_notification", True))
+
+# NPC «Кейсы» на площадке кейсов спавна (19, 7)
+def npc_cases(d):
+    npcs = d.setdefault("npcs", {}) or {}
+    if any(v.get("name") == "cases" for v in npcs.values()):
+        return
+    base = next(iter(npcs.values()), None)
+    if base is None:
+        return
+    import copy
+    n = copy.deepcopy(base)
+    n.update({"name": "cases", "type": "ALLAY", "glowing": True, "glowingColor": "gold", "attributes": {},
+              "displayName": "<gradient:#ffd36b:#ff8a00><bold>Кейсы</bold></gradient>",
+              "actions": {"ANY_CLICK": {"1": {"action": "player_command", "value": "cases"}}}})
+    n["location"] = {"world": "world", "x": 19.5, "y": 101.0, "z": 7.5, "yaw": 90.0, "pitch": 0.0}
+    npcs["5c1d9e2a-7b44-4c3e-9a1f-c4535e0ca5e5"] = n
+    d["npcs"] = npcs
+if os.path.exists(os.path.join(S, "plugins/FancyNpcs/npcs.yml")):
+    edit("plugins/FancyNpcs/npcs.yml", npc_cases)
 
 # ---------------------------------------------------------------- DeluxeMenus
 names = menus.write_all(os.path.join(P, "DeluxeMenus"))
@@ -489,3 +516,45 @@ def cmds(d):
 
 edit("commands.yml", cmds)
 print("configured", S)
+
+
+# ---------------------------------------------------------------- Velocity + LimboAuth (регистрация)
+V = os.path.join(S, "velocity")
+if os.path.isdir(V) and os.path.exists(os.path.join(V, "velocity.toml")):
+    secret = open(os.path.join(V, "forwarding.secret"), encoding="utf-8").read().strip()
+    t = open(os.path.join(V, "velocity.toml"), encoding="utf-8").read()
+    def tset(key, value):
+        global t
+        t = re.sub(r"(?m)^" + re.escape(key) + r" = .*$", lambda _m: f"{key} = {value}", t, count=1)
+    tset("bind", '"0.0.0.0:25565"')
+    tset("motd", '"<bold><gradient:#ff2a00:#ff8a00:#ffd000>✦ ClinderGrief ✦</gradient></bold> <gray>Выживание <yellow>1.21.11</yellow>\\n<gold>⚡ <yellow>Кейсы <dark_gray>• <red>Кланы <dark_gray>• <gold>Аукцион <dark_gray>• <light_purple>Ивенты"')
+    tset("show-max-players", "200")
+    tset("online-mode", "false")
+    tset("force-key-authentication", "false")
+    tset("player-info-forwarding-mode", '"modern"')
+    servers_new = '[servers]\n# Внутренний сервер выживания (Paper слушает только 127.0.0.1:25566)\nsurvival = "127.0.0.1:25566"\ntry = [\n    "survival"\n]\n\n[forced-hosts]\n\n[advanced]'
+    t = re.sub(r"(?s)\[servers\].*?\[advanced\]", servers_new.replace("\\n", "\n"), t, count=1)
+    open(os.path.join(V, "velocity.toml"), "w", encoding="utf-8").write(t)
+
+    def pg(d):
+        d["proxies"]["velocity"]["enabled"] = True
+        d["proxies"]["velocity"]["online-mode"] = False
+        d["proxies"]["velocity"]["secret"] = secret
+    edit("config/paper-global.yml", pg)
+
+    la = os.path.join(V, "plugins/limboauth/config.yml")
+    if os.path.exists(la):
+        sys.path.insert(0, os.path.join(os.path.dirname(__file__), "lang"))
+        from limboauth_ru import RU as LA_RU
+        def limbo(d):
+            d["prefix"] = "&6&lClinder&c&lGrief &8»&f"
+            m = d["main"]
+            # лицензионные игроки входят автоматически, остальные — /reg и /login
+            m["online-mode-need-auth"] = False
+            m["min-password-length"] = 6
+            m["totp-issuer"] = "ClinderGrief"
+            m["ip-limit-registrations"] = 3
+            for k, v in LA_RU.items():
+                if k in m["strings"]:
+                    m["strings"][k] = v
+        edit("velocity/plugins/limboauth/config.yml", limbo)

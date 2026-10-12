@@ -1,0 +1,41 @@
+# =====================================================================
+#  ClinderAC — собственный античит ClinderGrief
+#  vl — «очки нарушений». Каждая проверка добавляет vl, со временем они убывают.
+#  alert-vl  — с какого vl присылать уведомление персоналу (право clinderac.alerts)
+#  setback   — откатывать игрока на последнюю честную позицию
+#  kick-vl   — с какого vl кикать (0 — не кикать)
+#  Перезагрузка: /ac reload
+# =====================================================================
+prefix: "&8[&#ff5e00&lAC&8] &r"
+decay-per-10s: 2.0
+# Команда наказания при превышении punish-vl любой проверки (пусто — не наказывать).
+# {player} — ник. Например: "tempban {player} 1d Читы (ClinderAC)"
+punish-command: ""
+punish-vl: 0
+log-to-file: true
+# Писать в консоль КАЖДОЕ срабатывание (для настройки порогов). На живом сервере — false.
+debug: false
+
+checks:
+  fly:        { enabled: true, alert-vl: 10, kick-vl: 60, setback: true }
+  speed:      { enabled: true, alert-vl: 10, kick-vl: 60, setback: true }
+  groundspoof: { enabled: true, alert-vl: 10, kick-vl: 0, setback: true }
+  timer:      { enabled: true, alert-vl: 15, kick-vl: 80, setback: true }
+  reach:      { enabled: true, alert-vl: 5,  kick-vl: 40, cancel: true, max-distance: 3.4 }
+  killaura:   { enabled: true, alert-vl: 8,  kick-vl: 50, cancel: true, max-angle: 70 }
+  autoclicker: { enabled: true, alert-vl: 10, kick-vl: 0, max-cps: 20 }
+  fastbreak:  { enabled: true, alert-vl: 5,  kick-vl: 50, cancel: true }
+  fastplace:  { enabled: true, alert-vl: 8,  kick-vl: 50, cancel: true, max-per-second: 14 }
+  xray:       { enabled: true, alert-vl: 1,  kick-vl: 0 }
+
+messages:
+  alert: "&f{player} &7провалил &c{check} &8(&7{info}&8) &7VL: &c{vl}"
+  kick: "&c&lClinderAC\n\n&fВы отключены за подозрение в использовании читов.\n&7Проверка: &f{check}\n\n&7Если это ошибка — сообщите администрации."
+  alerts-on: "&aУведомления античита включены."
+  alerts-off: "&7Уведомления античита выключены."
+  reloaded: "&aКонфигурация ClinderAC перезагружена."
+  no-permission: "&cНедостаточно прав."
+  info-header: "&#ff5e00Нарушения игрока &f{player}&7:"
+  info-line: " &7{check}: &c{vl}"
+  info-none: " &7нарушений нет"
+  usage: "&f/ac alerts &7— вкл/выкл уведомления, &f/ac info <ник> &7— нарушения, &f/ac reload"

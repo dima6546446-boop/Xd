@@ -1,0 +1,20 @@
+name: ClinderAC
+version: '1.0.0'
+main: ru.clindergrief.ac.ClinderAC
+api-version: '1.21'
+description: Собственный античит сервера ClinderGrief (полёт, скорость, дальность, киллаура, автокликер, быстрая копка, таймер, X-Ray-подозрения)
+authors: [ClinderGrief]
+commands:
+  ac:
+    description: Античит ClinderAC
+    aliases: [anticheat, clinderac]
+    permission: clinderac.staff
+permissions:
+  clinderac.staff:
+    default: op
+  clinderac.alerts:
+    default: op
+  clinderac.admin:
+    default: op
+  clinderac.bypass:
+    default: false

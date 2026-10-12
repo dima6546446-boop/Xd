@@ -25,6 +25,8 @@ public final class ClinderCore extends JavaPlugin {
     private Events events;
     private Combat combat;
     private Mine mine;
+    private Cases cases;
+    private Quests quests;
 
     @Override
     public void onEnable() {
@@ -47,6 +49,8 @@ public final class ClinderCore extends JavaPlugin {
         clans = new Clans(this);
         events = new Events(this);
         mine = new Mine(this);
+        cases = new Cases(this);
+        quests = new Quests(this);
         Daily daily = new Daily(this);
         Reports reports = new Reports(this);
         Misc misc = new Misc(this);
@@ -62,6 +66,8 @@ public final class ClinderCore extends JavaPlugin {
         bind("clan", clans);
         bind("cc", clans);
         bind("event", events);
+        bind("cases", cases);
+        bind("quests", quests);
 
         var pm = getServer().getPluginManager();
         pm.registerEvents(activity, this);
@@ -73,6 +79,8 @@ public final class ClinderCore extends JavaPlugin {
         pm.registerEvents(auction, this);
         pm.registerEvents(clans, this);
         pm.registerEvents(events, this);
+        pm.registerEvents(cases, this);
+        pm.registerEvents(quests, this);
 
         activity.start();
         leaderboards.start();
@@ -110,6 +118,8 @@ public final class ClinderCore extends JavaPlugin {
         reloadConfig();
         store.load();
         tags.reload();
+        cases.reload();
+        quests.reload();
         leaderboards.refresh();
     }
 
@@ -152,6 +162,10 @@ public final class ClinderCore extends JavaPlugin {
 
     public Mine mine() {
         return mine;
+    }
+
+    public Cases cases() {
+        return cases;
     }
 
     public Auction auction() {

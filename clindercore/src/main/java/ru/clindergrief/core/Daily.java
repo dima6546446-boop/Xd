@@ -62,6 +62,11 @@ public final class Daily implements CommandExecutor {
         if (every > 0 && bonus > 0 && streak % every == 0) {
             plugin.economy().depositPlayer(player, bonus);
             player.sendMessage(plugin.msg("daily-milestone", Map.of("day", streak, "amount", Text.money(bonus))));
+            String key = plugin.getConfig().getString("daily.milestone-key", "rare");
+            if (!key.isEmpty()) {
+                plugin.cases().addKeys(player.getUniqueId(), key, 1);
+                player.sendMessage(plugin.msg("cases-received", Map.of("amount", 1, "case", plugin.cases().caseName(key))));
+            }
             player.playSound(player.getLocation(), Sound.UI_TOAST_CHALLENGE_COMPLETE, 1f, 1f);
         } else {
             player.playSound(player.getLocation(), Sound.ENTITY_PLAYER_LEVELUP, 1f, 1.4f);

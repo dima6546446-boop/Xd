@@ -39,7 +39,23 @@ if ! grep -qi '^eula=true' eula.txt 2>/dev/null; then
   esac
 fi
 
-exec "$JAVA" -Xms"$MIN_RAM" -Xmx"$MAX_RAM" -XX:+AlwaysPreTouch -XX:+DisableExplicitGC -XX:+ParallelRefProcEnabled \
+# Прокси Velocity с регистрацией (LimboAuth): игроки подключаются к порту 25565
+if [ -f velocity/velocity-3.5.1-615.jar ]; then
+  mkdir -p logs
+  if [ ! -f velocity/.secret-generated ]; then
+    S=$(LC_ALL=C tr -dc 'A-HJ-NP-Za-km-z2-9' < /dev/urandom | head -c 32)
+    printf '%s' "$S" > velocity/forwarding.secret
+    sed -i "s/^    secret: .*/    secret: '$S'/" config/paper-global.yml
+    echo ok > velocity/.secret-generated
+    echo "Создан уникальный секрет пересылки Velocity."
+  fi
+  (cd velocity && exec "$JAVA" -Xms256M -Xmx512M -Dfile.encoding=UTF-8 -Dstdout.encoding=UTF-8 -jar velocity-3.5.1-615.jar < /dev/null > ../logs/velocity-console.log 2>&1) &
+  VELOCITY_PID=$!
+  trap 'kill $VELOCITY_PID 2>/dev/null' EXIT
+  echo "Velocity запущен (PID $VELOCITY_PID), лог: logs/velocity-console.log"
+fi
+
+"$JAVA" -Xms"$MIN_RAM" -Xmx"$MAX_RAM" -XX:+AlwaysPreTouch -XX:+DisableExplicitGC -XX:+ParallelRefProcEnabled \
   -XX:+PerfDisableSharedMem -XX:+UnlockExperimentalVMOptions -XX:+UseG1GC -XX:G1HeapRegionSize=8M -XX:G1HeapWastePercent=5 \
   -XX:G1MaxNewSizePercent=40 -XX:G1MixedGCCountTarget=4 -XX:G1MixedGCLiveThresholdPercent=90 -XX:G1NewSizePercent=30 \
   -XX:G1RSetUpdatingPauseTimePercent=5 -XX:G1ReservePercent=20 -XX:InitiatingHeapOccupancyPercent=15 -XX:MaxGCPauseMillis=200 \
