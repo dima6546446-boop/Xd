@@ -1,0 +1,40 @@
+package dev.duckvisual;
+
+import dev.duckvisual.module.impl.hud.TargetHud;
+import dev.duckvisual.module.impl.visual.HitParticles;
+import dev.duckvisual.module.impl.visual.TargetESP;
+import net.minecraft.entity.Entity;
+import net.minecraft.entity.LivingEntity;
+
+public final class EventHooks {
+    private EventHooks() {}
+
+    /** Last entity the local player attacked and when, shared by TargetESP / TargetHud. */
+    public static LivingEntity target;
+    public static long targetTime;
+
+    public static void onAttack(Entity entity) {
+        if (entity instanceof LivingEntity living) {
+            target = living;
+            targetTime = System.currentTimeMillis();
+        }
+        HitParticles hp = DuckVisual.modules().get(HitParticles.class);
+        if (hp.isEnabled()) hp.spawn(entity);
+        TargetESP esp = DuckVisual.modules().get(TargetESP.class);
+        if (esp.isEnabled()) esp.onHit();
+        TargetHud hud = DuckVisual.modules().get(TargetHud.class);
+        if (hud.isEnabled()) hud.onHit();
+    }
+
+    /** Returns the current combat target if it is still valid (alive, nearby, recently hit). */
+    public static LivingEntity currentTarget(long timeoutMs) {
+        if (target == null) return null;
+        var mc = net.minecraft.client.MinecraftClient.getInstance();
+        if (mc.player == null || target.isRemoved() || !target.isAlive()
+                || target.squaredDistanceTo(mc.player) > 12 * 12
+                || System.currentTimeMillis() - targetTime > timeoutMs) {
+            return null;
+        }
+        return target;
+    }
+}

@@ -1,0 +1,20 @@
+{
+  "required": true,
+  "minVersion": "0.8",
+  "package": "dev.duckvisual.mixin",
+  "compatibilityLevel": "JAVA_21",
+  "client": [
+    "GameRendererMixin",
+    "HeldItemRendererMixin",
+    "InGameHudMixin",
+    "InGameOverlayRendererMixin",
+    "LightmapTextureManagerMixin",
+    "LivingEntityMixin",
+    "OverlayTextureAccessor",
+    "WorldPropertiesMixin",
+    "BossBarHudMixin"
+  ],
+  "injectors": {
+    "defaultRequire": 1
+  }
+}
