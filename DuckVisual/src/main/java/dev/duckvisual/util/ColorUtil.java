@@ -47,8 +47,8 @@ public final class ColorUtil {
             float hue = (float) ((System.currentTimeMillis() * speed / 4000.0 + index * 0.03) % 1.0);
             return 0xFF000000 | java.awt.Color.HSBtoRGB(hue, 0.6f, 1f);
         }
-        if (theme.mode.is("Static")) return 0xFF000000 | (theme.first.get() & 0xFFFFFF);
-        return lerp(0xFF000000 | theme.first.get(), 0xFF000000 | theme.second.get(), f);
+        if (theme.mode.is("Static")) return 0xFF000000 | (theme.firstColor() & 0xFFFFFF);
+        return lerp(0xFF000000 | theme.firstColor(), 0xFF000000 | theme.secondColor(), f);
     }
 
     public static int theme() {

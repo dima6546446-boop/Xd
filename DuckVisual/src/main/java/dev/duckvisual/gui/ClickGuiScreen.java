@@ -6,7 +6,9 @@ import dev.duckvisual.module.HudModule;
 import dev.duckvisual.module.Module;
 import dev.duckvisual.module.impl.hud.Watermark;
 import dev.duckvisual.module.impl.misc.ClickGui;
+import dev.duckvisual.setting.BindSetting;
 import dev.duckvisual.setting.BooleanSetting;
+import dev.duckvisual.module.impl.misc.Theme;
 import dev.duckvisual.setting.ColorSetting;
 import dev.duckvisual.setting.ModeSetting;
 import dev.duckvisual.setting.NumberSetting;
@@ -58,6 +60,9 @@ public class ClickGuiScreen extends Screen {
     private boolean searchFocused;
 
     private Module binding;
+    private BindSetting bindingSetting;
+    private static boolean paletteTab;
+    private float paletteAnim;
     private boolean draggingWindow;
     private float dragX, dragY;
     private HudModule draggingHud;
@@ -159,8 +164,9 @@ public class ClickGuiScreen extends Screen {
 
         ctx.getMatrices().pop();
 
-        if (binding != null) {
-            String s = "Press a key to bind " + binding.getName() + " (Esc = clear)";
+        if (binding != null || bindingSetting != null) {
+            String s = "Press a key or mouse button to bind "
+                    + (binding != null ? binding.getName() : bindingSetting.getName()) + " (Esc = clear)";
             float tw = Render2D.width(s) + 16;
             Render2D.roundedRect(ctx, width / 2f - tw / 2, 10, tw, 18, 4, 0xF0111116);
             Render2D.centeredText(ctx, s, width / 2f, 15, ColorUtil.theme());
@@ -197,7 +203,7 @@ public class ClickGuiScreen extends Screen {
 
         float ty = y + 46;
         for (Category c : Category.values()) {
-            boolean sel = c == current && search.isEmpty();
+            boolean sel = c == current && search.isEmpty() && !paletteTab;
             boolean hov = mx >= x + 6 && mx <= x + SIDEBAR - 6 && my >= ty && my <= ty + 22;
             float a = Animation.approach(tabAnim.getOrDefault(c, 0f), sel ? 1 : hov ? 0.4f : 0, 12);
             tabAnim.put(c, a);
@@ -215,10 +221,31 @@ public class ClickGuiScreen extends Screen {
             hits.add(new Hit(x + 6, ty, SIDEBAR - 12, 22, b -> {
                 scroll.put(current, scrollAnim);
                 current = c;
+                paletteTab = false;
                 search = "";
                 scrollAnim = scroll.getOrDefault(c, 0f);
             }));
             ty += 26;
+        }
+
+        // palette tab
+        {
+            boolean sel = paletteTab && search.isEmpty();
+            boolean hov = mx >= x + 6 && mx <= x + SIDEBAR - 6 && my >= ty && my <= ty + 22;
+            paletteAnim = Animation.approach(paletteAnim, sel ? 1 : hov ? 0.4f : 0, 12);
+            float a = paletteAnim;
+            if (a > 0.01f) {
+                Render2D.roundedRect(ctx, x + 6, ty, SIDEBAR - 12, 22, 5, ColorUtil.withAlpha(ColorUtil.theme(), (int) (40 * a)));
+                Render2D.roundedRect(ctx, x + 6, ty + 5, 2, 12, 1, ColorUtil.fade(ColorUtil.theme(), a));
+            }
+            Render2D.roundedGradient(ctx, x + 14, ty + 4, 14, 14, 4, ColorUtil.theme(0), ColorUtil.theme(10), ColorUtil.theme(10), ColorUtil.theme(0));
+            Render2D.text(ctx, "Palette", x + 34, ty + 7, ColorUtil.lerp(SUBTEXT, TEXT, a));
+            String cnt = String.valueOf(Theme.PRESETS.length);
+            Render2D.text(ctx, cnt, x + SIDEBAR - 14 - Render2D.width(cnt), ty + 7, ColorUtil.withAlpha(SUBTEXT, 160));
+            hits.add(new Hit(x + 6, ty, SIDEBAR - 12, 22, b -> {
+                paletteTab = true;
+                search = "";
+            }));
         }
 
         // search field
@@ -234,6 +261,10 @@ public class ClickGuiScreen extends Screen {
     // ------------------------------------------------------------------ content
 
     private void renderContent(DrawContext ctx, float x, float y, float w, float h, float mx, float my) {
+        if (paletteTab && search.isEmpty()) {
+            renderPalette(ctx, x, y, w, h, mx, my);
+            return;
+        }
         List<Module> modules = search.isEmpty()
                 ? DuckVisual.modules().getModules(current)
                 : DuckVisual.modules().getModules().stream()
@@ -273,6 +304,63 @@ public class ClickGuiScreen extends Screen {
             float barY = top + (-scrollAnim / (contentHeight - viewH)) * (viewH - barH);
             Render2D.roundedRect(ctx, x + w + 3, barY, 2, barH, 1, ColorUtil.withAlpha(ColorUtil.theme(), 150));
         }
+    }
+
+    /** Grid of theme presets plus the animation mode chips. */
+    private void renderPalette(DrawContext ctx, float x, float y, float w, float h, float mx, float my) {
+        Theme theme = DuckVisual.modules().get(Theme.class);
+        Render2D.text(ctx, "Palette", x + 2, y + 3, TEXT);
+
+        // mode chips
+        float cx = x + w;
+        String[] modes = {"Rainbow", "Static", "Gradient"};
+        for (String mode : modes) {
+            float cw = Render2D.width(mode) + 10;
+            cx -= cw;
+            boolean sel = theme.mode.is(mode);
+            Render2D.roundedRect(ctx, cx, y, cw, 13, 4, sel ? ColorUtil.theme() : 0xFF22222B);
+            Render2D.text(ctx, mode, cx + 5, y + 3, sel ? 0xFF111111 : SUBTEXT);
+            hits.add(new Hit(cx, y, cw, 13, b -> theme.mode.set(mode)));
+            cx -= 4;
+        }
+
+        int cols = 5;
+        float gap = 6, top = y + 20;
+        float tw = (w - gap * (cols - 1)) / cols, th = 36;
+        int n = Theme.PRESETS.length + 1;
+        for (int i = 0; i < n; i++) {
+            float tx = x + (i % cols) * (tw + gap), ty = top + (i / cols) * (th + gap);
+            boolean custom = i == Theme.PRESETS.length;
+            String name = custom ? "Custom" : Theme.PRESETS[i].name();
+            int c1 = custom ? theme.first.get() | 0xFF000000 : Theme.PRESETS[i].first();
+            int c2 = custom ? theme.second.get() | 0xFF000000 : Theme.PRESETS[i].second();
+            boolean sel = theme.palette.is(name);
+            boolean hov = mx >= tx && mx <= tx + tw && my >= ty && my <= ty + th;
+            if (sel) Render2D.shadow(ctx, tx, ty, tw, th, 5, 4, ColorUtil.withAlpha(c1, 120));
+            Render2D.roundedRect(ctx, tx, ty, tw, th, 5, sel ? 0xFF24242D : hov ? CARD_HOVER : CARD);
+            Render2D.roundedGradient(ctx, tx + 3, ty + 3, tw - 6, 18, 4, c1, c2, c2, c1);
+            if (sel) Render2D.centeredText(ctx, "\u2714", tx + tw / 2, ty + 8, 0xFF111111);
+            ctx.getMatrices().push();
+            ctx.getMatrices().translate(tx + tw / 2 - Render2D.width(name) * 0.4f, ty + 25, 0);
+            ctx.getMatrices().scale(0.8f, 0.8f, 1);
+            Render2D.text(ctx, name, 0, 0, sel ? TEXT : SUBTEXT);
+            ctx.getMatrices().pop();
+            hits.add(new Hit(tx, ty, tw, th, b -> {
+                theme.palette.set(name);
+                if (custom && b == 1) {
+                    // right click on Custom jumps to the Theme module to edit its colors
+                    paletteTab = false;
+                    current = Category.MISC;
+                    expanded.put(theme, true);
+                }
+            }));
+        }
+        float hy = top + ((n + cols - 1) / cols) * (th + gap);
+        ctx.getMatrices().push();
+        ctx.getMatrices().translate(x + 2, hy, 0);
+        ctx.getMatrices().scale(0.75f, 0.75f, 1);
+        Render2D.text(ctx, "RMB on Custom - edit your own colors", 0, 0, SUBTEXT);
+        ctx.getMatrices().pop();
     }
 
     private float renderCard(DrawContext ctx, Module m, float x, float y, float w, float mx, float my, boolean mouseInView) {
@@ -328,7 +416,10 @@ public class ClickGuiScreen extends Screen {
             hits.add(new Hit(x, y, w, headH, b -> {
                 if (b == 0) m.toggle();
                 else if (b == 1) expanded.put(m, !expanded.getOrDefault(m, false));
-                else if (b == 2) binding = m;
+                else if (b == 2) {
+                    bindingSetting = null;
+                    binding = m;
+                }
             }));
         }
 
@@ -353,12 +444,26 @@ public class ClickGuiScreen extends Screen {
 
     private float settingHeight(Setting<?> s) {
         if (s instanceof NumberSetting) return 22;
+        if (s instanceof BindSetting) return 15;
         if (s instanceof ColorSetting c) return pickerOpen.getOrDefault(c, false) ? 16 + 4 * 10 + 2 : 16;
         return 15;
     }
 
     private void renderSetting(DrawContext ctx, Setting<?> s, float x, float y, float w, float mx, float my, boolean interact) {
-        if (s instanceof BooleanSetting b) {
+        if (s instanceof BindSetting bs) {
+            Render2D.text(ctx, s.getName(), x, y + 3, SUBTEXT);
+            String v = bindingSetting == bs ? "..." : Keys.name(bs.get());
+            float vw = Render2D.width(v) + 8;
+            Render2D.roundedRect(ctx, x + w - vw, y + 1, vw, 12, 3, bindingSetting == bs ? ColorUtil.withAlpha(ColorUtil.theme(), 80) : 0xFF24242D);
+            Render2D.text(ctx, v, x + w - vw + 4, y + 3, bs.get() > 0 ? ColorUtil.theme() : SUBTEXT);
+            if (interact) hits.add(new Hit(x, y, w, 14, btn -> {
+                if (btn == 1) bs.set(-1);
+                else {
+                    binding = null;
+                    bindingSetting = bs;
+                }
+            }));
+        } else if (s instanceof BooleanSetting b) {
             Render2D.text(ctx, s.getName(), x, y + 3, b.get() ? TEXT : SUBTEXT);
             float bx = x + w - 10;
             Render2D.roundedRect(ctx, bx, y + 2, 10, 10, 3, b.get() ? ColorUtil.theme() : 0xFF2C2C36);
@@ -439,9 +544,11 @@ public class ClickGuiScreen extends Screen {
         if (closing) return true;
         lastMouseX = mouseX;
         lastMouseY = mouseY;
-        if (binding != null) {
-            // allow binding mouse side buttons is out of scope; any click cancels
+        if (binding != null || bindingSetting != null) {
+            // middle / side mouse buttons can be bound; left and right click cancel
+            if (button >= 2) applyBind(Keys.MOUSE + button);
             binding = null;
+            bindingSetting = null;
             return true;
         }
         if (!insideWindow(mouseX, mouseY)) {
@@ -469,6 +576,15 @@ public class ClickGuiScreen extends Screen {
         }
         if (!hitSearch) searchFocused = false;
         return true;
+    }
+
+    private void applyBind(int key) {
+        if (bindingSetting != null) {
+            bindingSetting.set(key);
+        } else if (binding != null) {
+            binding.setKey(key);
+            if (binding instanceof ClickGui && (key == -1 || key >= Keys.MOUSE)) binding.setKey(GLFW.GLFW_KEY_RIGHT_SHIFT);
+        }
     }
 
     @Override
@@ -509,11 +625,11 @@ public class ClickGuiScreen extends Screen {
     @Override
     public boolean keyPressed(int keyCode, int scanCode, int modifiers) {
         if (closing) return true;
-        if (binding != null) {
-            binding.setKey(keyCode == GLFW.GLFW_KEY_ESCAPE || keyCode == GLFW.GLFW_KEY_DELETE
+        if (binding != null || bindingSetting != null) {
+            applyBind(keyCode == GLFW.GLFW_KEY_ESCAPE || keyCode == GLFW.GLFW_KEY_DELETE
                     || keyCode == GLFW.GLFW_KEY_BACKSPACE ? -1 : keyCode);
-            if (binding instanceof ClickGui && binding.getKey() == -1) binding.setKey(GLFW.GLFW_KEY_RIGHT_SHIFT);
             binding = null;
+            bindingSetting = null;
             return true;
         }
         if (searchFocused) {
@@ -556,6 +672,7 @@ public class ClickGuiScreen extends Screen {
         activeSlider = null;
         searchFocused = false;
         binding = null;
+        bindingSetting = null;
     }
 
     @Override

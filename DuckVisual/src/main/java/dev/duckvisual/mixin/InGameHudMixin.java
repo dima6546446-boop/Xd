@@ -21,6 +21,11 @@ public class InGameHudMixin {
         if (DuckVisual.modules().get(Crosshair.class).isEnabled()) ci.cancel();
     }
 
+    @Inject(method = "renderHotbar", at = @At("HEAD"), cancellable = true)
+    private void duck$hotbar(DrawContext ctx, RenderTickCounter counter, CallbackInfo ci) {
+        if (DuckVisual.modules().get(dev.duckvisual.module.impl.hud.CustomHotbar.class).replacesVanilla()) ci.cancel();
+    }
+
     @Inject(method = "renderStatusEffectOverlay", at = @At("HEAD"), cancellable = true)
     private void duck$effects(DrawContext ctx, RenderTickCounter counter, CallbackInfo ci) {
         if (NoRender.active(nr -> nr.vanillaEffects) || DuckVisual.modules().get(Potions.class).isEnabled()) ci.cancel();

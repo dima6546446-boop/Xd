@@ -15,7 +15,8 @@
     "BossBarHudMixin",
     "MouseMixin",
     "WorldColorMixin",
-    "ClientWorldMixin"
+    "ClientWorldMixin",
+    "EntityRenderDispatcherMixin"
   ],
   "injectors": {
     "defaultRequire": 1

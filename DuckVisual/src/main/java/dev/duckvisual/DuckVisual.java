@@ -115,7 +115,7 @@ public class DuckVisual implements ClientModInitializer {
         for (Module m : moduleManager.getModules()) {
             int key = m.getKey();
             if (key <= 0) continue;
-            boolean down = InputUtil.isKeyPressed(window, key);
+            boolean down = dev.duckvisual.util.Keys.isDown(window, key);
             if (down && !heldKeys.contains(key)) {
                 heldKeys.add(key);
                 if (inGame) {

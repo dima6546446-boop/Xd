@@ -23,6 +23,9 @@ ClickGUI, HUD, China Hat, Jump Circles, Trails, Target ESP, Hit Particles, ка�
 | Переключить режим | ЛКМ — вперёд, ПКМ — назад |
 | Двигать HUD | Зажать ЛКМ на элементе HUD при открытом меню |
 | Поиск | Поле `Search...` внизу слева |
+| Сменить цвета | Вкладка **Palette** в меню — клик по палитре (ПКМ по Custom — свои цвета) |
+| Бинд на кнопку мыши | Начать бинд и нажать колесо / боковую кнопку мыши |
+| Бинд слотов хотбара | Модуль CustomHotbar → ПКМ → Slot 1..9 → нажать клавишу (ПКМ по бинду — сброс) |
 
 Конфиг сохраняется автоматически в `.minecraft/config/duckvisual.json`.
 
@@ -46,6 +49,8 @@ ClickGUI, HUD, China Hat, Jump Circles, Trails, Target ESP, Hit Particles, ка�
 - **BoxESP** — боксы вокруг игроков/мобов/животных (Box / Filled / Corners) + полоска HP.
 - **Tracers** — линии от прицела к игрокам (цвет по дистанции или по теме).
 - **HitSounds** — звук при ударе (Bell / Pling / Orb / Chime / Arrow).
+- **HitBoxes** — красивые хитбоксы как на F3+B: цвет темы/белый/по HP, линия глаз, направление взгляда, заливка, сквозь стены (только визуал).
+- **CustomModels** — замена модели игрока: Duck / Amogus / Rabbit / Penguin, с анимацией ног и головы, на себе или на всех.
 - **KillEffects** — молния, частицы и звук, когда твоя цель умирает, + счётчик убийств.
 
 **Hud**
@@ -57,6 +62,7 @@ ClickGUI, HUD, China Hat, Jump Circles, Trails, Target ESP, Hit Particles, ка�
 - **Information** — координаты (+ координаты Незера), скорость, сервер.
 - **Notifications** — уведомления о включении/выключении модулей.
 - **ArmorHud** — броня и её прочность в процентах.
+- **CustomHotbar** — новый хотбар со скруглением и плавным выбором слота + **бинд на каждый слот** (клавиша или кнопка мыши).
 - **Cooldowns** — кулдауны предметов (жемчуг, яблоки, щит, заряды ветра).
 
 **World**
@@ -66,7 +72,7 @@ ClickGUI, HUD, China Hat, Jump Circles, Trails, Target ESP, Hit Particles, ка�
 - **WorldColor** — окрашивает небо, туман и облака в цвет темы или свой.
 
 **Misc**
-- **Theme** — цвета клиента: Gradient / Static / Rainbow, два цвета, скорость.
+- **Theme** — цвета клиента: Gradient / Static / Rainbow, **26 готовых палитр** (Duck, Sunset, Ocean, Purple, Mint, Cherry, Sky, Lime, Pink, Aqua, Fire, Lavender, Blood, Gold, Ice, Neon, Forest, Royal, Peach, Candy, Toxic, Love, Mono, Rose, Coral, Emerald) или свои цвета.
 - **ClickGui** — бинд меню, затемнение фона, описания.
 
 ## Сборка

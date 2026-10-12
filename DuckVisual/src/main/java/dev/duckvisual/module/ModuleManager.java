@@ -31,6 +31,8 @@ public class ModuleManager {
         add(new Tracers());
         add(new HitSounds());
         add(new KillEffects());
+        add(new HitBoxes());
+        add(new CustomModels());
         // Hud
         add(new Watermark());
         add(new ArrayListHud());
@@ -41,6 +43,7 @@ public class ModuleManager {
         add(new Notifications());
         add(new ArmorHud());
         add(new Cooldowns());
+        add(new CustomHotbar());
         // World
         add(new Fullbright());
         add(new TimeChanger());
