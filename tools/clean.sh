@@ -18,7 +18,7 @@ mkdir -p plugins/Essentials/userdata
 rm -rf plugins/GriefPreventionData/PlayerData/* plugins/GriefPreventionData/ClaimData/* plugins/GriefPreventionData/Logs/*
 rm -f plugins/QuickShop-Hikari/shops.mv.db plugins/QuickShop-Hikari/shops.trace.db plugins/QuickShop-Hikari/qs.log
 rm -rf plugins/QuickShop-Hikari/cache
-rm -f plugins/CoreProtect/database.db
+rm -f plugins/CoreProtect/database.db plugins/ClinderCore/data.yml plugins/PlayerParticles/playerparticles.db
 : > plugins/TAB/playerdata.yml; : > plugins/TAB/users.yml
 rm -rf plugins/FancyNpcs/logs plugins/WorldEdit/sessions/* plugins/spark/tmp
 sed -i 's/^online-mode=.*/online-mode=true/' server.properties

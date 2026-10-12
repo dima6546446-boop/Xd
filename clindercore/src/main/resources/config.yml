@@ -1,0 +1,184 @@
+# =====================================================================
+#  ClinderCore — собственные системы сервера ClinderGrief
+#  Цвета: &a, &l ... и HEX &#ff8800. Перезагрузка: /cg reload
+# =====================================================================
+
+prefix: "&#ff5e00&lC&#ff7a00&lG &8» &r"
+
+# ---------------------------------------------------------------------
+# Ежедневная награда /daily. Серия растёт, если забирать награду каждый
+# день подряд (по календарю часового пояса timezone). Пропуск — серия с 1.
+# Награда за день N серии = rewards[N-1]; после конца списка — последнее значение.
+# ---------------------------------------------------------------------
+daily:
+  enabled: true
+  timezone: Europe/Moscow
+  rewards: [100, 150, 200, 250, 300, 400, 750]
+  # Каждый N-й день серии — дополнительный бонус
+  milestone-every: 7
+  milestone-bonus: 1000
+
+# ---------------------------------------------------------------------
+# Награда за активную игру: каждые interval-minutes активных минут.
+# Игрок считается AFK, если не двигался и не писал afk-after-minutes минут.
+# ---------------------------------------------------------------------
+playtime-rewards:
+  enabled: true
+  interval-minutes: 30
+  reward: 75
+  afk-after-minutes: 5
+
+# ---------------------------------------------------------------------
+# Награда за голову /bounty
+# ---------------------------------------------------------------------
+bounty:
+  enabled: true
+  min-amount: 100
+  max-amount: 1000000
+  # Не выплачивать награду, если убийца и жертва зашли с одного IP (защита от фарма)
+  block-same-ip: true
+
+# ---------------------------------------------------------------------
+# Жалобы /report
+# ---------------------------------------------------------------------
+reports:
+  cooldown-seconds: 60
+  keep-last: 200
+
+# ---------------------------------------------------------------------
+# Объявления в чат (по кругу)
+# ---------------------------------------------------------------------
+broadcast:
+  enabled: true
+  interval-seconds: 300
+  messages:
+    - "&#ffb347✦ &fЗабирай ежедневную награду: &#ffb347/daily&f — чем длиннее серия, тем больше монет!"
+    - "&#6bcbff✦ &fЗащити постройку &eзолотой лопатой&f — подробности в &#6bcbff/menu"
+    - "&#a0ff6b✦ &fПродавай руду и урожай скупщику: &#a0ff6b/buyer"
+    - "&#ff6b6b✦ &fНазначь награду за голову обидчика: &#ff6b6b/bounty <ник> <сумма>"
+    - "&#d18cff✦ &fТитулы за время в игре и для привилегий: &#d18cff/tags"
+    - "&#ffd36b✦ &fУвидел нарушителя? &#ffd36b/report <ник> <причина>"
+    - "&#ff8800✦ &fПоддержать сервер и получить косметику: &#ff8800/donate"
+
+# ---------------------------------------------------------------------
+# Фильтр чата: регулярные выражения (без учёта регистра).
+# Совпадения заменяются на replacement. Право обхода: clindercore.chatfilter.bypass
+# ---------------------------------------------------------------------
+chat-filter:
+  enabled: true
+  replacement: "***"
+  patterns:
+    - "(?<![а-яё])(х[уy][йеёяию]\\p{L}*)"
+    - "(?<![а-яё])(п[иi]зд\\p{L}*)"
+    - "(?<![а-яё])(бл[яa]д\\p{L}*)"
+    - "(?<![а-яё])(бл[яa]ть?)(?![а-яё])"
+    - "(?<![а-яё])((?:за|на|по|у|вы|от|раз|до|про|с)?[её]б(?:а|ан|ат|л|ну|у)\\p{L}*)"
+    - "(?<![а-яё])(сук(?:а|и|е|у|ой|ам|ами)?)(?![а-яё])"
+    - "(?<![а-яё])(муда[кч]\\p{L}*)"
+    - "(?<![а-яё])(пид[оа]р\\p{L}*)"
+    - "(?<![а-яё])(залуп\\p{L}*)"
+    - "(?<![а-яё])(шлюх\\p{L}*)"
+    - "(?<![a-z])(fuck\\p{L}*)"
+
+# ---------------------------------------------------------------------
+# Объявления о входе (первое подходящее право сверху вниз)
+# ---------------------------------------------------------------------
+join:
+  title-for-player: true
+  title: "&#ff5e00&lClinderGrief"
+  subtitle: "&7Добро пожаловать, &f{player}&7!"
+  # Пусто — потому что новичков уже приветствует EssentialsX
+  first-join-broadcast: ""
+  # Объявление о входе по группе LuckPerms (первая подходящая сверху вниз).
+  # sound — ключ звука Minecraft (например entity.player.levelup) или пусто.
+  announcements:
+    - group: god
+      message: "&#00e5ff&l⚡ БОГ &f{player} &#00e5ffспустился на сервер! ⚡"
+      sound: entity.lightning_bolt.thunder
+    - group: imperator
+      message: "&#ffaa00&l♛ Император &f{player} &#ffaa00прибыл на сервер!"
+      sound: ui.toast.challenge_complete
+    - group: titan
+      message: "&#ff5555&l⚔ Титан &f{player} &#ff5555вошёл в игру!"
+      sound: entity.player.levelup
+    - group: legend
+      message: "&d&l✦ Легенда &f{player} &dзашёл на сервер!"
+      sound: entity.player.levelup
+
+# ---------------------------------------------------------------------
+# Титулы /tags. Показываются после ника (в чате и TAB) через суффикс LuckPerms.
+# hours — сколько часов нужно наиграть; permission — нужное право (привилегия).
+# ---------------------------------------------------------------------
+tags:
+  suffix-priority: 50
+  list:
+    novice:      { display: "&7[Новичок]",                  hours: 0,   icon: WOODEN_PICKAXE }
+    survivor:    { display: "&a[Выживший]",                 hours: 3,   icon: STONE_PICKAXE }
+    miner:       { display: "&8[Шахтёр]",                   hours: 10,  icon: IRON_PICKAXE }
+    farmer:      { display: "&e[Фермер]",                   hours: 15,  icon: GOLDEN_HOE }
+    builder:     { display: "&6[Строитель]",                hours: 25,  icon: BRICKS }
+    veteran:     { display: "&#c0c0c0[Ветеран]",            hours: 50,  icon: IRON_CHESTPLATE }
+    oldfag:      { display: "&#d4af37[Старожил]",           hours: 100, icon: CLOCK }
+    ancient:     { display: "&#8a2be2[Древний]",            hours: 250, icon: ANCIENT_DEBRIS }
+    star:        { display: "&e[★]",                        permission: clindercore.tag.vip,       icon: NETHER_STAR }
+    cyber:       { display: "&#00ffd5[Кибер]",              permission: clindercore.tag.premium,   icon: PRISMARINE_SHARD }
+    shadow:      { display: "&#7d7d7d[Тень]",               permission: clindercore.tag.elite,     icon: BLACK_DYE }
+    fire:        { display: "&#ff4e00[Пламя]",              permission: clindercore.tag.legend,    icon: BLAZE_POWDER }
+    demon:       { display: "&#ff1a1a[☠ Демон]",            permission: clindercore.tag.titan,     icon: WITHER_SKELETON_SKULL }
+    crown:       { display: "&#ffaa00[♛ Корона]",           permission: clindercore.tag.imperator, icon: GOLDEN_HELMET }
+    divine:      { display: "&#00e5ff[⚡ Божество]",         permission: clindercore.tag.god,       icon: TRIDENT }
+
+# ---------------------------------------------------------------------
+# Ссылки /links
+# ---------------------------------------------------------------------
+links:
+  - "&#5865f2Discord: &fУКАЖИТЕ-ССЫЛКУ"
+  - "&#4c75a3ВКонтакте: &fУКАЖИТЕ-ССЫЛКУ"
+  - "&#29b6f6Telegram: &fУКАЖИТЕ-ССЫЛКУ"
+  - "&#ff8800Сайт и донат: &fУКАЖИТЕ-ССЫЛКУ"
+
+# ---------------------------------------------------------------------
+# Топы (обновляются раз в update-minutes): /top и плейсхолдеры для голограмм
+# ---------------------------------------------------------------------
+leaderboards:
+  update-minutes: 5
+  size: 10
+
+messages:
+  no-permission: "&cУ вас нет прав."
+  players-only: "&cКоманда только для игроков."
+  player-not-found: "&cИгрок не найден."
+  reloaded: "&aКонфигурация ClinderCore перезагружена."
+  daily-claimed: "&fНаграда за &#ffb347{day}-й день&f серии: &a+{amount}$"
+  daily-milestone: "&#ffb347&l✦ &fБонус за серию в {day} дн.: &a+{amount}$"
+  daily-already: "&cВы уже забрали награду сегодня. Следующая — через &f{time}&c."
+  daily-broken: "&7Серия прервалась — начинаем заново."
+  playtime-reward: "&a+{amount}$ &7за {minutes} мин активной игры"
+  tags-gui-title: "&8Титулы"
+  tag-selected: "&fТитул установлен: {tag}"
+  tag-removed: "&fТитул снят."
+  tag-locked-hours: "&cНужно наиграть {hours} ч. (у вас {have} ч.)"
+  tag-locked-perm: "&cТитул доступен с привилегией. &7/donate"
+  report-usage: "&cИспользование: /report <ник> <причина>"
+  report-self: "&cНельзя пожаловаться на самого себя."
+  report-cooldown: "&cПодождите {seconds} сек. перед следующей жалобой."
+  report-sent: "&aЖалоба отправлена модераторам. Спасибо!"
+  report-notify: "&#ff6b6b[Жалоба] &f{reporter} &7→ &f{target}&7: &f{reason}"
+  reports-empty: "&7Жалоб нет."
+  reports-header: "&#ff6b6b&lЖалобы &7(последние {count}):"
+  reports-line: "&8{time} &f{reporter} &7→ &c{target}&7: {reason}"
+  reports-cleared: "&aСписок жалоб очищен."
+  bounty-usage: "&cИспользование: /bounty <ник> <сумма> &7или &c/bounty list"
+  bounty-self: "&cНельзя назначить награду за свою голову."
+  bounty-range: "&cСумма должна быть от {min}$ до {max}$."
+  bounty-no-money: "&cНедостаточно денег."
+  bounty-placed: "&#ff6b6b☠ &f{player} &7назначил награду &a{amount}$ &7за голову &c{target}&7! Всего: &a{total}$"
+  bounty-claimed: "&#ff6b6b☠ &f{killer} &7получил &a{amount}$ &7за голову &c{target}&7!"
+  bounty-same-ip: "&7Награда за голову не выплачена: одинаковый IP."
+  bounty-list-header: "&#ff6b6b&lНаграды за головы:"
+  bounty-list-line: "&f{n}. &c{target} &7— &a{amount}$"
+  bounty-list-empty: "&7Сейчас нет наград за головы."
+  links-header: "&#ff8800&lНаши ссылки:"
+  top-header: "&#ffb347&lТоп — {type}:"
+  top-line: "&f{n}. &e{name} &7— &a{value}"
+  top-usage: "&cИспользование: /top <money|playtime|kills>"

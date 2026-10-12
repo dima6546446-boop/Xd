@@ -1,4 +1,4 @@
-# Команды настройки групп LuckPerms для сборки MineRus.
+# Команды настройки групп LuckPerms для сборки ClinderGrief.
 # Уже применены в поставляемой базе (plugins/LuckPerms/luckperms-h2-v2.mv.db).
 # Если нужно пересоздать группы — вставьте строки (без комментариев) в консоль сервера.
 
@@ -6,44 +6,68 @@
 lp creategroup vip
 lp creategroup premium
 lp creategroup elite
+lp creategroup legend
+lp creategroup titan
+lp creategroup imperator
+lp creategroup god
 lp creategroup helper
 lp creategroup moder
 lp creategroup admin
 
-# ===== Вес (порядок) и префиксы =====
+# ===== Вес, префиксы, названия рангов (meta rank — для скорборда) =====
 lp group default setweight 1
-lp group vip setweight 10
-lp group premium setweight 20
-lp group elite setweight 30
-lp group helper setweight 100
-lp group moder setweight 200
-lp group admin setweight 300
 lp group default meta setprefix 1 "&7"
-lp group vip meta setprefix 10 "&a[VIP] "
-lp group premium meta setprefix 20 "&b[Premium] "
-lp group elite meta setprefix 30 "&6[Элита] "
-lp group helper meta setprefix 100 "&e[Хелпер] "
-lp group moder meta setprefix 200 "&9[Модератор] "
-lp group admin meta setprefix 300 "&c[Админ] "
 lp group default meta set rank "&7Игрок"
-lp group vip meta set rank "&aVIP"
-lp group premium meta set rank "&bPremium"
-lp group elite meta set rank "&6Элита"
-lp group helper meta set rank "&eХелпер"
-lp group moder meta set rank "&9Модератор"
-lp group admin meta set rank "&cАдмин"
 lp group default setdisplayname Игрок
+lp group vip setweight 10
+lp group vip meta setprefix 10 "&8[&aVIP&8] &a"
+lp group vip meta set rank "&aVIP"
 lp group vip setdisplayname VIP
+lp group premium setweight 20
+lp group premium meta setprefix 20 "&8[&bPremium&8] &b"
+lp group premium meta set rank "&bPremium"
 lp group premium setdisplayname Premium
+lp group elite setweight 30
+lp group elite meta setprefix 30 "&8[&6Элита&8] &6"
+lp group elite meta set rank "&6Элита"
 lp group elite setdisplayname Элита
+lp group legend setweight 40
+lp group legend meta setprefix 40 "&8[&dЛегенда&8] &d"
+lp group legend meta set rank "&dЛегенда"
+lp group legend setdisplayname Легенда
+lp group titan setweight 50
+lp group titan meta setprefix 50 "&8[&#ff5555Титан&8] &#ff5555"
+lp group titan meta set rank "&#ff5555Титан"
+lp group titan setdisplayname Титан
+lp group imperator setweight 60
+lp group imperator meta setprefix 60 "&8[&#ffaa00Император&8] &#ffaa00"
+lp group imperator meta set rank "&#ffaa00Император"
+lp group imperator setdisplayname Император
+lp group god setweight 70
+lp group god meta setprefix 70 "&8[&#00e5ffБОГ&8] &#00e5ff"
+lp group god meta set rank "&#00e5ffБОГ"
+lp group god setdisplayname Бог
+lp group helper setweight 100
+lp group helper meta setprefix 100 "&8[&eХелпер&8] &e"
+lp group helper meta set rank "&eХелпер"
 lp group helper setdisplayname Хелпер
+lp group moder setweight 200
+lp group moder meta setprefix 200 "&8[&9Модер&8] &9"
+lp group moder meta set rank "&9Модератор"
 lp group moder setdisplayname Модератор
+lp group admin setweight 300
+lp group admin meta setprefix 300 "&8[&4Админ&8] &c"
+lp group admin meta set rank "&cАдмин"
 lp group admin setdisplayname Админ
 
-# ===== Наследование =====
+# ===== Наследование: донат-лестница и персонал =====
 lp group vip parent add default
 lp group premium parent add vip
 lp group elite parent add premium
+lp group legend parent add elite
+lp group titan parent add legend
+lp group imperator parent add titan
+lp group god parent add imperator
 lp group helper parent add default
 lp group moder parent add helper
 lp group admin parent add moder
@@ -99,23 +123,63 @@ lp group default permission set griefprevention.createclaims true
 lp group default permission set griefprevention.claims true
 lp group default permission set griefprevention.buysellclaimblocks true
 lp group default permission set quickshop.player true
+lp group default permission set playerparticles.basecommand true
 
-# ===== VIP (только косметика) =====
+# ===== ПРИВИЛЕГИИ — ТОЛЬКО КОСМЕТИКА (правила Minecraft запрещают продавать игровые преимущества) =====
+# ----- VIP
 lp group vip permission set essentials.chat.color true
-lp group vip permission set essentials.nick true
 lp group vip permission set essentials.hat true
-
-# ===== Premium (только косметика) =====
+lp group vip permission set clindercore.tag.vip true
+lp group vip permission set playerparticles.particles.max.1 true
+lp group vip permission set playerparticles.effect.heart true
+lp group vip permission set playerparticles.effect.note true
+lp group vip permission set playerparticles.effect.happy_villager true
+lp group vip permission set playerparticles.effect.crit true
+lp group vip permission set playerparticles.style.normal true
+lp group vip permission set playerparticles.style.feet true
+lp group vip permission set playerparticles.style.halo true
+# ----- Premium
 lp group premium permission set essentials.chat.format true
+lp group premium permission set essentials.nick true
 lp group premium permission set essentials.nick.color true
 lp group premium permission set essentials.ptime true
 lp group premium permission set essentials.pweather true
-
-# ===== Элита (только косметика) =====
+lp group premium permission set clindercore.tag.premium true
+lp group premium permission set playerparticles.particles.max.2 true
+lp group premium permission set playerparticles.effect.flame true
+lp group premium permission set playerparticles.effect.enchant true
+lp group premium permission set playerparticles.effect.cloud true
+lp group premium permission set playerparticles.effect.end_rod true
+lp group premium permission set playerparticles.effect.cherry_leaves true
+lp group premium permission set playerparticles.style.orbit true
+lp group premium permission set playerparticles.style.spiral true
+lp group premium permission set playerparticles.style.trail true
+# ----- Элита
 lp group elite permission set essentials.chat.rgb true
 lp group elite permission set essentials.nick.format true
-lp group elite permission set essentials.nick.rgb true
 lp group elite permission set essentials.signs.color true
+lp group elite permission set clindercore.tag.elite true
+lp group elite permission set playerparticles.particles.max.3 true
+lp group elite permission set playerparticles.effect.* true
+lp group elite permission set playerparticles.style.* true
+# ----- Легенда (+ объявление о входе от ClinderCore)
+lp group legend permission set clindercore.tag.legend true
+lp group legend permission set playerparticles.particles.max.4 true
+lp group legend permission set essentials.signs.format true
+# ----- Титан
+lp group titan permission set clindercore.tag.titan true
+lp group titan permission set playerparticles.particles.max.5 true
+lp group titan permission set playerparticles.fixed true
+lp group titan permission set playerparticles.fixed.max.1 true
+# ----- Император
+lp group imperator permission set clindercore.tag.imperator true
+lp group imperator permission set playerparticles.particles.max.6 true
+lp group imperator permission set playerparticles.fixed.max.3 true
+lp group imperator permission set essentials.nick.magic true
+# ----- Бог
+lp group god permission set clindercore.tag.god true
+lp group god permission set playerparticles.particles.max.8 true
+lp group god permission set playerparticles.fixed.max.5 true
 
 # ===== Хелпер =====
 lp group helper permission set essentials.mute true
@@ -142,6 +206,8 @@ lp group helper permission set coreprotect.lookup.inventory true
 lp group helper permission set griefprevention.claimslistother true
 lp group helper permission set griefprevention.softmute true
 lp group helper permission set tab.staff true
+lp group helper permission set clindercore.reports.notify true
+lp group helper permission set clindercore.reports.view true
 
 # ===== Модератор =====
 lp group moder permission set essentials.ban true

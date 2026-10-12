@@ -1,0 +1,38 @@
+# Анимации ClinderGrief для TAB (сгенерировано tools/configure.py)
+CGTitle:
+  change-interval: 100
+  texts:
+  - <bold><gradient:#ff2a00:#ff8a00:#ffd000:#ff8a00:#ff2a00:-1.0>✦ ClinderGrief ✦</gradient></bold>
+  - <bold><gradient:#ff2a00:#ff8a00:#ffd000:#ff8a00:#ff2a00:-0.9>✦ ClinderGrief ✦</gradient></bold>
+  - <bold><gradient:#ff2a00:#ff8a00:#ffd000:#ff8a00:#ff2a00:-0.8>✦ ClinderGrief ✦</gradient></bold>
+  - <bold><gradient:#ff2a00:#ff8a00:#ffd000:#ff8a00:#ff2a00:-0.7>✦ ClinderGrief ✦</gradient></bold>
+  - <bold><gradient:#ff2a00:#ff8a00:#ffd000:#ff8a00:#ff2a00:-0.6>✦ ClinderGrief ✦</gradient></bold>
+  - <bold><gradient:#ff2a00:#ff8a00:#ffd000:#ff8a00:#ff2a00:-0.5>✦ ClinderGrief ✦</gradient></bold>
+  - <bold><gradient:#ff2a00:#ff8a00:#ffd000:#ff8a00:#ff2a00:-0.4>✦ ClinderGrief ✦</gradient></bold>
+  - <bold><gradient:#ff2a00:#ff8a00:#ffd000:#ff8a00:#ff2a00:-0.3>✦ ClinderGrief ✦</gradient></bold>
+  - <bold><gradient:#ff2a00:#ff8a00:#ffd000:#ff8a00:#ff2a00:-0.2>✦ ClinderGrief ✦</gradient></bold>
+  - <bold><gradient:#ff2a00:#ff8a00:#ffd000:#ff8a00:#ff2a00:-0.1>✦ ClinderGrief ✦</gradient></bold>
+  - <bold><gradient:#ff2a00:#ff8a00:#ffd000:#ff8a00:#ff2a00:0.0>✦ ClinderGrief ✦</gradient></bold>
+  - <bold><gradient:#ff2a00:#ff8a00:#ffd000:#ff8a00:#ff2a00:0.1>✦ ClinderGrief ✦</gradient></bold>
+  - <bold><gradient:#ff2a00:#ff8a00:#ffd000:#ff8a00:#ff2a00:0.2>✦ ClinderGrief ✦</gradient></bold>
+  - <bold><gradient:#ff2a00:#ff8a00:#ffd000:#ff8a00:#ff2a00:0.3>✦ ClinderGrief ✦</gradient></bold>
+  - <bold><gradient:#ff2a00:#ff8a00:#ffd000:#ff8a00:#ff2a00:0.4>✦ ClinderGrief ✦</gradient></bold>
+  - <bold><gradient:#ff2a00:#ff8a00:#ffd000:#ff8a00:#ff2a00:0.5>✦ ClinderGrief ✦</gradient></bold>
+  - <bold><gradient:#ff2a00:#ff8a00:#ffd000:#ff8a00:#ff2a00:0.6>✦ ClinderGrief ✦</gradient></bold>
+  - <bold><gradient:#ff2a00:#ff8a00:#ffd000:#ff8a00:#ff2a00:0.7>✦ ClinderGrief ✦</gradient></bold>
+  - <bold><gradient:#ff2a00:#ff8a00:#ffd000:#ff8a00:#ff2a00:0.8>✦ ClinderGrief ✦</gradient></bold>
+  - <bold><gradient:#ff2a00:#ff8a00:#ffd000:#ff8a00:#ff2a00:0.9>✦ ClinderGrief ✦</gradient></bold>
+CGTips:
+  change-interval: 4000
+  texts:
+  - '&7Меню сервера: &#ffb347/menu'
+  - '&7Ежедневная награда: &#ffd36b/daily'
+  - '&7Титулы: &#d18cff/tags &8• &7Частицы: &#ff6b6b/pp'
+  - '&7Привилегии: &#ff8800/donate'
+  - '&7Охота за головами: &#ff6b6b/bounty'
+CGSbFooter:
+  change-interval: 3000
+  texts:
+  - '&#ff8a00ClinderGrief &8• &7/menu'
+  - '&#ffd000/daily &7— забери награду!'
+  - '&#ff5e00/donate &7— привилегии'

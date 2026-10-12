@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Генерирует команды постройки спавна MineRus (летающий остров над точкой 0,0).
+"""Генерирует команды постройки спавна ClinderGrief (летающий остров над точкой 0,0).
 
 Вывод: список команд для консоли сервера (по одной в строке). Координаты:
   центр острова — X=0 Z=0, пол — Y=100, игроки ходят на Y=101;
@@ -57,11 +57,34 @@ def snbt_component(parts):
     return conv(parts)
 
 
+def grad(s, colors, bold=True):
+    """Посимвольный градиент для text_display: список компонентов с #rrggbb."""
+    def hx(c):
+        return [int(c[i:i + 2], 16) for i in (1, 3, 5)]
+    out = []
+    n = max(1, len(s) - 1)
+    for i, ch in enumerate(s):
+        pos = i / n * (len(colors) - 1)
+        k = min(int(pos), len(colors) - 2)
+        f = pos - k
+        a, b = hx(colors[k]), hx(colors[k + 1])
+        rgb = "#%02x%02x%02x" % tuple(round(a[j] + (b[j] - a[j]) * f) for j in range(3))
+        out.append(text(ch, rgb, bold))
+    return out
+
+
+FIRE = ["#ff2a00", "#ff8a00", "#ffd000", "#ff8a00", "#ff2a00"]
+
+
 def holo(x, y, z, lines, scale=1.0, tag="minerus_holo"):
     comp = {"text": "", "extra": []}
     for i, (s, color, bold) in enumerate(lines):
-        t = text(("\n" if i else "") + s, color, bold)
-        comp["extra"].append(t)
+        if i:
+            comp["extra"].append(text("\n", "white"))
+        if isinstance(color, list):
+            comp["extra"].extend(grad(s, color, bold))
+        else:
+            comp["extra"].append(text(s, color, bold))
     c(f"summon minecraft:text_display {x} {y} {z} {{billboard:\"center\",alignment:\"center\",shadow:1b,"
       f"background:1342177280,line_width:260,text:{snbt_component(comp)},"
       f"transformation:{{left_rotation:[0f,0f,0f,1f],right_rotation:[0f,0f,0f,1f],translation:[0f,0f,0f],scale:[{scale}f,{scale}f,{scale}f]}},"
@@ -208,12 +231,51 @@ for z, facing in ((12, "north"), (-12, "south")):
         c(f"setblock {x} {Y + 1} {z} minecraft:spruce_stairs[facing={facing}]")
 
 # --- голограммы
-holo(0.5, Y + 8.2, 0.5, [("MineRus", "gold", True), ("Добро пожаловать на сервер!", "yellow", False)], 2.0)
-holo(0.5, Y + 3.2, 10.5, [("Меню сервера: /menu", "green", True), ("Магазин, скупщик, телепорты, помощь", "gray", False)], 1.0)
+holo(0.5, Y + 8.6, 0.5, [("✦ ClinderGrief ✦", FIRE, True), ("Добро пожаловать на сервер!", "#ffd36b", False),
+                         ("Выживание • Экономика • Приваты • Титулы", "gray", False)], 2.0)
+holo(0.5, Y + 3.2, 10.5, [("Меню сервера: /menu", ["#a0ff6b", "#3ddc84"], True), ("Магазин, скупщик, телепорты, помощь", "gray", False),
+                          ("Награда дня: /daily", "#ffd36b", False)], 1.0)
 holo(-6.5, Y + 2.8, 15.5, [("Приваты", "dark_green", True), ("Золотая лопата: ПКМ по 2 углам", "white", False), ("Палка: показать границы", "gray", False)], 0.9)
 holo(7.5, Y + 2.8, 15.5, [("В дикий мир", "light_purple", True), ("/tpr или /rtp", "white", False), ("Дом: /sethome и /home", "gray", False)], 0.9)
 for (x, z) in ((0.5, -25.5), (0.5, 26.5), (-25.5, 0.5), (26.5, 0.5)):
     holo(x, Y + 3.0, z, [("Выход в мир", "light_purple", True), ("/tpr — случайная телепортация", "white", False)], 0.8)
+
+# --- огненные врата на выходах дорог
+for sgn in (-1, 1):
+    for axis in ("z", "x"):
+        a = 25 * sgn
+        def at(w, y):
+            return (w, y, a) if axis == "z" else (a, y, w)
+        for w in (-3, 3):
+            x, _, z = at(w, 0)
+            c(f"fill {x} {Y + 1} {z} {x} {Y + 6} {z} minecraft:polished_blackstone_bricks")
+            c(f"setblock {x} {Y + 1} {z} minecraft:chiseled_polished_blackstone")
+            c(f"setblock {x} {Y + 6} {z} minecraft:chiseled_polished_blackstone")
+            c(f"setblock {x} {Y + 7} {z} minecraft:polished_blackstone_bricks")
+            c(f"setblock {x} {Y + 8} {z} minecraft:campfire[lit=true]")
+        for w in range(-2, 3):
+            x, _, z = at(w, 0)
+            c(f"setblock {x} {Y + 7} {z} minecraft:{'gilded_blackstone' if w == 0 else 'polished_blackstone_bricks'}")
+        for w in (-1, 1):
+            x, _, z = at(w, 0)
+            c(f"setblock {x} {Y + 6} {z} minecraft:soul_lantern[hanging=true]")
+
+# --- жаровни с дымом вокруг фонтана
+for bx, bz in ((6, 6), (-6, 6), (6, -6), (-6, -6)):
+    c(f"setblock {bx} {Y + 1} {bz} minecraft:polished_blackstone_bricks")
+    c(f"setblock {bx} {Y + 2} {bz} minecraft:campfire[lit=true]")
+
+# --- светлячки (кусты светлячков 1.21.5+) и кольцо из чернита у площади
+for _ in range(60):
+    x, z = rnd.randint(-R, R), rnd.randint(-R, R)
+    d = dist(x, z)
+    if d > R - 2.5 or d < 11.5 or abs(x) <= 3 or abs(z) <= 3 or (x, z) in pav_cells:
+        continue
+    c(f"setblock {x} {Y + 1} {z} minecraft:firefly_bush keep")
+for x in range(-12, 13):
+    for z in range(-12, 13):
+        if 10.6 < dist(x, z) <= 11.4 and abs(x) > 2 and abs(z) > 2:
+            c(f"setblock {x} {Y} {z} minecraft:polished_blackstone_bricks")
 
 # --- тюрьма в скале под островом (Essentials /jail)
 c("fill -2 80 -2 2 84 2 minecraft:polished_deepslate")

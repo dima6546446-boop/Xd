@@ -1,0 +1,54 @@
+name: ClinderCore
+version: '1.0.0'
+main: ru.clindergrief.core.ClinderCore
+api-version: '1.21'
+description: Собственные системы сервера ClinderGrief (награды, титулы, жалобы, награды за головы, топы, объявления, фильтр чата)
+authors: [ClinderGrief]
+depend: [Vault]
+softdepend: [PlaceholderAPI, LuckPerms, Essentials]
+commands:
+  daily:
+    description: Ежедневная награда
+    aliases: [bonus, nagrada]
+  tags:
+    description: Выбор титула
+    aliases: [tag, titul, titles]
+  report:
+    description: Пожаловаться на игрока
+    aliases: [zhaloba]
+  reports:
+    description: Список жалоб (для модераторов)
+  bounty:
+    description: Награда за голову игрока
+    aliases: [bounties, ohota]
+  links:
+    description: Ссылки сервера
+    aliases: [discord, vk, site]
+  top:
+    description: Топы игроков
+    aliases: [tops, leaderboard]
+  clindercore:
+    description: Управление ClinderCore
+    aliases: [cg]
+    permission: clindercore.admin
+permissions:
+  clindercore.daily:
+    default: true
+  clindercore.tags:
+    default: true
+  clindercore.report:
+    default: true
+  clindercore.bounty:
+    default: true
+  clindercore.links:
+    default: true
+  clindercore.top:
+    default: true
+  clindercore.reports.notify:
+    default: op
+  clindercore.reports.view:
+    default: op
+  clindercore.chatfilter.bypass:
+    default: op
+  clindercore.admin:
+    default: op

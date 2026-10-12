@@ -1,0 +1,39 @@
+# DeluxeMenus — меню сервера ClinderGrief. Файлы меню лежат в gui_menus/.
+check_updates: true
+debug: LOW
+use_admin_commands_in_menus_list: false
+menus_list_page_size: 10
+metas_list_page_size: 15
+gui_menus:
+  main:
+    file: main.yml
+  shop:
+    file: shop.yml
+  buyer:
+    file: buyer.yml
+  donate:
+    file: donate.yml
+  tops:
+    file: tops.yml
+  shop_blocks:
+    file: shop_blocks.yml
+  shop_food:
+    file: shop_food.yml
+  shop_resources:
+    file: shop_resources.yml
+  shop_farm:
+    file: shop_farm.yml
+  buyer_ores:
+    file: buyer_ores.yml
+  buyer_mobs:
+    file: buyer_mobs.yml
+  buyer_farm:
+    file: buyer_farm.yml
+  buyer_wood:
+    file: buyer_wood.yml
+  help_claims:
+    file: help_claims.yml
+  help_shops:
+    file: help_shops.yml
+  help_commands:
+    file: help_commands.yml

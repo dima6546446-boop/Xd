@@ -1,0 +1,38 @@
+location: world:-8.5:105.6:0.5
+enabled: true
+display-range: 32
+update-range: 32
+update-interval: 100
+facing: 90.0
+down-origin: false
+pages:
+- lines:
+  - content: '&#ffd000&l⛁ Топ богачей'
+    height: 0.35
+  - content: '&8&m                    '
+    height: 0.3
+  - content: '&#ffd7001. &f%clinder_top_money_name_1% &8— &a%clinder_top_money_value_1%'
+    height: 0.27
+  - content: '&#c0c0c02. &f%clinder_top_money_name_2% &8— &a%clinder_top_money_value_2%'
+    height: 0.27
+  - content: '&#cd7f323. &f%clinder_top_money_name_3% &8— &a%clinder_top_money_value_3%'
+    height: 0.27
+  - content: '&74. &f%clinder_top_money_name_4% &8— &a%clinder_top_money_value_4%'
+    height: 0.27
+  - content: '&75. &f%clinder_top_money_name_5% &8— &a%clinder_top_money_value_5%'
+    height: 0.27
+  - content: '&76. &f%clinder_top_money_name_6% &8— &a%clinder_top_money_value_6%'
+    height: 0.27
+  - content: '&77. &f%clinder_top_money_name_7% &8— &a%clinder_top_money_value_7%'
+    height: 0.27
+  - content: '&78. &f%clinder_top_money_name_8% &8— &a%clinder_top_money_value_8%'
+    height: 0.27
+  - content: '&79. &f%clinder_top_money_name_9% &8— &a%clinder_top_money_value_9%'
+    height: 0.27
+  - content: '&710. &f%clinder_top_money_name_10% &8— &a%clinder_top_money_value_10%'
+    height: 0.27
+  - content: '&8&m                    '
+    height: 0.3
+  - content: '&7Обновление каждые 5 мин &8• &7/top'
+    height: 0.3
+  actions: {}

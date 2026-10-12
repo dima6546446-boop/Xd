@@ -1,0 +1,256 @@
+# Меню DeluxeMenus. Сгенерировано tools/menus.py — цены берутся из tools/economy.py
+menu_title: '&8&lПривилегии &6&lClinderGrief'
+open_command:
+- donate
+- privileges
+register_command: true
+size: 54
+items:
+  filler:
+    material: BLACK_STAINED_GLASS_PANE
+    slots:
+    - 0
+    - 1
+    - 2
+    - 3
+    - 4
+    - 5
+    - 6
+    - 7
+    - 8
+    - 9
+    - 10
+    - 11
+    - 12
+    - 13
+    - 14
+    - 15
+    - 16
+    - 17
+    - 18
+    - 19
+    - 20
+    - 21
+    - 22
+    - 23
+    - 24
+    - 25
+    - 26
+    - 27
+    - 28
+    - 29
+    - 30
+    - 31
+    - 32
+    - 33
+    - 34
+    - 35
+    - 36
+    - 37
+    - 38
+    - 39
+    - 40
+    - 41
+    - 42
+    - 43
+    - 44
+    - 45
+    - 46
+    - 47
+    - 48
+    - 49
+    - 50
+    - 51
+    - 52
+    - 53
+    display_name: '&r'
+    priority: 99
+  accent:
+    material: ORANGE_STAINED_GLASS_PANE
+    slots:
+    - 0
+    - 1
+    - 7
+    - 8
+    - 45
+    - 46
+    - 52
+    - 53
+    display_name: '&r'
+    priority: 98
+  vip:
+    material: LIME_DYE
+    slot: 19
+    display_name: '&a&lVIP'
+    lore:
+    - ''
+    - '&7Префикс &8[&aVIP&8]&7 в чате и TAB'
+    - '&7Цветной чат &f(&&a-коды)'
+    - '&7Шляпа из блока: &f/hat'
+    - '&7Титул &e[★]'
+    - '&7Частицы: &f1 эффект &7(сердца, ноты…)'
+    - ''
+    - '&7Срок и цена — в магазине сервера'
+    - ''
+    - '&eНажмите, чтобы узнать, как купить'
+    left_click_commands: &id001
+    - '[close]'
+    - '[message] &6&lПривилегии &8» &7Купить привилегию можно в магазине сервера:'
+    - '[message] &b&nУКАЖИТЕ-ССЫЛКУ-НА-ВАШ-МАГАЗИН'
+    - '[message] &7Все привилегии — только косметика и не дают игрового преимущества.'
+    right_click_commands: *id001
+  premium:
+    material: LIGHT_BLUE_DYE
+    slot: 20
+    display_name: '&b&lPremium'
+    lore:
+    - ''
+    - '&7Всё из &aVIP'
+    - '&7Префикс &8[&bPremium&8]'
+    - '&7Ник: &f/nick &7с цветами'
+    - '&7Жирный/курсив в чате'
+    - '&7Своё время и погода: &f/ptime /pweather'
+    - '&7Титул &#00ffd5[Кибер]'
+    - '&7Частицы: &f2 эффекта &7(огонь, магия…)'
+    - ''
+    - '&7Срок и цена — в магазине сервера'
+    - ''
+    - '&eНажмите, чтобы узнать, как купить'
+    left_click_commands: *id001
+    right_click_commands: *id001
+  elite:
+    material: ORANGE_DYE
+    slot: 21
+    display_name: '&6&lЭлита'
+    lore:
+    - ''
+    - '&7Всё из &bPremium'
+    - '&7Префикс &8[&6Элита&8]'
+    - '&7HEX-цвета в чате и нике'
+    - '&7Цветные таблички'
+    - '&7Титул &#7d7d7d[Тень]'
+    - '&7Частицы: &fВСЕ эффекты и стили, 3 шт.'
+    - ''
+    - '&7Срок и цена — в магазине сервера'
+    - ''
+    - '&eНажмите, чтобы узнать, как купить'
+    left_click_commands: *id001
+    right_click_commands: *id001
+  legend:
+    material: MAGENTA_DYE
+    slot: 22
+    display_name: '&d&lЛегенда'
+    lore:
+    - ''
+    - '&7Всё из &6Элиты'
+    - '&7Префикс &8[&dЛегенда&8]'
+    - '&7Объявление о входе на сервер'
+    - '&7Титул &#ff4e00[Пламя]'
+    - '&7Частицы: &f4 одновременно'
+    - ''
+    - '&7Срок и цена — в магазине сервера'
+    - ''
+    - '&eНажмите, чтобы узнать, как купить'
+    left_click_commands: *id001
+    right_click_commands: *id001
+  titan:
+    material: RED_DYE
+    slot: 23
+    display_name: '&#ff5555&lТитан'
+    lore:
+    - ''
+    - '&7Всё из &dЛегенды'
+    - '&7Префикс &8[&#ff5555Титан&8]'
+    - '&7Эффектное объявление о входе'
+    - '&7Титул &#ff1a1a[☠ Демон]'
+    - '&7Частицы: &f5 шт. + 1 стационарный эффект'
+    - ''
+    - '&7Срок и цена — в магазине сервера'
+    - ''
+    - '&eНажмите, чтобы узнать, как купить'
+    left_click_commands: *id001
+    right_click_commands: *id001
+  imperator:
+    material: YELLOW_DYE
+    slot: 24
+    display_name: '&#ffaa00&lИмператор'
+    lore:
+    - ''
+    - '&7Всё из &#ff5555Титана'
+    - '&7Префикс &8[&#ffaa00Император&8]'
+    - '&7Объявление о входе со звуком'
+    - '&7Магический ник &k&7xx'
+    - '&7Титул &#ffaa00[♛ Корона]'
+    - '&7Частицы: &f6 шт. + 3 стационарных'
+    - ''
+    - '&7Срок и цена — в магазине сервера'
+    - ''
+    - '&eНажмите, чтобы узнать, как купить'
+    left_click_commands: *id001
+    right_click_commands: *id001
+  god:
+    material: LIGHT_BLUE_DYE
+    slot: 25
+    display_name: '&#00e5ff&lБОГ'
+    lore:
+    - ''
+    - '&7Всё из &#ffaa00Императора'
+    - '&7Префикс &8[&#00e5ffБОГ&8]'
+    - '&7Громовое объявление о входе'
+    - '&7Титул &#00e5ff[⚡ Божество]'
+    - '&7Частицы: &f8 шт. + 5 стационарных'
+    - ''
+    - '&7Срок и цена — в магазине сервера'
+    - ''
+    - '&eНажмите, чтобы узнать, как купить'
+    left_click_commands: *id001
+    right_click_commands: *id001
+  info:
+    material: NETHER_STAR
+    slot: 4
+    display_name: '&6&lПривилегии ClinderGrief'
+    lore:
+    - ''
+    - '&7Каждая следующая включает всё'
+    - '&7из предыдущих.'
+    - ''
+    - '&7Только косметика: префиксы, цвета,'
+    - '&7титулы, частицы, объявления.'
+    - '&7Никаких игровых преимуществ —'
+    - '&7по правилам Minecraft (EULA).'
+    - ''
+    - '&7Ваш ранг: %luckperms_meta_rank%'
+  particles:
+    material: BLAZE_POWDER
+    slot: 39
+    display_name: '&c&lПримерить частицы'
+    lore:
+    - ''
+    - '&7Открыть меню частиц &f/pp'
+    left_click_commands:
+    - '[close]'
+    - '[player] pp'
+    right_click_commands:
+    - '[close]'
+    - '[player] pp'
+  tags:
+    material: NAME_TAG
+    slot: 41
+    display_name: '&d&lТитулы'
+    lore:
+    - ''
+    - '&7Открыть выбор титула &f/tags'
+    left_click_commands:
+    - '[close]'
+    - '[player] tags'
+    right_click_commands:
+    - '[close]'
+    - '[player] tags'
+  back:
+    material: ARROW
+    slot: 49
+    display_name: '&cНазад'
+    left_click_commands:
+    - '[openguimenu] main'
+    right_click_commands:
+    - '[openguimenu] main'

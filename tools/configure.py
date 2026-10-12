@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Применяет настройки сборки MineRus к папке сервера (после первого запуска, когда конфиги уже созданы).
+"""Применяет настройки сборки ClinderGrief к папке сервера (после первого запуска, когда конфиги уже созданы).
 
 Использование: python3 tools/configure.py <папка сервера>
 """
@@ -54,7 +54,7 @@ def uesc(s):
 props_path = os.path.join(S, "server.properties")
 lines = open(props_path, encoding="utf-8").read().splitlines()
 want = {
-    "motd": uesc("§6§lMineRus §8| §fВыживание §e1.21.11\\n§aПриваты §7• §bМагазины §7• §eЭкономика §7• §dПривилегии"),
+    "motd": uesc("§8§l✦ §4§lC§c§ll§c§li§6§ln§6§ld§e§le§e§lr§6§lG§6§lr§c§li§c§le§4§lf §8§l✦ §7Выживание §e1.21.11\\n§6⚡ §eЕжедневные награды §8• §cОхота за головами §8• §bТитулы"),
     "difficulty": "normal",
     "max-players": "50",
     "spawn-protection": "0",
@@ -171,9 +171,9 @@ with open(os.path.join(P, "Essentials/worth.yml"), "w", encoding="utf-8") as f:
     yaml.safe_dump({"worth": worth}, f, sort_keys=True)
 
 write("plugins/Essentials/motd.txt", """
-&6&l✦ &eДобро пожаловать на &6&lMineRus&e, &f{PLAYER}&e! &6&l✦
+&#ff5e00&l✦ &fДобро пожаловать на &#ff8a00&lClinderGrief&f, &#ffd000{PLAYER}&f! &#ff5e00&l✦
 &7Сейчас онлайн: &f{ONLINE}
-&7Главное меню сервера: &a/menu
+&7Главное меню сервера: &a/menu  &8•  &7Награда дня: &e/daily
 &7Случайная телепортация в дикий мир: &a/tpr &7(или &a/rtp&7)
 &7Защитить постройку: &eзолотая лопата &7(подробно в &a/menu&7)
 &7Правила сервера: &a/rules
@@ -192,7 +192,7 @@ write("plugins/Essentials/rules.txt", """
 """)
 
 write("plugins/Essentials/info.txt", """
-&6&lMineRus &7— сервер выживания с экономикой
+&6&lClinderGrief &7— сервер выживания с экономикой
 &e/menu &7— главное меню (магазин, скупщик, телепорты, помощь)
 &e/shop &7— магазин сервера  &e/buyer &7— скупщик
 &e/donate &7— привилегии  &e/rules &7— правила
@@ -206,7 +206,7 @@ with open(gp_path, encoding="utf-8") as f:
 for k, v in gp["Messages"].items():
     v["Text"] = GP_RU[k]
 with open(gp_path, "w", encoding="utf-8") as f:
-    f.write("# Русский перевод сообщений GriefPrevention (сборка MineRus). Цвета задаются символом $ (например $a).\n")
+    f.write("# Русский перевод сообщений GriefPrevention (сборка ClinderGrief). Цвета задаются символом $ (например $a).\n")
     ry.dump(gp, f)
 
 
@@ -232,6 +232,34 @@ def gp_cfg(d):
 
 edit("plugins/GriefPreventionData/config.yml", gp_cfg)
 
+# ---------------------------------------------------------------- PlayerParticles (донат-косметика)
+edit("plugins/PlayerParticles/config.yml", lambda d: d.__setitem__("locale", "ru_RU"))
+
+# ---------------------------------------------------------------- ClinderCore (собственный плагин)
+cc_jar = os.path.join(os.path.dirname(__file__), "..", "clindercore", "build", "ClinderCore-1.0.0.jar")
+if os.path.exists(cc_jar):
+    shutil.copyfile(cc_jar, os.path.join(P, "ClinderCore-1.0.0.jar"))
+
+# ---------------------------------------------------------------- DecentHolograms: живые топы у фонтана
+TOPS = {
+    "top_money": ("money", "&#ffd000&l⛁ Топ богачей", "&a", "world:-8.5:105.6:0.5", 90.0),
+    "top_playtime": ("playtime", "&#6bcbff&l⌚ Топ по времени в игре", "&b", "world:9.5:105.6:0.5", -90.0),
+    "top_kills": ("kills", "&#ff6b6b&l⚔ Топ убийц", "&c", "world:0.5:105.6:-8.5", 0.0),
+}
+os.makedirs(os.path.join(P, "DecentHolograms/holograms"), exist_ok=True)
+for name, (typ, title, col, loc, facing) in TOPS.items():
+    lines = [{"content": title, "height": 0.35}, {"content": "&8&m                    ", "height": 0.3}]
+    medals = {1: "&#ffd700", 2: "&#c0c0c0", 3: "&#cd7f32"}
+    for n in range(1, 11):
+        lines.append({"content": f"{medals.get(n, '&7')}{n}. &f%clinder_top_{typ}_name_{n}% &8— {col}%clinder_top_{typ}_value_{n}%",
+                      "height": 0.27})
+    lines.append({"content": "&8&m                    ", "height": 0.3})
+    lines.append({"content": "&7Обновление каждые 5 мин &8• &7/top", "height": 0.3})
+    holo = {"location": loc, "enabled": True, "display-range": 32, "update-range": 32, "update-interval": 100,
+            "facing": facing, "down-origin": False, "pages": [{"lines": lines, "actions": {}}]}
+    with open(os.path.join(P, "DecentHolograms/holograms", name + ".yml"), "w", encoding="utf-8") as fh:
+        yaml.safe_dump(holo, fh, allow_unicode=True, sort_keys=False, width=400)
+
 # ---------------------------------------------------------------- QuickShop-Hikari
 def qs(d):
     d["game-language"] = "ru_ru"
@@ -256,38 +284,92 @@ dm_cfg = {"check_updates": True, "debug": "LOW", "use_admin_commands_in_menus_li
           "menus_list_page_size": 10, "metas_list_page_size": 15,
           "gui_menus": {n: {"file": n + ".yml"} for n in names}}
 with open(os.path.join(P, "DeluxeMenus/config.yml"), "w", encoding="utf-8") as f:
-    f.write("# DeluxeMenus — меню сервера MineRus. Файлы меню лежат в gui_menus/.\n")
+    f.write("# DeluxeMenus — меню сервера ClinderGrief. Файлы меню лежат в gui_menus/.\n")
     yaml.safe_dump(dm_cfg, f, allow_unicode=True, sort_keys=False)
 
 # ---------------------------------------------------------------- TAB
+def gradient_frames(text, colors, frames=20):
+    """Кадры анимации MiniMessage-градиента с бегущей фазой (TAB поддерживает MiniMessage)."""
+    out = []
+    for i in range(frames):
+        phase = round(-1 + 2 * i / frames, 2)
+        out.append(f"<bold><gradient:{':'.join(colors)}:{phase}>{text}</gradient></bold>")
+    return out
+
+
+FIRE = ["#ff2a00", "#ff8a00", "#ffd000", "#ff8a00", "#ff2a00"]
+
+
 def tab(d):
     d["header-footer"]["designs"] = {"default": {
-        "header": ["", "&6&lMineRus &8| &fВыживание", "&7Добро пожаловать, &e%player%&7!", ""],
-        "footer": ["", "&7Онлайн: &a%online% &8| &7Пинг: &a%ping% мс", "&7Меню сервера: &e/menu", ""],
+        "header": [
+            "",
+            "%animation:CGTitle%",
+            "&7Выживание &8• &7Экономика &8• &7Приваты &8• &7Титулы",
+            "",
+            "&fИгроков онлайн: &a%online% &8• &fСерия наград: &e%clinder_streak% дн.",
+            "",
+        ],
+        "footer": [
+            "",
+            "&7Пинг: &#a0ff6b%ping% мс &8• &7TPS: &#a0ff6b%tps%",
+            "%animation:CGTips%",
+            "&8Соцсети и сайт: &7/links",
+            "",
+        ],
     }}
-    d["scoreboard-teams"]["sorting-types"] = ["GROUPS:admin,moder,helper,elite,premium,vip,default", "PLACEHOLDER_A_TO_Z:%player%"]
+    d["scoreboard-teams"]["sorting-types"] = [
+        "GROUPS:admin,moder,helper,god,imperator,titan,legend,elite,premium,vip,default", "PLACEHOLDER_A_TO_Z:%player%"]
+    d["belowname-objective"]["enabled"] = True
+    d["belowname-objective"]["value"] = "%health%"
+    d["belowname-objective"]["fancy-value"] = "&c%health% ❤"
+    d["belowname-objective"]["title"] = "&c❤"
     d["scoreboard"]["enabled"] = True
     d["scoreboard"]["scoreboards"] = {"main": {
-        "title": "&6&lMineRus",
+        "title": "%animation:CGTitle%",
         "lines": [
-            "&8%date%",
+            "&8%date% &8• &8%time%",
             "",
-            "&fНик: &e%player%",
-            "&fРанг: %luckperms_meta_rank%",
-            "&fБаланс: &a%vault_eco_balance_formatted%$",
+            "&#ffb347▶ &fНик: &#ffb347%player%",
+            "&#ffb347▶ &fРанг: %luckperms_meta_rank%",
+            "&#ffb347▶ &fТитул: %clinder_tag%",
             "",
-            "&fОнлайн: &a%online%",
-            "&fПинг: &a%ping% мс",
+            "&#a0ff6b$ &fБаланс: &#a0ff6b%vault_eco_balance_formatted%$",
+            "&#ffd36b✦ &fСерия наград: &#ffd36b%clinder_streak% дн.",
             "",
-            "&7/menu &8— &7меню сервера",
+            "&#ff6b6b⚔ &fУбийств: &#ff6b6b%clinder_kills%",
+            "&#9e9e9e☠ &fСмертей: &#9e9e9e%clinder_deaths%",
+            "&#6bcbff⌚ &fВ игре: &#6bcbff%clinder_playtime%",
+            "",
+            "&#a0ff6b● &fОнлайн: &#a0ff6b%online%",
+            "%animation:CGSbFooter%",
         ],
     }}
     d["placeholders"]["locale"] = "ru-RU"
-    d["placeholders"]["time-format"] = "HH:mm:ss"
-    d["primary-group-finding-list"] = ["admin", "moder", "helper", "elite", "premium", "vip", "default"]
+    d["placeholders"]["time-format"] = "HH:mm"
+    d["placeholder-output-replacements"] = {"%clinder_tag%": {"": "&7нет &8(/tags)"}}
+    d["primary-group-finding-list"] = ["admin", "moder", "helper", "god", "imperator", "titan", "legend", "elite", "premium", "vip", "default"]
 
 
 edit("plugins/TAB/config.yml", tab)
+tab_anim = {
+    "CGTitle": {"change-interval": 100, "texts": gradient_frames("✦ ClinderGrief ✦", FIRE)},
+    "CGTips": {"change-interval": 4000, "texts": [
+        "&7Меню сервера: &#ffb347/menu",
+        "&7Ежедневная награда: &#ffd36b/daily",
+        "&7Титулы: &#d18cff/tags &8• &7Частицы: &#ff6b6b/pp",
+        "&7Привилегии: &#ff8800/donate",
+        "&7Охота за головами: &#ff6b6b/bounty",
+    ]},
+    "CGSbFooter": {"change-interval": 3000, "texts": [
+        "&#ff8a00ClinderGrief &8• &7/menu",
+        "&#ffd000/daily &7— забери награду!",
+        "&#ff5e00/donate &7— привилегии",
+    ]},
+}
+with open(os.path.join(P, "TAB/animations.yml"), "w", encoding="utf-8") as fh:
+    fh.write("# Анимации ClinderGrief для TAB (сгенерировано tools/configure.py)\n")
+    yaml.safe_dump(tab_anim, fh, allow_unicode=True, sort_keys=False, width=400)
 write("plugins/TAB/groups.yml", """
 # Префиксы берутся из LuckPerms (команды /lp group <группа> meta setprefix ...)
 _DEFAULT_:
