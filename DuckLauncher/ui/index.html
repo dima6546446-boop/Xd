@@ -102,6 +102,7 @@
   .card { background: var(--card); border-radius: 14px; padding: 14px 18px; margin-bottom: 12px; }
   .row { display: flex; align-items: center; justify-content: space-between; gap: 16px; }
   .row + .row { margin-top: 12px; padding-top: 12px; border-top: 1px solid var(--line); }
+  .row.grp { padding-top: 14px; } .row.grp + .row { border-top: 0; padding-top: 0; margin-top: 8px; }
   .row small { display: block; color: var(--sub); font-size: 12px; margin-top: 2px; }
   .switch { width: 42px; height: 24px; border-radius: 99px; background: var(--card2); position: relative; transition: background .2s; flex: none; }
   .switch::after { content: ""; position: absolute; left: 3px; top: 3px; width: 18px; height: 18px; border-radius: 50%; background: #9a9aa8; transition: left .2s, background .2s; }
@@ -278,12 +279,16 @@
     <div class="scroll">
       <div class="sec">Производительность</div>
       <div class="card">
-        <div class="row"><div>Режим слабого ПК<small>Лёгкая графика для новых версий: дальность 6, без облаков и теней, меньше частиц</small></div><button class="switch" id="weakPc"></button></div>
+        <div class="row" style="display:block"><div style="margin-bottom:10px">Профиль графики<small id="presetHint"></small></div>
+          <div class="seg" id="preset"><button data-v="auto">Авто</button><button data-v="fps">Максимум FPS</button><button data-v="balanced">Баланс</button><button data-v="quality">Качество</button><button data-v="none">Не трогать</button></div></div>
+        <div class="row"><div>Высокий приоритет игры<small>Windows отдаёт игре процессор раньше фоновых программ — меньше фризов</small></div><button class="switch" id="highPriority"></button></div>
+        <div class="row"><div>Мощная видеокарта<small>На ноутбуках игра запускается на дискретной видеокарте (NVIDIA / AMD), а не на встроенной</small></div><button class="switch" id="dgpu"></button></div>
+        <div class="row"><div>Быстрый запуск<small>Java кэширует классы игры: со второго запуска игра открывается быстрее</small></div><button class="switch" id="fastStart"></button></div>
         <div class="row"><div>Оперативная память<small id="ramHint">Авто — подбирается под твой компьютер</small></div>
           <div style="display:flex;align-items:center;gap:10px"><button class="btn" id="ramAuto">Авто</button><input type="range" id="ram" min="1024" step="256"><b id="ramVal" style="width:64px;text-align:right"></b></div></div>
       </div>
       <div class="card" id="modsCard">
-        <div style="margin-bottom:4px">Моды оптимизации<small style="display:block;color:var(--sub);font-size:12px;margin-top:2px">Ставятся автоматически для версий с Fabric. Свои моды можно класть в папку «Моды».</small></div>
+        <div style="margin-bottom:4px;display:flex;justify-content:space-between;align-items:center;gap:10px"><div>Моды оптимизации<small style="display:block;color:var(--sub);font-size:12px;margin-top:2px">Ставятся сами для версий с Fabric вместе с нужными им библиотеками. Если мода нет для выбранной версии — он пропускается.</small></div><button class="btn" id="modsAll">Включить все</button></div>
       </div>
       <div class="sec">Игра</div>
       <div class="card">
@@ -424,7 +429,9 @@ async function refresh() {
   const max = Math.max(2048, Math.min(16384, st.maxMemoryMb - 1024));
   $('#ram').max = max;
   $('#ram').value = st.memoryMb || st.autoMemoryMb; ramLabel();
-  $('#weakPc').classList.toggle('on', st.weakPc);
+  $$('#preset button').forEach(b => b.classList.toggle('on', b.dataset.v === st.preset));
+  presetHint();
+  ['highPriority', 'dgpu', 'fastStart'].forEach(k => $('#' + k).classList.toggle('on', !!st[k]));
   $('#fullscreen').classList.toggle('on', st.fullscreen);
   $('#width').value = st.width; $('#height').value = st.height;
   $('#lang').value = st.lang;
@@ -434,9 +441,16 @@ async function refresh() {
   $('#cfKey').placeholder = st.cfKey ? 'Ключ сохранён (вставь новый, чтобы заменить; пусто — удалить)' : 'Вставь API-ключ CurseForge';
   const mc = $('#modsCard');
   mc.querySelectorAll('.row').forEach(r => r.remove());
+  const groups = { fps: 'FPS и графика', cpu: 'Процессор и мир', mem: 'Память и запуск', net: 'Сеть' };
+  let lastGroup = '';
   st.perfMods.forEach(m => {
+    if (m.group !== lastGroup) {
+      lastGroup = m.group;
+      const h = document.createElement('div'); h.className = 'row grp'; h.innerHTML = `<div class="sec" style="margin:0">${groups[m.group] || m.group}</div>`;
+      mc.appendChild(h);
+    }
     const row = document.createElement('div'); row.className = 'row';
-    row.innerHTML = `<div>${m.name}<small>${m.about}</small></div><button class="switch ${st.mods[m.slug] ? 'on' : ''}" data-mod="${m.slug}"></button>`;
+    row.innerHTML = `<div>${m.name}<small>${m.about}${m.needs ? ' · нужен Sodium' : ''}${m.default ? '' : ' · по умолчанию выключен'}</small></div><button class="switch ${st.mods[m.slug] ? 'on' : ''}" data-mod="${m.slug}"></button>`;
     row.querySelector('.switch').onclick = e => { e.target.classList.toggle('on'); save(); };
     mc.appendChild(row);
   });
@@ -458,7 +472,8 @@ function settingsData() {
   $$('[data-mod]').forEach(s => mods[s.dataset.mod] = s.classList.contains('on'));
   const after = [...$$('#after button')].find(b => b.classList.contains('on'));
   return {
-    memoryMb: st.memoryMb || 0, mods, weakPc: $('#weakPc').classList.contains('on'),
+    memoryMb: st.memoryMb || 0, mods, preset: ([...$$('#preset button')].find(b => b.classList.contains('on')) || {dataset: {v: st.preset}}).dataset.v,
+    highPriority: $('#highPriority').classList.contains('on'), dgpu: $('#dgpu').classList.contains('on'), fastStart: $('#fastStart').classList.contains('on'),
     width: parseInt($('#width').value) || 1280, height: parseInt($('#height').value) || 720,
     fullscreen: $('#fullscreen').classList.contains('on'), lang: $('#lang').value,
     afterLaunch: after ? after.dataset.v : 'minimize', jvmArgs: $('#jvm').value
@@ -470,7 +485,18 @@ $$('.nav button').forEach(b => b.onclick = () => {
   $$('.page').forEach(x => x.classList.remove('on'));
   b.classList.add('on'); $('#page-' + b.dataset.page).classList.add('on');
 });
-['#weakPc', '#fullscreen'].forEach(id => $(id).onclick = () => { $(id).classList.toggle('on'); save(); });
+const presetText = {
+  auto: () => 'Подбирается под твой ПК: ' + (st.maxMemoryMb <= 6144 ? '«Максимум FPS»' : '«Баланс»'),
+  fps: () => 'Дальность 6, быстрая графика и листва, без облаков, теней и блюра меню, минимум частиц',
+  balanced: () => 'Дальность 10, красивая графика, быстрые облака, меньше частиц',
+  quality: () => 'Дальность 16, всё красиво. Для мощных ПК',
+  none: () => 'Лаунчер не меняет настройки графики'
+};
+function presetHint() { const v = ([...$$('#preset button')].find(b => b.classList.contains('on')) || {}).dataset?.v || st.preset;
+  $('#presetHint').textContent = (presetText[v] || presetText.none)() + (v !== 'none' ? '. Применяется при следующем запуске, дальше можно менять в игре.' : ''); }
+$$('#preset button').forEach(b => b.onclick = () => { $$('#preset button').forEach(x => x.classList.remove('on')); b.classList.add('on'); presetHint(); save(); });
+$('#modsAll').onclick = () => { $$('[data-mod]').forEach(x => x.classList.add('on')); save(); };
+['#highPriority', '#dgpu', '#fastStart', '#fullscreen'].forEach(id => $(id).onclick = () => { $(id).classList.toggle('on'); save(); });
 $$('#after button').forEach(b => b.onclick = () => { $$('#after button').forEach(x => x.classList.remove('on')); b.classList.add('on'); save(); });
 $('#ram').oninput = () => { st.memoryMb = +$('#ram').value; ramLabel(); };
 $('#ram').onchange = save;

@@ -27,14 +27,15 @@ func main() {
 	loader := flag.String("loader", "", "fabric or vanilla (with -cli)")
 	weak := flag.Bool("weak", false, "weak PC graphics preset for a new instance (with -cli)")
 	join := flag.String("join", "", "server address to join right away (with -cli)")
+	world := flag.String("world", "", "singleplayer world folder to open right away, 1.20+ (with -cli)")
 	flag.Parse()
 	if *cli {
-		os.Exit(runCLI(*name, *version, *loader, *weak, *join))
+		os.Exit(runCLI(*name, *version, *loader, *weak, *join, *world))
 	}
 	runUI()
 }
 
-func runCLI(name, version, loader string, weak bool, join string) int {
+func runCLI(name, version, loader string, weak bool, join, world string) int {
 	cfg := core.LoadConfig()
 	if name != "" {
 		acc, err := core.OfflineAccount(name)
@@ -50,9 +51,11 @@ func runCLI(name, version, loader string, weak bool, join string) int {
 	if loader != "" {
 		cfg.Loader = loader
 	}
-	cfg.WeakPC = cfg.WeakPC || weak
+	if weak {
+		cfg.Preset = "fps"
+	}
 	cfg.Save()
-	cfg.QuickJoin = join
+	cfg.QuickJoin, cfg.QuickWorld = join, world
 	last, lastPct := "", int64(-1)
 	cmd, logPath, err := core.Prepare(cfg, totalMemoryMB(), func(stage string, done, total int64) {
 		pct := int64(100)

@@ -103,7 +103,7 @@ func SearchMods(source, query, gameVersion, sort, cfKey string, page int, gameDi
 	userModsMu.Unlock()
 	for i := range res {
 		res[i].Installed = u.has(res[i].Source, res[i].ID)
-		res[i].Auto = isAutoMod(res[i].Source, res[i].ID, perf)
+		res[i].Auto = isAutoMod(res[i].Source, res[i].ID, perf, gameDir)
 	}
 	return res, nil
 }
@@ -131,7 +131,7 @@ func InstallMod(source, id, gameVersion, cfKey, gameDir string, perf map[string]
 			continue
 		}
 		seen[it.id] = true
-		if isAutoMod(source, it.id, perf) {
+		if isAutoMod(source, it.id, perf, gameDir) {
 			if it.dep {
 				continue
 			}
@@ -193,15 +193,25 @@ func InstallMod(source, id, gameVersion, cfKey, gameDir string, perf map[string]
 	return first, u.save(gameDir)
 }
 
-// isAutoMod reports whether a dependency is already installed by the launcher itself (Fabric API, Sodium...).
-func isAutoMod(source, id string, perf map[string]bool) bool {
-	auto := map[string]string{"P7dR8mSH": "fabric-api", "AANobbMI": "sodium", "gvQqBUqZ": "lithium",
-		"uXXizFIs": "ferrite-core", "5ZwdcRci": "immediatelyfast", "NNAgCjsB": "entityculling"}
+// isAutoMod reports whether a mod is already installed by the launcher itself (Fabric API, Sodium,
+// or a dependency of a performance mod).
+func isAutoMod(source, id string, perf map[string]bool, gameDir string) bool {
 	if source == "curseforge" {
-		auto = map[string]string{"306612": "fabric-api", "394468": "sodium"}
+		slug, ok := map[string]string{"306612": "fabric-api", "394468": "sodium"}[id]
+		return ok && (slug == "fabric-api" || perf[slug])
 	}
-	slug, ok := auto[id]
-	return ok && (slug == "fabric-api" || perf[slug])
+	if id == "P7dR8mSH" {
+		return true
+	}
+	for _, pm := range PerfMods {
+		if pm.ID == id || pm.Slug == id {
+			return perf[pm.Slug] && (pm.Needs == "" || perf[pm.Needs])
+		}
+	}
+	var m managed
+	readJSON(filepath.Join(gameDir, "mods", ".duck-managed.json"), &m)
+	_, ok := m.Files[id]
+	return ok
 }
 
 // RemoveMod deletes a catalog mod from the instance.

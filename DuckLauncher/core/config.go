@@ -14,7 +14,12 @@ type Config struct {
 
 	MemoryMB    int             `json:"memoryMb"` // 0 = automatic
 	Mods        map[string]bool `json:"mods"`     // performance mods by Modrinth slug
-	WeakPC      bool            `json:"weakPc"`   // light graphics preset for new instances
+	WeakPC      bool            `json:"weakPc"`   // legacy: light graphics preset (now Preset "fps")
+	Preset      string          `json:"preset"`   // graphics profile: none, auto, fps, balanced, quality
+	HighPrio    bool            `json:"highPriority"`
+	DGPU        bool            `json:"dgpu"`     // prefer the discrete GPU on laptops
+	FastStart   bool            `json:"fastStart"` // Java class data sharing cache
+	ModsRev     int             `json:"modsRev"`  // bumps when new performance mods are added
 	Width       int             `json:"width"`
 	Height      int             `json:"height"`
 	Fullscreen  bool            `json:"fullscreen"`
@@ -25,6 +30,8 @@ type Config struct {
 
 	// QuickJoin is a server address to connect to right after start (not saved).
 	QuickJoin string `json:"-"`
+	// QuickWorld is a singleplayer world to open right after start (1.20+, not saved).
+	QuickWorld string `json:"-"`
 
 	// legacy fields from launcher 1.0
 	Sodium     *bool `json:"sodium,omitempty"`
@@ -44,10 +51,32 @@ func LoadConfig() *Config {
 	if c.Loader == "" {
 		c.Loader = "fabric"
 	}
-	if c.Mods == nil {
-		c.Mods = map[string]bool{"sodium": true, "lithium": true, "ferrite-core": true, "immediatelyfast": true, "entityculling": true}
+	fresh := c.Mods == nil
+	if fresh {
+		c.Mods = DefaultMods()
 		if c.Sodium != nil && !*c.Sodium {
 			c.Mods["sodium"] = false
+		}
+	}
+	if c.ModsRev < 2 {
+		// launcher 1.3 added many performance mods: switch the new ones on for existing players too
+		for slug, on := range DefaultMods() {
+			if _, known := c.Mods[slug]; !known {
+				c.Mods[slug] = on
+			}
+		}
+		if fresh || c.Preset == "" {
+			c.HighPrio, c.DGPU, c.FastStart = true, true, true
+		}
+		c.ModsRev = 2
+	}
+	if c.Preset == "" {
+		c.Preset = "none" // players updating from 1.2 keep their own graphics settings
+		if fresh {
+			c.Preset = "auto"
+		}
+		if c.WeakPC {
+			c.Preset = "fps"
 		}
 	}
 	if c.AfterLaunch == "" {

@@ -11,14 +11,6 @@ import (
 	"time"
 )
 
-// weakPreset is written into options.txt of a new instance when "weak PC" mode is on.
-var weakPreset = map[string]string{
-	"renderDistance": "6", "simulationDistance": "6", "graphicsMode": "0", "fancyGraphics": "false",
-	"ao": "false", "biomeBlendRadius": "0", "renderClouds": "\"false\"", "particles": "2",
-	"entityShadows": "false", "mipmapLevels": "0", "maxFps": "120", "enableVsync": "false",
-	"entityDistanceScaling": "0.75", "prioritizeChunkUpdates": "0",
-}
-
 // setOptions updates (or adds) keys in options.txt, keeping everything else the player set.
 func setOptions(path string, values map[string]string) {
 	b, _ := os.ReadFile(path)
@@ -81,14 +73,10 @@ func Prepare(cfg *Config, totalMemMB int, progress Progress) (*exec.Cmd, string,
 	os.MkdirAll(gameDir, 0o755)
 	opts := filepath.Join(gameDir, "options.txt")
 	if !fileOK(Task{Path: opts}) {
-		first := map[string]string{"onboardAccessibility": "false", "guiScale": "2", "skipMultiplayerWarning": "true"}
-		if cfg.WeakPC {
-			for k, v := range weakPreset {
-				first[k] = v
-			}
-		}
-		setOptions(opts, first)
+		setOptions(opts, map[string]string{"onboardAccessibility": "false", "guiScale": "2", "skipMultiplayerWarning": "true"})
 	}
+	sodium := cfg.Loader == "fabric" && cfg.Mods["sodium"]
+	applyPreset(gameDir, cfg.Version, ResolvePreset(cfg.Preset, totalMemMB), sodium)
 	if cfg.Lang != "" {
 		setOptions(opts, map[string]string{"lang": cfg.Lang})
 	}
@@ -136,6 +124,10 @@ func Prepare(cfg *Config, totalMemMB int, progress Progress) (*exec.Cmd, string,
 	}
 	features := map[string]bool{"has_custom_resolution": !cfg.Fullscreen}
 	quickPlay := false
+	if cfg.QuickWorld != "" {
+		features["is_quick_play_singleplayer"] = true
+		vars["quickPlaySingleplayer"] = cfg.QuickWorld
+	}
 	if cfg.QuickJoin != "" {
 		for _, a := range inst.Vanilla.Arguments.Game {
 			for _, x := range a.Values {
@@ -150,10 +142,8 @@ func Prepare(cfg *Config, totalMemMB int, progress Progress) (*exec.Cmd, string,
 		}
 	}
 
-	args := []string{fmt.Sprintf("-Xmx%dm", memory), "-Xms" + strconv.Itoa(min(memory, 1024)) + "m",
-		"-XX:+UseG1GC", "-XX:+UnlockExperimentalVMOptions", "-XX:G1NewSizePercent=20", "-XX:G1ReservePercent=20",
-		"-XX:MaxGCPauseMillis=50", "-XX:G1HeapRegionSize=16M", "-XX:+ParallelRefProcEnabled", "-XX:+DisableExplicitGC",
-		"-Dfile.encoding=UTF-8", "-Dduck.launcher=" + LauncherVersion}
+	cds := filepath.Join(BaseDir(), "cache", "cds", fmt.Sprintf("%s-%s-j%d", cfg.Version, cfg.Loader, inst.JavaMajor))
+	args := jvmFlags(memory, inst.JavaMajor, cds, cfg.FastStart)
 	if authlib != "" {
 		args = append(args, "-javaagent:"+authlib+"=ely.by")
 	}
@@ -222,6 +212,9 @@ func Prepare(cfg *Config, totalMemMB int, progress Progress) (*exec.Cmd, string,
 		cmd.Stdout = f
 		cmd.Stderr = f
 	}
-	hideWindow(cmd)
+	hideWindow(cmd, cfg.HighPrio)
+	if cfg.DGPU {
+		preferDiscreteGPU(java)
+	}
 	return cmd, logPath, nil
 }

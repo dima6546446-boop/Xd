@@ -4,4 +4,6 @@ package core
 
 import "os/exec"
 
-func hideWindow(cmd *exec.Cmd) {}
+func hideWindow(cmd *exec.Cmd, highPriority bool) {}
+
+func preferDiscreteGPU(java string) {}

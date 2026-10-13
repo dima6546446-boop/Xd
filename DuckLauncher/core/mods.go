@@ -14,18 +14,44 @@ var DuckVisualJar []byte
 
 // OptionalMod is a performance mod the player can toggle in the settings.
 type OptionalMod struct {
-	Slug  string `json:"slug"`
-	Name  string `json:"name"`
-	About string `json:"about"`
+	Slug    string `json:"slug"`
+	ID      string `json:"id"` // Modrinth project id (dependencies refer to projects by id)
+	Name    string `json:"name"`
+	About   string `json:"about"`
+	Group   string `json:"group"`
+	Default bool   `json:"default"`
+	Needs   string `json:"needs,omitempty"` // only installed together with this mod
 }
 
 // PerfMods are Modrinth projects that make the game run better on weak PCs.
+// Each is installed only if it exists for the chosen version, with its required dependencies.
 var PerfMods = []OptionalMod{
-	{"sodium", "Sodium", "Новый движок рендера: обычно в 2–3 раза больше FPS"},
-	{"lithium", "Lithium", "Оптимизирует физику, ИИ мобов и тики мира"},
-	{"ferrite-core", "FerriteCore", "Сильно уменьшает потребление оперативной памяти"},
-	{"immediatelyfast", "ImmediatelyFast", "Ускоряет отрисовку HUD, текста и предметов"},
-	{"entityculling", "EntityCulling", "Не рисует мобов и сундуки, которые не видно"},
+	{"sodium", "AANobbMI", "Sodium", "Новый движок рендера: обычно в 2–3 раза больше FPS", "fps", true, ""},
+	{"sodium-extra", "PtjYWJkn", "Sodium Extra", "Ещё настройки графики: выключение анимаций, частиц, тумана и т.д.", "fps", true, "sodium"},
+	{"reeses-sodium-options", "Bh37bMuy", "Reese's Sodium Options", "Удобное меню настроек Sodium", "fps", true, "sodium"},
+	{"moreculling", "51shyZVL", "MoreCulling", "Не рисует скрытые грани листвы, стекла и блоков", "fps", true, ""},
+	{"entityculling", "NNAgCjsB", "EntityCulling", "Не рисует мобов и сундуки, которые не видно", "fps", true, ""},
+	{"immediatelyfast", "5ZwdcRci", "ImmediatelyFast", "Ускоряет отрисовку HUD, текста и предметов", "fps", true, ""},
+	{"badoptimizations", "g96Z4WVZ", "BadOptimizations", "Кэширует освещение, небо и цвета — меньше работы за кадр", "fps", true, ""},
+	{"dynamic-fps", "LQ3K71Q1", "Dynamic FPS", "Снижает FPS в свёрнутой игре: ПК не греется, музыка в браузере не лагает", "fps", true, ""},
+	{"lithium", "gvQqBUqZ", "Lithium", "Оптимизирует физику, ИИ мобов и тики мира", "cpu", true, ""},
+	{"scalablelux", "Ps1zyz6x", "ScalableLux", "Быстрый движок освещения, чанки грузятся плавнее", "cpu", true, ""},
+	{"clumps", "Wnxd13zP", "Clumps", "Склеивает сферы опыта — нет лагов на фермах", "cpu", true, ""},
+	{"noisium", "KuNKN7d2", "Noisium", "Быстрее генерирует мир в одиночной игре", "cpu", true, ""},
+	{"c2me-fabric", "VSNURh3q", "C2ME", "Многопоточная загрузка и генерация чанков (одиночная игра, бета)", "cpu", false, ""},
+	{"ferrite-core", "uXXizFIs", "FerriteCore", "Сильно уменьшает потребление оперативной памяти", "mem", true, ""},
+	{"modernfix", "nmDcB62a", "ModernFix", "Быстрый запуск игры и ещё меньше памяти", "mem", true, ""},
+	{"ksyxis", "2ecVyZ49", "Ksyxis", "Мир загружается быстрее", "mem", true, ""},
+	{"krypton", "fQEb0iXm", "Krypton", "Оптимизирует сеть — меньше нагрузка на серверах", "net", true, ""},
+}
+
+// DefaultMods is the toggle state of a fresh install.
+func DefaultMods() map[string]bool {
+	m := map[string]bool{}
+	for _, pm := range PerfMods {
+		m[pm.Slug] = pm.Default
+	}
+	return m
 }
 
 type modrinthVersion struct {
@@ -39,15 +65,25 @@ type modrinthVersion struct {
 			Sha1 string `json:"sha1"`
 		} `json:"hashes"`
 	} `json:"files"`
+	Dependencies []struct {
+		ProjectID      string `json:"project_id"`
+		DependencyType string `json:"dependency_type"`
+	} `json:"dependencies"`
 }
 
-// modrinthFile finds the newest Fabric build of a project for a game version.
-func modrinthFile(slug, gameVersion string) (*Task, error) {
+// resolvedMod is a downloadable file plus the projects it needs.
+type resolvedMod struct {
+	Task
+	Deps []string `json:"deps"`
+}
+
+// modrinthFile finds the newest Fabric build of a project (slug or id) for a game version.
+func modrinthFile(project, gameVersion string) (*resolvedMod, error) {
 	q := url.Values{}
 	q.Set("game_versions", `["`+gameVersion+`"]`)
 	q.Set("loaders", `["fabric"]`)
 	var versions []modrinthVersion
-	if err := getJSON("https://api.modrinth.com/v2/project/"+slug+"/version?"+q.Encode(), &versions); err != nil {
+	if err := getJSON("https://api.modrinth.com/v2/project/"+url.PathEscape(project)+"/version?"+q.Encode(), &versions); err != nil {
 		return nil, err
 	}
 	if len(versions) == 0 || len(versions[0].Files) == 0 {
@@ -59,16 +95,23 @@ func modrinthFile(slug, gameVersion string) (*Task, error) {
 			f = x
 		}
 	}
-	return &Task{URL: f.URL, Sha1: f.Hashes.Sha1, Size: f.Size, Path: f.Filename}, nil
+	r := &resolvedMod{Task: Task{URL: f.URL, Sha1: f.Hashes.Sha1, Size: f.Size, Path: f.Filename}}
+	for _, d := range versions[0].Dependencies {
+		if d.DependencyType == "required" && d.ProjectID != "" {
+			r.Deps = append(r.Deps, d.ProjectID)
+		}
+	}
+	return r, nil
 }
 
 // managed remembers which jars the launcher put into a mods folder, so it can update or
 // remove them without touching mods the player added by hand.
 type managed struct {
-	Files map[string]string `json:"files"` // slug -> file name
+	Files map[string]string `json:"files"` // slug or project id -> file name
 }
 
-// EnsureMods installs Fabric API, the chosen performance mods and (on 1.21.4) Duck Visual.
+// EnsureMods installs Fabric API, the chosen performance mods with their dependencies and
+// (on 1.21.4) Duck Visual.
 func EnsureMods(version, gameDir string, enabled map[string]bool, progress Progress) error {
 	mods := filepath.Join(gameDir, "mods")
 	if err := os.MkdirAll(mods, 0o755); err != nil {
@@ -81,42 +124,68 @@ func EnsureMods(version, gameDir string, enabled map[string]bool, progress Progr
 		m.Files = map[string]string{}
 	}
 
-	cachePath := filepath.Join(VersionsDir(), version, "mods-resolved.json")
-	var cache map[string]*Task
+	cachePath := filepath.Join(VersionsDir(), version, "mods-resolved-v2.json")
+	var cache map[string]*resolvedMod
 	readJSON(cachePath, &cache)
 	if cache == nil {
-		cache = map[string]*Task{}
+		cache = map[string]*resolvedMod{}
 	}
 
-	want := map[string]bool{"fabric-api": true}
+	// project ids of the mods we know, so a dependency on e.g. Sodium is not installed twice
+	idToSlug := map[string]string{"P7dR8mSH": "fabric-api"}
 	for _, pm := range PerfMods {
-		if enabled[pm.Slug] {
-			want[pm.Slug] = true
+		idToSlug[pm.ID] = pm.Slug
+	}
+	// mods the player installed from the catalog already satisfy dependencies
+	userIDs := map[string]bool{}
+	userModsMu.Lock()
+	for _, um := range loadUserMods(gameDir).Mods {
+		if um.Source == "modrinth" {
+			userIDs[um.ID] = true
+		}
+	}
+	userModsMu.Unlock()
+
+	queue := []string{"fabric-api"}
+	for _, pm := range PerfMods {
+		if enabled[pm.Slug] && (pm.Needs == "" || enabled[pm.Needs]) {
+			queue = append(queue, pm.Slug)
 		}
 	}
 	var tasks []Task
 	next := map[string]string{}
-	for slug := range want {
-		t, ok := cache[slug]
+	seen := map[string]bool{}
+	for len(queue) > 0 {
+		key := queue[0]
+		queue = queue[1:]
+		if s, ok := idToSlug[key]; ok {
+			key = s
+		}
+		if seen[key] || userIDs[key] {
+			continue
+		}
+		seen[key] = true
+		t, ok := cache[key]
 		if !ok {
 			if progress != nil {
 				progress("mods-resolve", 0, 1)
 			}
 			var err error
-			t, err = modrinthFile(slug, version)
+			t, err = modrinthFile(key, version)
 			if err != nil {
-				if slug == "fabric-api" {
+				if key == "fabric-api" {
 					return fmt.Errorf("Fabric API: %w", err)
 				}
 				continue // optional mod: skip on network errors
 			}
-			cache[slug] = t
+			cache[key] = t
 		}
 		if t == nil {
 			continue
 		}
-		next[slug] = t.Path
+		next[key] = t.Path
 		tasks = append(tasks, Task{URL: t.URL, Sha1: t.Sha1, Size: t.Size, Path: filepath.Join(mods, t.Path)})
+		queue = append(queue, t.Deps...)
 	}
 	os.MkdirAll(filepath.Dir(cachePath), 0o755)
 	if b, err := json.Marshal(cache); err == nil {
@@ -125,7 +194,7 @@ func EnsureMods(version, gameDir string, enabled map[string]bool, progress Progr
 
 	// remove managed jars that are disabled or replaced by a newer file
 	for slug, file := range m.Files {
-		if next[slug] != file && !strings.Contains(file, "/") && !strings.Contains(file, "\\") {
+		if next[slug] != file && !isValue(next, file) && !strings.Contains(file, "/") && !strings.Contains(file, "\\") {
 			os.Remove(filepath.Join(mods, file))
 		}
 	}
