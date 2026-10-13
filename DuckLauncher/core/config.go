@@ -21,6 +21,10 @@ type Config struct {
 	Lang        string          `json:"lang"`
 	AfterLaunch string          `json:"afterLaunch"` // "keep", "minimize", "close"
 	JVMArgs     string          `json:"jvmArgs"`
+	CFKey       string          `json:"cfKey"` // CurseForge API key for the mods catalog
+
+	// QuickJoin is a server address to connect to right after start (not saved).
+	QuickJoin string `json:"-"`
 
 	// legacy fields from launcher 1.0
 	Sodium     *bool `json:"sodium,omitempty"`

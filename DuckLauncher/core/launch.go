@@ -2,6 +2,7 @@ package core
 
 import (
 	"fmt"
+	"net"
 	"os"
 	"os/exec"
 	"path/filepath"
@@ -91,6 +92,7 @@ func Prepare(cfg *Config, totalMemMB int, progress Progress) (*exec.Cmd, string,
 	if cfg.Lang != "" {
 		setOptions(opts, map[string]string{"lang": cfg.Lang})
 	}
+	EnsureServers(gameDir) // a broken servers.dat must not stop the game
 
 	memory := cfg.MemoryMB
 	if memory == 0 {
@@ -133,6 +135,20 @@ func Prepare(cfg *Config, totalMemMB int, progress Progress) (*exec.Cmd, string,
 		return s
 	}
 	features := map[string]bool{"has_custom_resolution": !cfg.Fullscreen}
+	quickPlay := false
+	if cfg.QuickJoin != "" {
+		for _, a := range inst.Vanilla.Arguments.Game {
+			for _, x := range a.Values {
+				if strings.Contains(x, "${quickPlayMultiplayer}") {
+					quickPlay = true
+				}
+			}
+		}
+		if quickPlay {
+			features["is_quick_play_multiplayer"] = true
+			vars["quickPlayMultiplayer"] = cfg.QuickJoin
+		}
+	}
 
 	args := []string{fmt.Sprintf("-Xmx%dm", memory), "-Xms" + strconv.Itoa(min(memory, 1024)) + "m",
 		"-XX:+UseG1GC", "-XX:+UnlockExperimentalVMOptions", "-XX:G1NewSizePercent=20", "-XX:G1ReservePercent=20",
@@ -188,6 +204,14 @@ func Prepare(cfg *Config, totalMemMB int, progress Progress) (*exec.Cmd, string,
 	}
 	if cfg.Fullscreen {
 		args = append(args, "--fullscreen")
+	}
+	if cfg.QuickJoin != "" && !quickPlay {
+		// versions before 1.20 join a server with --server/--port
+		host, port, err := net.SplitHostPort(cfg.QuickJoin)
+		if err != nil {
+			host, port = cfg.QuickJoin, "25565"
+		}
+		args = append(args, "--server", host, "--port", port)
 	}
 
 	os.MkdirAll(LogsDir(), 0o755)

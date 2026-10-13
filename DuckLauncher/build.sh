@@ -18,4 +18,18 @@ go run github.com/tc-hib/go-winres@v0.3.3 make --in winres/winres.json --out rsr
 mkdir -p dist
 GOOS=windows GOARCH=amd64 CGO_ENABLED=0 go build -trimpath -ldflags "-H windowsgui -s -w" -o "dist/Duck Launcher.exe" .
 CGO_ENABLED=0 go build -trimpath -ldflags "-s -w" -o dist/ducklauncher-linux .
+
+# 4. code signing (optional): removes the "unknown publisher" SmartScreen warning.
+#    Needs a code signing certificate (.pfx) from a CA such as Certum, Sectigo, SSL.com,
+#    or Azure Trusted Signing. A self-signed certificate does NOT help with SmartScreen.
+#    DUCK_SIGN_PFX=cert.pfx DUCK_SIGN_PASS=... ./build.sh
+if [ -n "$DUCK_SIGN_PFX" ]; then
+  command -v osslsigncode >/dev/null || { echo "install osslsigncode to sign"; exit 1; }
+  osslsigncode sign -pkcs12 "$DUCK_SIGN_PFX" -pass "$DUCK_SIGN_PASS" \
+    -n "Duck Launcher" -i "https://t.me/dev_filatov" -h sha256 \
+    -ts http://timestamp.sectigo.com \
+    -in "dist/Duck Launcher.exe" -out "dist/Duck Launcher.signed.exe"
+  mv "dist/Duck Launcher.signed.exe" "dist/Duck Launcher.exe"
+  echo "signed"
+fi
 echo "built: dist/Duck Launcher.exe"

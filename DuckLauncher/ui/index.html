@@ -127,6 +127,44 @@
   .feat b { display: block; margin-bottom: 6px; } .feat b i { font-style: normal; background: var(--grad); -webkit-background-clip: text; color: transparent; }
   .feat p { color: var(--sub); font-size: 13px; line-height: 1.5; }
 
+
+  /* mods */
+  .tools { display: flex; gap: 10px; align-items: center; margin-bottom: 12px; }
+  .tools .field { flex: 1; }
+  .tools select.field { width: 200px; flex: none; }
+  .btn { white-space: nowrap; }
+  .mod { display: flex; gap: 14px; align-items: center; background: var(--card); border-radius: 14px; padding: 12px 14px; margin-bottom: 10px; }
+  .mod img, .mod .noimg { width: 52px; height: 52px; border-radius: 12px; flex: none; background: var(--card2); object-fit: cover; }
+  .mod .txt { flex: 1; min-width: 0; }
+  .mod .txt b { display: block; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .mod .txt b a { color: var(--sub); font-weight: 400; font-size: 12px; margin-left: 6px; cursor: pointer; }
+  .mod .txt b a:hover { color: var(--accent1); }
+  .mod .txt p { color: var(--sub); font-size: 12px; margin-top: 3px; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+  .mod .meta { color: #6d6d7a; font-size: 11px; margin-top: 4px; }
+  .mod .act { flex: none; min-width: 120px; }
+  .btn.done { background: rgba(85,224,138,.12); color: var(--ok); }
+  .btn.done:hover { background: rgba(255,85,102,.14); color: var(--danger); }
+  .btn:disabled { opacity: .55; cursor: default; }
+  .empty { color: var(--sub); text-align: center; padding: 40px 10px; line-height: 1.6; }
+  .empty .btn { margin-top: 12px; }
+  .cnt { background: var(--card2); color: var(--sub); border-radius: 99px; padding: 1px 7px; font-size: 11px; margin-left: 4px; }
+  .seg button.on .cnt { background: rgba(0,0,0,.15); color: #1a1205; }
+
+  /* servers */
+  .srv { display: flex; gap: 18px; align-items: center; background: var(--card); border-radius: 18px; padding: 18px; margin-bottom: 12px;
+         border: 1px solid var(--line); background-image: radial-gradient(circle at 0% 0%, rgba(255,170,40,.10), transparent 55%); }
+  .srv .ic { width: 72px; height: 72px; border-radius: 14px; background: var(--card2); image-rendering: pixelated; flex: none; display: grid; place-items: center; }
+  .srv .ic img { width: 72px; height: 72px; border-radius: 14px; image-rendering: pixelated; }
+  .srv .txt { flex: 1; min-width: 0; }
+  .srv .txt b { font-size: 18px; }
+  .srv .addr { color: var(--sub); font-size: 12px; margin-top: 2px; cursor: pointer; } .srv .addr:hover { color: var(--accent1); }
+  .motd { font-family: Consolas, "Cascadia Mono", monospace; font-size: 13px; margin-top: 8px; white-space: pre-wrap; line-height: 1.4; color: #aaa; }
+  .srv .stat { display: flex; gap: 14px; margin-top: 8px; font-size: 12px; color: var(--sub); }
+  .srv .st { display: inline-flex; align-items: center; }
+  .dot { display: inline-block; flex: none; width: 8px; height: 8px; border-radius: 50%; background: #555; margin-right: 6px; }
+  .dot.on { background: var(--ok); box-shadow: 0 0 10px var(--ok); }
+  .srv .play { width: 190px; height: 54px; font-size: 16px; }
+
   /* creator */
   .creator { flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; gap: 10px; }
   .avatar { width: 120px; height: 120px; border-radius: 32px; background: var(--card); display: grid; place-items: center;
@@ -172,6 +210,8 @@
   </div>
   <nav class="nav">
     <button class="on" data-page="home"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 11l9-8 9 8v9a1 1 0 0 1-1 1h-5v-6H9v6H4a1 1 0 0 1-1-1z"/></svg>Играть</button>
+    <button data-page="mods"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 16V8a2 2 0 0 0-1-1.7l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.7l7 4a2 2 0 0 0 2 0l7-4a2 2 0 0 0 1-1.7z"/><path d="M3.3 7 12 12l8.7-5M12 22V12"/></svg>Моды</button>
+    <button data-page="servers"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="7" rx="2"/><rect x="3" y="13" width="18" height="7" rx="2"/><path d="M7 7.5h.01M7 16.5h.01"/></svg>Серверы</button>
     <button data-page="settings"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M12 1v3M12 20v3M4.2 4.2l2.1 2.1M17.7 17.7l2.1 2.1M1 12h3M20 12h3M4.2 19.8l2.1-2.1M17.7 6.3l2.1-2.1"/></svg>Настройки</button>
     <button data-page="about"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2l3 7h7l-5.5 4.5L18 21l-6-4-6 4 1.5-7.5L2 9h7z"/></svg>Функции</button>
     <button data-page="creator"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="8" r="4"/><path d="M4 21c0-4 4-6 8-6s8 2 8 6"/></svg>Создатель</button>
@@ -213,6 +253,26 @@
     </div>
   </section>
 
+
+  <section class="page" id="page-mods">
+    <h2 style="display:flex;align-items:center;gap:10px">Моды <span class="badge gray" id="modsFor"></span></h2>
+    <div class="tools">
+      <div class="seg" id="modSrc"><button data-v="modrinth" class="on">Modrinth</button><button data-v="curseforge">CurseForge</button></div>
+      <div class="seg" id="modView"><button data-v="catalog" class="on">Каталог</button><button data-v="installed">Мои моды<span class="cnt" id="modCnt">0</span></button></div>
+    </div>
+    <div class="tools" id="modSearchBar">
+      <input class="field" id="modQuery" placeholder="Поиск модов: карта, миникарта, зум, шейдеры...">
+      <select class="field" id="modSort"><option value="relevance">По релевантности</option><option value="downloads">Популярные</option><option value="updated">Обновлённые</option></select>
+    </div>
+    <div class="scroll" id="modList" style="flex:1"></div>
+  </section>
+
+  <section class="page" id="page-servers">
+    <h2>Серверы</h2>
+    <div class="scroll" id="srvList"></div>
+    <div class="hint" style="margin-top:4px">Сервер уже добавлен в «Сетевую игру» в Minecraft на любой версии. Кнопка «Играть на сервере» запускает игру и сразу подключает к нему.</div>
+  </section>
+
   <section class="page" id="page-settings">
     <h2>Настройки</h2>
     <div class="scroll">
@@ -232,6 +292,11 @@
           <div style="display:flex;align-items:center;gap:8px"><input class="field small-field" id="width" inputmode="numeric"><span style="color:var(--sub)">×</span><input class="field small-field" id="height" inputmode="numeric"></div></div>
         <div class="row"><div>Язык игры</div>
           <select class="field" id="lang"><option value="ru_ru">Русский</option><option value="uk_ua">Українська</option><option value="be_by">Беларуская</option><option value="kk_kz">Қазақша</option><option value="en_us">English</option></select></div>
+      </div>
+      <div class="sec">CurseForge</div>
+      <div class="card">
+        <div class="row" style="display:block"><div style="margin-bottom:8px">API-ключ CurseForge<small>CurseForge выдаёт доступ к каталогу только по ключу. Он бесплатный: войди на console.curseforge.com → API Keys, скопируй ключ и вставь сюда. Modrinth работает без ключа.</small></div>
+          <div style="display:flex;gap:8px"><input class="field" id="cfKey" type="password" placeholder="$2a$10$..."><button class="btn" id="cfGet">Получить ключ</button></div></div>
       </div>
       <div class="sec">Лаунчер</div>
       <div class="card">
@@ -366,6 +431,7 @@ async function refresh() {
   $$('#after button').forEach(b => b.classList.toggle('on', b.dataset.v === st.afterLaunch));
   $('#jvm').value = st.jvmArgs || '';
   $('#dir').textContent = st.dir;
+  $('#cfKey').placeholder = st.cfKey ? 'Ключ сохранён (вставь новый, чтобы заменить; пусто — удалить)' : 'Вставь API-ключ CurseForge';
   const mc = $('#modsCard');
   mc.querySelectorAll('.row').forEach(r => r.remove());
   st.perfMods.forEach(m => {
@@ -386,16 +452,17 @@ function ramLabel() {
   $('#ramAuto').classList.toggle('primary', auto);
   $('#ramHint').textContent = auto ? 'Авто — подобрано под твой ПК (' + Math.round(st.maxMemoryMb / 1024) + ' ГБ ОЗУ)' : 'Вручную. Оставь системе хотя бы 2 ГБ';
 }
-function save() {
+function save() { dlSaveSettings(settingsData()); }
+function settingsData() {
   const mods = {};
   $$('[data-mod]').forEach(s => mods[s.dataset.mod] = s.classList.contains('on'));
   const after = [...$$('#after button')].find(b => b.classList.contains('on'));
-  dlSaveSettings({
+  return {
     memoryMb: st.memoryMb || 0, mods, weakPc: $('#weakPc').classList.contains('on'),
     width: parseInt($('#width').value) || 1280, height: parseInt($('#height').value) || 720,
     fullscreen: $('#fullscreen').classList.contains('on'), lang: $('#lang').value,
     afterLaunch: after ? after.dataset.v : 'minimize', jvmArgs: $('#jvm').value
-  });
+  };
 }
 
 $$('.nav button').forEach(b => b.onclick = () => {
@@ -500,6 +567,165 @@ window.onError = (msg) => {
   $('#play').disabled = false; $('#play').textContent = 'ИГРАТЬ';
   $('#stage').textContent = 'Ошибка'; toast(msg);
 };
+
+
+/* ---------- mods ---------- */
+const esc = t => String(t ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const fmtNum = n => n >= 1e6 ? (n / 1e6).toFixed(1).replace('.0', '') + ' млн' : n >= 1e3 ? Math.round(n / 1e3) + ' тыс' : String(n);
+const mods = { src: 'modrinth', view: 'catalog', page: 0, items: [], loading: false, end: false, busy: {} };
+
+function modsAvailable() {
+  $('#modsFor').textContent = st.loader === 'fabric' ? 'Fabric ' + st.version : st.version + ' · Vanilla';
+  return st.loader === 'fabric';
+}
+function modIcon(url) { return url ? `<img src="${esc(url)}" loading="lazy" onerror="this.outerHTML='<div class=noimg></div>'">` : '<div class="noimg"></div>'; }
+function modButton(m) {
+  if (m.auto) return '<button class="btn" disabled>Ставит лаунчер</button>';
+  if (mods.busy[m.id] !== undefined) return `<button class="btn" disabled>${mods.busy[m.id]}</button>`;
+  if (m.installed) return '<button class="btn done" data-act="remove">Установлен ✓</button>';
+  return '<button class="btn primary" data-act="install">Установить</button>';
+}
+function modRow(m) {
+  const d = document.createElement('div'); d.className = 'mod'; d.dataset.id = m.id;
+  d.innerHTML = `${modIcon(m.icon)}<div class="txt"><b>${esc(m.title)}${m.url ? '<a>страница ↗</a>' : ''}</b><p>${esc(m.description)}</p>
+    <div class="meta">${m.author ? esc(m.author) + ' · ' : ''}${fmtNum(m.downloads || 0)} загрузок</div></div><div class="act">${modButton(m)}</div>`;
+  const a = d.querySelector('.txt a'); if (a) a.onclick = () => dlOpenURL(m.url);
+  d.querySelector('.act').onclick = e => {
+    const act = e.target.dataset.act;
+    if (act === 'install') installMod(m);
+    if (act === 'remove') removeMod(m.source, m.id);
+  };
+  return d;
+}
+function modsMessage(html) { $('#modList').innerHTML = `<div class="empty">${html}</div>`; }
+
+async function loadMods(reset) {
+  if (!modsAvailable()) {
+    modsMessage('Моды ставятся только на <b>Fabric</b>.<br>Открой «Играть» → меню версии → Fabric.'); return;
+  }
+  if (mods.view === 'installed') return showInstalled();
+  if (reset) { mods.page = 0; mods.items = []; mods.end = false; $('#modList').innerHTML = ''; }
+  if (mods.loading || mods.end) return;
+  if (mods.src === 'curseforge' && !st.cfKey) {
+    modsMessage('Для CurseForge нужен бесплатный API-ключ — без него CurseForge не отдаёт каталог сторонним лаунчерам.<br>Вставь его в <b>Настройки → CurseForge</b>. Modrinth работает без ключа.<br><button class="btn primary" id="toCf">Открыть настройки</button>');
+    $('#toCf').onclick = () => $('[data-page=settings]').click(); return;
+  }
+  mods.loading = true;
+  const q = $('#modQuery').value.trim(), token = (loadMods.token = (loadMods.token || 0) + 1);
+  if (reset) modsMessage('Загрузка...');
+  let res;
+  try { res = await dlModsSearch(mods.src, q, $('#modSort').value, mods.page); }
+  catch (e) { mods.loading = false; if (token === loadMods.token) modsMessage(esc(e.message || e)); return; }
+  mods.loading = false;
+  if (token !== loadMods.token) return;
+  const list = $('#modList');
+  if (mods.page === 0) list.innerHTML = '';
+  list.querySelector('.more')?.remove();
+  if (!res.length && mods.page === 0) { modsMessage('Ничего не нашлось для ' + esc(st.version) + '. Попробуй другой запрос.'); return; }
+  res.forEach(m => { mods.items.push(m); list.appendChild(modRow(m)); });
+  mods.page++;
+  if (res.length < 20) mods.end = true;
+  else {
+    const more = document.createElement('div'); more.className = 'empty more';
+    more.innerHTML = '<button class="btn">Показать ещё</button>'; more.querySelector('button').onclick = () => loadMods(false);
+    list.appendChild(more);
+  }
+}
+async function updateModCount() { const l = await dlModsInstalled(); $('#modCnt').textContent = l.filter(m => !m.dep).length; return l; }
+async function showInstalled() {
+  const l = await updateModCount();
+  if (!l.length) { modsMessage('Ты ещё не ставил модов из каталога.<br>Свои .jar можно класть в папку: Настройки → Папки → Моды.'); return; }
+  const list = $('#modList'); list.innerHTML = '';
+  l.forEach(m => list.appendChild(modRow({ ...m, description: m.dep ? 'Нужен другим модам (зависимость)' : m.file, installed: true, downloads: 0, author: m.source === 'curseforge' ? 'CurseForge' : 'Modrinth' })));
+  list.querySelectorAll('.meta').forEach(x => x.textContent = x.textContent.replace(/ · 0 загрузок$/, ''));
+}
+function refreshModRow(id) {
+  const m = mods.items.find(x => x.id === id);
+  const row = [...$$('#modList .mod')].find(r => r.dataset.id === id);
+  if (m && row) row.querySelector('.act').innerHTML = modButton(m);
+}
+function installMod(m) {
+  mods.busy[m.id] = 'Загрузка...'; refreshModRow(m.id);
+  dlModInstall(m.source, m.id);
+}
+window.onModProgress = (id, done, total) => {
+  if (mods.busy[id] === undefined) return;
+  mods.busy[id] = total > 0 ? Math.round(done / total * 100) + '%' : 'Загрузка...'; refreshModRow(id);
+};
+window.onModInstalled = (id, title, err) => {
+  delete mods.busy[id];
+  const m = mods.items.find(x => x.id === id);
+  if (err) toast(err); else { if (m) m.installed = true; toast('Установлен: ' + title); }
+  refreshModRow(id); updateModCount();
+};
+async function removeMod(source, id) {
+  const err = await dlModRemove(source, id);
+  if (err) { toast(err); return; }
+  const m = mods.items.find(x => x.id === id); if (m) m.installed = false;
+  if (mods.view === 'installed') showInstalled(); else { refreshModRow(id); updateModCount(); }
+}
+$$('#modSrc button').forEach(b => b.onclick = () => { $$('#modSrc button').forEach(x => x.classList.toggle('on', x === b)); mods.src = b.dataset.v; mods.view = 'catalog';
+  $$('#modView button').forEach(x => x.classList.toggle('on', x.dataset.v === 'catalog')); $('#modSearchBar').style.display = ''; loadMods(true); });
+$$('#modView button').forEach(b => b.onclick = () => { $$('#modView button').forEach(x => x.classList.toggle('on', x === b)); mods.view = b.dataset.v;
+  $('#modSearchBar').style.display = mods.view === 'catalog' ? '' : 'none'; loadMods(true); });
+$('#modQuery').oninput = () => { clearTimeout(loadMods.h); loadMods.h = setTimeout(() => loadMods(true), 350); };
+$('#modSort').onchange = () => loadMods(true);
+$('#modList').onscroll = e => { const el = e.target; if (mods.view === 'catalog' && el.scrollTop + el.clientHeight > el.scrollHeight - 200) loadMods(false); };
+
+/* ---------- servers ---------- */
+function motdHTML(t) {
+  const colors = { 0:'#000',1:'#00a',2:'#0a0',3:'#0aa',4:'#a00',5:'#a0a',6:'#fa0',7:'#aaa',8:'#555',9:'#55f',a:'#5f5',b:'#5ff',c:'#f55',d:'#f5f',e:'#ff5',f:'#fff' };
+  let out = '', color = '#aaa', bold = false, i = 0;
+  while (i < t.length) {
+    if (t[i] === '§' && i + 1 < t.length) {
+      const c = t[i + 1].toLowerCase();
+      if (c === '#' && /^[0-9a-f]{6}$/i.test(t.substr(i + 2, 6))) { color = '#' + t.substr(i + 2, 6); bold = false; i += 8; continue; }
+      if (colors[c]) { color = colors[c]; bold = false; } else if (c === 'l') bold = true; else if (c === 'r') { color = '#aaa'; bold = false; }
+      i += 2; continue;
+    }
+    let j = i; while (j < t.length && t[j] !== '§') j++;
+    out += `<span style="color:${color}${bold ? ';font-weight:700' : ''}">${esc(t.slice(i, j))}</span>`; i = j;
+  }
+  return out;
+}
+let serverList = null;
+async function loadServers() {
+  if (!serverList) serverList = await dlServers();
+  const box = $('#srvList'); box.innerHTML = '';
+  serverList.forEach((s, i) => {
+    const d = document.createElement('div'); d.className = 'srv';
+    d.innerHTML = `<div class="ic"><svg width="44" height="44" viewBox="0 0 64 64"><ellipse cx="29" cy="42" rx="22" ry="14" fill="#ffb02e"/><circle cx="40" cy="22" r="12" fill="#ffd43b"/><path d="M50 19 L62 23 L50 27 Z" fill="#ff8a1f"/><circle cx="43" cy="19" r="2.4" fill="#111"/></svg></div>
+      <div class="txt"><b>${esc(s.name)}</b><div class="addr" title="Скопировать">${esc(s.port && s.port !== 25565 ? s.host + ':' + s.port : s.host)} ⧉</div>
+      <div class="motd">Проверяем сервер...</div><div class="stat"><span class="st"><b class="dot"></b><span class="stt">...</span></span><span class="pl"></span><span class="pg"></span></div></div>
+      <button class="play">ИГРАТЬ НА СЕРВЕРЕ</button>`;
+    d.querySelector('.addr').onclick = () => { navigator.clipboard?.writeText(d.querySelector('.addr').textContent.replace(' ⧉', '')); toast('Адрес скопирован'); };
+    d.querySelector('.play').onclick = async () => {
+      if (!st.account) { openLogin(); return; }
+      $('[data-page=home]').click();
+      $('#play').disabled = true; $('#play').textContent = 'ЗАГРУЗКА'; $('#stage').textContent = 'Подготовка...'; $('#fill').style.width = '0%';
+      const err = await dlJoinServer(i);
+      if (err) { toast(err); $('#play').disabled = false; $('#play').textContent = 'ИГРАТЬ'; }
+    };
+    box.appendChild(d);
+    dlPingServer(i).then(r => {
+      d.querySelector('.dot').classList.toggle('on', r.online);
+      d.querySelector('.stt').textContent = r.online ? 'Онлайн' : 'Оффлайн';
+      d.querySelector('.motd').innerHTML = r.online ? motdHTML(r.motd || '') : esc(r.error || 'Сервер не отвечает');
+      if (r.online) {
+        d.querySelector('.pl').textContent = `👥 ${r.players} / ${r.maxPlayers}`;
+        d.querySelector('.pg').textContent = `📶 ${r.ping} мс` + (r.version ? ' · ' + r.version : '');
+        if (r.favicon) d.querySelector('.ic').innerHTML = `<img src="${esc(r.favicon)}">`;
+      }
+    });
+  });
+}
+
+$$('.nav button').forEach(b => b.addEventListener('click', () => {
+  if (b.dataset.page === 'mods') loadMods(true);
+  if (b.dataset.page === 'servers') loadServers();
+}));
+$('#cfKey').onchange = async () => { await dlSaveSettings({ ...settingsData(), cfKey: $('#cfKey').value }); $('#cfKey').value = ''; await refresh(); toast(st.cfKey ? 'Ключ CurseForge сохранён' : 'Ключ CurseForge удалён'); };
+$('#cfGet').onclick = () => dlOpenURL('https://console.curseforge.com/');
 
 $('#hero').style.backgroundImage = 'url(data:image/jpeg;base64,{{HERO}})';
 refresh();

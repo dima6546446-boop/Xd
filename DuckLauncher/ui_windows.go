@@ -4,6 +4,7 @@ package main
 
 import (
 	"encoding/base64"
+	"errors"
 	"encoding/json"
 	"os"
 	"os/exec"
@@ -90,6 +91,13 @@ func runUI() {
 	w.Bind("dlOpenURL", a.openURL)
 	w.Bind("dlPlay", a.play)
 	w.Bind("dlOpen", a.open)
+	w.Bind("dlServers", a.servers)
+	w.Bind("dlPingServer", a.pingServer)
+	w.Bind("dlJoinServer", a.joinServer)
+	w.Bind("dlModsSearch", a.modsSearch)
+	w.Bind("dlModsInstalled", a.modsInstalled)
+	w.Bind("dlModInstall", a.modInstall)
+	w.Bind("dlModRemove", a.modRemove)
 	w.SetHtml(strings.Replace(indexHTML, "{{HERO}}", base64.StdEncoding.EncodeToString(heroJPG), 1))
 	w.Run()
 }
@@ -117,6 +125,7 @@ type state struct {
 	Lang        string             `json:"lang"`
 	AfterLaunch string             `json:"afterLaunch"`
 	JVMArgs     string             `json:"jvmArgs"`
+	CFKey       bool               `json:"cfKey"`
 	Running     bool               `json:"running"`
 	Busy        bool               `json:"busy"`
 	AppVersion  string             `json:"appVersion"`
@@ -135,7 +144,7 @@ func (a *app) state() state {
 	return state{Account: safe, Version: c.Version, Loader: c.Loader, DuckVersion: core.DuckVersion,
 		MemoryMB: c.MemoryMB, AutoMemory: core.AutoMemoryMB(total), MaxMemoryMB: total, Mods: c.Mods, PerfMods: core.PerfMods,
 		WeakPC: c.WeakPC, Width: c.Width, Height: c.Height, Fullscreen: c.Fullscreen, Lang: c.Lang,
-		AfterLaunch: c.AfterLaunch, JVMArgs: c.JVMArgs, Running: a.running, Busy: a.busy,
+		AfterLaunch: c.AfterLaunch, JVMArgs: c.JVMArgs, CFKey: c.CFKey != "", Running: a.running, Busy: a.busy,
 		AppVersion: core.LauncherVersion, Dir: core.BaseDir()}
 }
 
@@ -197,6 +206,7 @@ type settings struct {
 	Lang        string          `json:"lang"`
 	AfterLaunch string          `json:"afterLaunch"`
 	JVMArgs     string          `json:"jvmArgs"`
+	CFKey       *string         `json:"cfKey"` // nil = unchanged
 }
 
 func (a *app) saveSettings(s settings) {
@@ -221,6 +231,9 @@ func (a *app) saveSettings(s settings) {
 		c.AfterLaunch = s.AfterLaunch
 	}
 	c.JVMArgs = s.JVMArgs
+	if s.CFKey != nil {
+		c.CFKey = strings.TrimSpace(*s.CFKey)
+	}
 	c.Save()
 }
 
@@ -245,7 +258,12 @@ func (a *app) open(kind string) {
 
 // openURL only opens the links the UI actually shows.
 func (a *app) openURL(u string) {
-	if strings.HasPrefix(u, "https://t.me/") || strings.HasPrefix(u, "https://ely.by") {
+	allowed := []string{"https://t.me/", "https://ely.by", "https://modrinth.com/", "https://www.curseforge.com/", "https://console.curseforge.com/"}
+	ok := false
+	for _, p := range allowed {
+		ok = ok || strings.HasPrefix(u, p)
+	}
+	if ok {
 		exec.Command("rundll32", "url.dll,FileProtocolHandler", u).Start()
 	}
 }
@@ -256,7 +274,85 @@ func (a *app) showWindow(cmd uintptr) {
 	a.w.Dispatch(func() { procShowWindow.Call(uintptr(a.w.Window()), cmd) })
 }
 
-func (a *app) play() string {
+func (a *app) play() string { return a.launch("") }
+
+func (a *app) servers() []core.Server { return core.Servers }
+
+func (a *app) pingServer(i int) core.ServerStatus {
+	if i < 0 || i >= len(core.Servers) {
+		return core.ServerStatus{Error: "нет сервера"}
+	}
+	return core.PingServer(core.Servers[i])
+}
+
+func (a *app) joinServer(i int) string {
+	if i < 0 || i >= len(core.Servers) {
+		return "нет сервера"
+	}
+	return a.launch(core.Servers[i].Address())
+}
+
+// modTarget is the version and folder the "Моды" tab works with.
+func (a *app) modTarget() (version, dir, key string, perf map[string]bool, err string) {
+	a.mu.Lock()
+	defer a.mu.Unlock()
+	if a.cfg.Loader != "fabric" {
+		return "", "", "", nil, "Моды работают только на Fabric — выбери Fabric в меню версий"
+	}
+	perf = map[string]bool{}
+	for k, v := range a.cfg.Mods {
+		perf[k] = v
+	}
+	return a.cfg.Version, core.InstanceDir(a.cfg.Version, a.cfg.Loader), a.cfg.CFKey, perf, ""
+}
+
+func (a *app) modsSearch(source, query, sort string, page int) ([]core.CatalogMod, error) {
+	v, dir, key, perf, e := a.modTarget()
+	if e != "" {
+		return nil, errors.New(e)
+	}
+	return core.SearchMods(source, query, v, sort, key, page, dir, perf)
+}
+
+func (a *app) modsInstalled() []core.UserMod {
+	_, dir, _, _, e := a.modTarget()
+	if e != "" {
+		return []core.UserMod{}
+	}
+	return core.InstalledMods(dir)
+}
+
+// modInstall runs in the background and reports through onModInstalled(id, title, error).
+func (a *app) modInstall(source, id string) {
+	v, dir, key, perf, e := a.modTarget()
+	if e != "" {
+		a.emit("onModInstalled", id, "", e)
+		return
+	}
+	go func() {
+		title, err := core.InstallMod(source, id, v, key, dir, perf, func(stage string, done, total int64) {
+			a.emit("onModProgress", id, done, total)
+		})
+		msg := ""
+		if err != nil {
+			msg = err.Error()
+		}
+		a.emit("onModInstalled", id, title, msg)
+	}()
+}
+
+func (a *app) modRemove(source, id string) string {
+	_, dir, _, _, e := a.modTarget()
+	if e != "" {
+		return e
+	}
+	if err := core.RemoveMod(dir, source, id); err != nil {
+		return err.Error()
+	}
+	return ""
+}
+
+func (a *app) launch(join string) string {
 	a.mu.Lock()
 	if a.busy || a.running {
 		a.mu.Unlock()
@@ -270,6 +366,9 @@ func (a *app) play() string {
 	a.mu.Unlock()
 
 	go func() {
+		a.mu.Lock()
+		a.cfg.QuickJoin = join
+		a.mu.Unlock()
 		cmd, logPath, err := core.Prepare(a.cfg, totalMemoryMB(), func(stage string, done, total int64) {
 			a.emit("onProgress", stage, done, total)
 		})
