@@ -63,7 +63,7 @@ func setup(t *testing.T) (*Bot, *fakeTelegram) {
 	t.Cleanup(srv.Close)
 	dir := t.TempDir()
 	os.WriteFile(filepath.Join(dir, "cover.png"), []byte("\x89PNG fake"), 0o644)
-	cfg := &Config{Token: "T", Channel: "@duckvisual", AdminID: 42, Amounts: []int{50, 100, 250}, Cover: "cover.png", Contact: "@dev_filatov", APIURL: srv.URL}
+	cfg := &Config{Token: "T", Channel: "@duckvisual", AdminID: 42, Amounts: []int{50, 100, 250}, Cover: "cover.png", Contact: "t.me/duckvisual", APIURL: srv.URL}
 	b, err := newBot(cfg, dir)
 	if err != nil {
 		t.Fatal(err)

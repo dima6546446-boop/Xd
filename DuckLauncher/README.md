@@ -6,7 +6,7 @@
 > Duck Launcher и Duck Visual не являются продуктами Mojang AB и не связаны с Mojang AB или Microsoft.
 > Minecraft — товарный знак Mojang AB. Игровые файлы загружаются с официальных серверов Mojang.
 
-Создатель: **filatov** — Telegram [@dev_filatov](https://t.me/dev_filatov)
+Новости и поддержка: Telegram-канал [@DuckVisual](https://t.me/duckvisual)
 
 ## Что делает лаунчер
 

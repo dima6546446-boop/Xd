@@ -26,7 +26,7 @@ CGO_ENABLED=0 go build -trimpath -ldflags "-s -w" -o dist/ducklauncher-linux .
 if [ -n "$DUCK_SIGN_PFX" ]; then
   command -v osslsigncode >/dev/null || { echo "install osslsigncode to sign"; exit 1; }
   osslsigncode sign -pkcs12 "$DUCK_SIGN_PFX" -pass "$DUCK_SIGN_PASS" \
-    -n "Duck Launcher" -i "https://t.me/dev_filatov" -h sha256 \
+    -n "Duck Launcher" -i "https://t.me/duckvisual" -h sha256 \
     -ts http://timestamp.sectigo.com \
     -in "dist/Duck Launcher.exe" -out "dist/Duck Launcher.signed.exe"
   mv "dist/Duck Launcher.signed.exe" "dist/Duck Launcher.exe"

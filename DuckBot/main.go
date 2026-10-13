@@ -28,7 +28,7 @@ type Config struct {
 	AdminID int64  `json:"adminId"` // your Telegram user id: gets payment notices and admin commands
 	Amounts []int  `json:"amounts"` // quick buttons, in Stars
 	Cover   string `json:"cover"`   // picture for the channel post (optional)
-	Contact string `json:"contact"` // where people write about payments, e.g. "@dev_filatov"
+	Contact string `json:"contact"` // where people write about payments, e.g. "t.me/duckvisual"
 	APIURL  string `json:"apiUrl"`  // only for tests; default https://api.telegram.org
 }
 
@@ -54,7 +54,7 @@ func loadConfig(path string) (*Config, error) {
 		c.APIURL = "https://api.telegram.org"
 	}
 	if c.Contact == "" {
-		c.Contact = "@dev_filatov"
+		c.Contact = "t.me/duckvisual"
 	}
 	return c, nil
 }
@@ -369,7 +369,7 @@ func (b *Bot) handleText(m *Message) {
 		b.send(m.Chat.ID, "Это добровольный донат создателю Duck Visual и Duck Launcher. За звёзды ничего не продаётся и не выдаётся: ни функций, ни привилегий. Мод и лаунчер остаются бесплатными для всех.", nil)
 		return
 	case "/paysupport":
-		b.send(m.Chat.ID, "Если с оплатой что-то не так — напиши "+htmlEscape(b.cfg.Contact)+" и приложи скриншот платежа. Разберёмся и при необходимости вернём звёзды.", nil)
+		b.send(m.Chat.ID, "Если с оплатой что-то не так — напиши в "+htmlEscape(b.cfg.Contact)+" и приложи скриншот платежа. Разберёмся и при необходимости вернём звёзды.", nil)
 		return
 	case "/id":
 		if m.From != nil {

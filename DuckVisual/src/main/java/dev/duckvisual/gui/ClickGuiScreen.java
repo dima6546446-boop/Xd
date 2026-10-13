@@ -339,7 +339,7 @@ public class ClickGuiScreen extends Screen {
             }
             Render2D.roundedRect(ctx, x + 14, ty + 4, 14, 14, 4, sel ? ColorUtil.theme() : 0xFF24242D);
             Render2D.centeredText(ctx, "@", x + 21.5f, ty + 7, sel ? 0xFF111111 : SUBTEXT);
-            Render2D.text(ctx, "\u0421\u043E\u0437\u0434\u0430\u0442\u0435\u043B\u044C", x + 34, ty + 7, ColorUtil.lerp(SUBTEXT, TEXT, a));
+            Render2D.text(ctx, "\u041F\u0440\u043E\u0435\u043A\u0442", x + 34, ty + 7, ColorUtil.lerp(SUBTEXT, TEXT, a));
             hits.add(new Hit(x + 6, ty, SIDEBAR - 12, 22, b -> {
                 creatorTab = true;
                 guideTab = false;
@@ -419,12 +419,10 @@ public class ClickGuiScreen extends Screen {
         }
     }
 
-    private static final String TELEGRAM = "https://t.me/dev_filatov";
     private static final String CHANNEL = "https://t.me/duckvisual";
     private static final String SUPPORT = "https://t.me/duckvisual/2";
-    private static final String CHANNEL_LABEL = "Канал: t.me/duckvisual";
 
-    /** Credits: who made the client, Telegram link and the Mojang disclaimer. */
+    /** Project page: channel link, support with Telegram Stars and the Mojang disclaimer. */
     private void renderCreator(DrawContext ctx, float x, float y, float w, float h, float mx, float my) {
         float cx = x + w / 2;
         float cy = y + 40;
@@ -436,36 +434,25 @@ public class ClickGuiScreen extends Screen {
         float tw = Render2D.width("Duck Visual");
         Render2D.gradientText(ctx, "Duck Visual", -tw / 2, 0, 0);
         ctx.getMatrices().pop();
-        Render2D.centeredText(ctx, "\u0421\u043E\u0437\u0434\u0430\u0442\u0435\u043B\u044C \u043A\u043B\u0438\u0435\u043D\u0442\u0430", cx, cy + 92, SUBTEXT);
-        ctx.getMatrices().push();
-        ctx.getMatrices().translate(cx, cy + 104, 0);
-        ctx.getMatrices().scale(1.5f, 1.5f, 1);
-        Render2D.centeredText(ctx, "filatov", 0, 0, TEXT);
-        ctx.getMatrices().pop();
+        Render2D.centeredText(ctx, "\u041D\u043E\u0432\u043E\u0441\u0442\u0438, \u0438\u0434\u0435\u0438 \u0438 \u0431\u0430\u0433\u0438 \u2014 \u0432 \u043D\u0430\u0448\u0435\u043C Telegram-\u043A\u0430\u043D\u0430\u043B\u0435", cx, cy + 96, SUBTEXT);
 
-        // Telegram button
-        float bw = 170, bh = 26, bx = cx - bw / 2, by = cy + 128;
+        // channel button
+        float bw = 170, bh = 26, bx = cx - bw / 2, by = cy + 118;
         boolean hov = mx >= bx && mx <= bx + bw && my >= by && my <= by + bh;
         Render2D.shadow(ctx, bx, by, bw, bh, 7, hov ? 8 : 5, ColorUtil.withAlpha(0xFF2AABEE, hov ? 140 : 80));
         Render2D.roundedGradient(ctx, bx, by, bw, bh, 7, 0xFF37AEE2, 0xFF1E96C8, 0xFF1E96C8, 0xFF37AEE2);
         // paper plane
         Render2D.triangle(ctx, bx + 12, by + 13, bx + 26, by + 7, bx + 21, by + 19, 0xFFFFFFFF);
-        Render2D.centeredText(ctx, "Telegram  @dev_filatov", bx + bw / 2 + 8, by + 9, 0xFFFFFFFF);
-        hits.add(new Hit(bx, by, bw, bh, b -> net.minecraft.util.Util.getOperatingSystem().open(TELEGRAM)));
+        Render2D.centeredText(ctx, "\u041A\u0430\u043D\u0430\u043B  @DuckVisual", bx + bw / 2 + 8, by + 9, 0xFFFFFFFF);
+        hits.add(new Hit(bx, by, bw, bh, b -> net.minecraft.util.Util.getOperatingSystem().open(CHANNEL)));
 
         // support with Telegram Stars (opens the pinned post of the channel)
         float sy = by + bh + 8;
         boolean shov = mx >= bx && mx <= bx + bw && my >= sy && my <= sy + bh;
         Render2D.shadow(ctx, bx, sy, bw, bh, 7, shov ? 8 : 5, ColorUtil.withAlpha(ColorUtil.theme(), shov ? 140 : 80));
         Render2D.roundedGradient(ctx, bx, sy, bw, bh, 7, ColorUtil.theme(0), ColorUtil.theme(6), ColorUtil.theme(6), ColorUtil.theme(0));
-        Render2D.centeredText(ctx, "★  Поддержать звёздами", bx + bw / 2, sy + 9, 0xFF1A1104);
+        Render2D.centeredText(ctx, "\u2605  \u041F\u043E\u0434\u0434\u0435\u0440\u0436\u0430\u0442\u044C \u0437\u0432\u0451\u0437\u0434\u0430\u043C\u0438", bx + bw / 2, sy + 9, 0xFF1A1104);
         hits.add(new Hit(bx, sy, bw, bh, b -> net.minecraft.util.Util.getOperatingSystem().open(SUPPORT)));
-
-        float ly = sy + bh + 10;
-        float lw = Render2D.width(CHANNEL_LABEL);
-        boolean lhov = mx >= cx - lw / 2 && mx <= cx + lw / 2 && my >= ly - 2 && my <= ly + 10;
-        Render2D.centeredText(ctx, CHANNEL_LABEL, cx, ly, lhov ? TEXT : SUBTEXT);
-        hits.add(new Hit(cx - lw / 2, ly - 2, lw, 12, b -> net.minecraft.util.Util.getOperatingSystem().open(CHANNEL)));
 
         ctx.getMatrices().push();
         ctx.getMatrices().translate(cx, y + h - 26, 0);
