@@ -4,8 +4,8 @@
 
 ## Как выложить бесплатно
 
-**GitHub Pages:** Settings → Pages → Source: «Deploy from a branch» → ветка и папка `/DuckSite` недоступна, поэтому
-скопируй `index.html` в корень отдельной ветки `gh-pages` (или в папку `docs/` основной ветки) и выбери её.
+**GitHub Pages:** Pages умеет брать сайт только из корня ветки или из папки `docs/`.
+Скопируй `index.html` в папку `docs/` основной ветки, затем Settings → Pages → «Deploy from a branch» → ветка `main`, папка `/docs`.
 Сайт будет на `https://<ник>.github.io/<репозиторий>/`.
 
 **Netlify / Cloudflare Pages:** перетащи папку `DuckSite` на app.netlify.com/drop — получишь ссылку за минуту.
