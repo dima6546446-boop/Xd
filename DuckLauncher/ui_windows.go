@@ -85,6 +85,9 @@ func runUI() {
 	w.Bind("dlLoginEly", a.loginEly)
 	w.Bind("dlLogout", a.logout)
 	w.Bind("dlSaveSettings", a.saveSettings)
+	w.Bind("dlVersions", a.versions)
+	w.Bind("dlSetVersion", a.setVersion)
+	w.Bind("dlOpenURL", a.openURL)
 	w.Bind("dlPlay", a.play)
 	w.Bind("dlOpen", a.open)
 	w.SetHtml(strings.Replace(indexHTML, "{{HERO}}", base64.StdEncoding.EncodeToString(heroJPG), 1))
@@ -98,29 +101,58 @@ func (a *app) emit(fn string, args ...any) {
 }
 
 type state struct {
-	Account     *core.Account `json:"account"`
-	MemoryMB    int           `json:"memoryMb"`
-	MaxMemoryMB int           `json:"maxMemoryMb"`
-	Sodium      bool          `json:"sodium"`
-	CloseOnRun  bool          `json:"closeOnRun"`
-	JVMArgs     string        `json:"jvmArgs"`
-	Running     bool          `json:"running"`
-	Busy        bool          `json:"busy"`
-	Version     string        `json:"version"`
-	Dir         string        `json:"dir"`
+	Account     *core.Account      `json:"account"`
+	Version     string             `json:"version"`
+	Loader      string             `json:"loader"`
+	DuckVersion string             `json:"duckVersion"`
+	MemoryMB    int                `json:"memoryMb"`
+	AutoMemory  int                `json:"autoMemoryMb"`
+	MaxMemoryMB int                `json:"maxMemoryMb"`
+	Mods        map[string]bool    `json:"mods"`
+	PerfMods    []core.OptionalMod `json:"perfMods"`
+	WeakPC      bool               `json:"weakPc"`
+	Width       int                `json:"width"`
+	Height      int                `json:"height"`
+	Fullscreen  bool               `json:"fullscreen"`
+	Lang        string             `json:"lang"`
+	AfterLaunch string             `json:"afterLaunch"`
+	JVMArgs     string             `json:"jvmArgs"`
+	Running     bool               `json:"running"`
+	Busy        bool               `json:"busy"`
+	AppVersion  string             `json:"appVersion"`
+	Dir         string             `json:"dir"`
 }
 
 func (a *app) state() state {
 	a.mu.Lock()
 	defer a.mu.Unlock()
-	acc := a.cfg.Account
+	c := a.cfg
 	var safe *core.Account
-	if acc != nil {
-		safe = &core.Account{Type: acc.Type, Name: acc.Name}
+	if c.Account != nil {
+		safe = &core.Account{Type: c.Account.Type, Name: c.Account.Name}
 	}
-	return state{Account: safe, MemoryMB: a.cfg.MemoryMB, MaxMemoryMB: totalMemoryMB(), Sodium: a.cfg.Sodium,
-		CloseOnRun: a.cfg.CloseOnRun, JVMArgs: a.cfg.JVMArgs, Running: a.running, Busy: a.busy,
-		Version: core.LauncherVersion, Dir: core.BaseDir()}
+	total := totalMemoryMB()
+	return state{Account: safe, Version: c.Version, Loader: c.Loader, DuckVersion: core.DuckVersion,
+		MemoryMB: c.MemoryMB, AutoMemory: core.AutoMemoryMB(total), MaxMemoryMB: total, Mods: c.Mods, PerfMods: core.PerfMods,
+		WeakPC: c.WeakPC, Width: c.Width, Height: c.Height, Fullscreen: c.Fullscreen, Lang: c.Lang,
+		AfterLaunch: c.AfterLaunch, JVMArgs: c.JVMArgs, Running: a.running, Busy: a.busy,
+		AppVersion: core.LauncherVersion, Dir: core.BaseDir()}
+}
+
+func (a *app) versions() ([]core.GameVersion, error) {
+	return core.ListVersions()
+}
+
+func (a *app) setVersion(version, loader string) {
+	a.mu.Lock()
+	defer a.mu.Unlock()
+	if version != "" {
+		a.cfg.Version = version
+	}
+	if loader == "fabric" || loader == "vanilla" {
+		a.cfg.Loader = loader
+	}
+	a.cfg.Save()
 }
 
 func (a *app) loginOffline(name string) string {
@@ -154,30 +186,74 @@ func (a *app) logout() {
 	a.mu.Unlock()
 }
 
-func (a *app) saveSettings(memoryMb int, sodium, closeOnRun bool, jvmArgs string) {
+// settings is what the settings page sends back.
+type settings struct {
+	MemoryMB    int             `json:"memoryMb"`
+	Mods        map[string]bool `json:"mods"`
+	WeakPC      bool            `json:"weakPc"`
+	Width       int             `json:"width"`
+	Height      int             `json:"height"`
+	Fullscreen  bool            `json:"fullscreen"`
+	Lang        string          `json:"lang"`
+	AfterLaunch string          `json:"afterLaunch"`
+	JVMArgs     string          `json:"jvmArgs"`
+}
+
+func (a *app) saveSettings(s settings) {
 	a.mu.Lock()
-	if memoryMb >= 1024 {
-		a.cfg.MemoryMB = memoryMb
+	defer a.mu.Unlock()
+	c := a.cfg
+	if s.MemoryMB == 0 || s.MemoryMB >= 1024 {
+		c.MemoryMB = s.MemoryMB
 	}
-	a.cfg.Sodium = sodium
-	a.cfg.CloseOnRun = closeOnRun
-	a.cfg.JVMArgs = jvmArgs
-	a.cfg.Save()
-	a.mu.Unlock()
+	if s.Mods != nil {
+		c.Mods = s.Mods
+	}
+	c.WeakPC = s.WeakPC
+	if s.Width >= 320 && s.Height >= 240 {
+		c.Width, c.Height = s.Width, s.Height
+	}
+	c.Fullscreen = s.Fullscreen
+	if s.Lang != "" {
+		c.Lang = s.Lang
+	}
+	if s.AfterLaunch == "keep" || s.AfterLaunch == "minimize" || s.AfterLaunch == "close" {
+		c.AfterLaunch = s.AfterLaunch
+	}
+	c.JVMArgs = s.JVMArgs
+	c.Save()
 }
 
 func (a *app) open(kind string) {
-	dir := core.GameDir()
+	a.mu.Lock()
+	game := core.InstanceDir(a.cfg.Version, a.cfg.Loader)
+	a.mu.Unlock()
+	dir := game
 	switch kind {
 	case "mods":
-		dir = core.ModsDir()
+		dir = filepath.Join(game, "mods")
 	case "logs":
 		dir = core.LogsDir()
 	case "screenshots":
-		dir = filepath.Join(core.GameDir(), "screenshots")
+		dir = filepath.Join(game, "screenshots")
+	case "base":
+		dir = core.BaseDir()
 	}
 	os.MkdirAll(dir, 0o755)
 	exec.Command("explorer", dir).Start()
+}
+
+// openURL only opens the links the UI actually shows.
+func (a *app) openURL(u string) {
+	if strings.HasPrefix(u, "https://t.me/") || strings.HasPrefix(u, "https://ely.by") {
+		exec.Command("rundll32", "url.dll,FileProtocolHandler", u).Start()
+	}
+}
+
+var procShowWindow = syscall.NewLazyDLL("user32.dll").NewProc("ShowWindow")
+
+func (a *app) showWindow(cmd uintptr) {
+	a.w.Dispatch(func() { procShowWindow.Call(uintptr(a.w.Window()), cmd) })
 }
 
 func (a *app) play() string {
@@ -194,7 +270,7 @@ func (a *app) play() string {
 	a.mu.Unlock()
 
 	go func() {
-		cmd, logPath, err := core.Prepare(a.cfg, func(stage string, done, total int64) {
+		cmd, logPath, err := core.Prepare(a.cfg, totalMemoryMB(), func(stage string, done, total int64) {
 			a.emit("onProgress", stage, done, total)
 		})
 		if err == nil {
@@ -209,17 +285,24 @@ func (a *app) play() string {
 		}
 		a.mu.Lock()
 		a.running = true
-		closeOnRun := a.cfg.CloseOnRun
+		after := a.cfg.AfterLaunch
 		a.mu.Unlock()
 		a.emit("onLaunched", logPath)
-		if closeOnRun {
+		switch after {
+		case "close":
+			// the game keeps running on its own; the launcher frees its memory
 			a.w.Dispatch(func() { a.w.Terminate() })
 			return
+		case "minimize":
+			a.showWindow(6) // SW_MINIMIZE
 		}
 		werr := cmd.Wait()
 		a.mu.Lock()
 		a.running = false
 		a.mu.Unlock()
+		if after == "minimize" {
+			a.showWindow(9) // SW_RESTORE
+		}
 		msg := ""
 		if werr != nil {
 			msg = werr.Error()

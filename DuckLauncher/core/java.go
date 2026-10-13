@@ -44,9 +44,20 @@ func findJava(dir string) string {
 	return found
 }
 
-// EnsureJava downloads Eclipse Temurin JRE 21 (Minecraft 1.21.4 needs Java 21) once.
-func EnsureJava(progress Progress) (string, error) {
-	dir := filepath.Join(RuntimeDir(), "java21")
+// javaFeature picks a Temurin release that satisfies the version's required Java.
+func javaFeature(major int) int {
+	for _, v := range []int{8, 11, 17, 21, 25} {
+		if v >= major {
+			return v
+		}
+	}
+	return major
+}
+
+// EnsureJava downloads the Eclipse Temurin JRE a Minecraft version needs (8 for <=1.16, 17, 21, ...), once.
+func EnsureJava(major int, progress Progress) (string, error) {
+	feature := javaFeature(major)
+	dir := filepath.Join(RuntimeDir(), fmt.Sprintf("java%d", feature))
 	if j := findJava(dir); j != "" {
 		return j, nil
 	}
@@ -56,9 +67,9 @@ func EnsureJava(progress Progress) (string, error) {
 		return "", fmt.Errorf("unsupported platform %s/%s", runtime.GOOS, runtime.GOARCH)
 	}
 	var assets []adoptiumAsset
-	url := fmt.Sprintf("https://api.adoptium.net/v3/assets/latest/21/hotspot?architecture=%s&image_type=jre&os=%s&vendor=eclipse", arch, osName)
+	url := fmt.Sprintf("https://api.adoptium.net/v3/assets/latest/%d/hotspot?architecture=%s&image_type=jre&os=%s&vendor=eclipse", feature, arch, osName)
 	if err := getJSON(url, &assets); err != nil || len(assets) == 0 {
-		return "", fmt.Errorf("cannot find Java 21: %v", err)
+		return "", fmt.Errorf("не удалось найти Java %d: %v", feature, err)
 	}
 	pkg := assets[0].Binary.Package
 	archive := filepath.Join(RuntimeDir(), pkg.Name)

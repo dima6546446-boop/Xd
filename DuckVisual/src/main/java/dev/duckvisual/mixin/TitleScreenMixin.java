@@ -36,6 +36,13 @@ public abstract class TitleScreenMixin {
         else drawer.draw(ctx, screenWidth, alpha);
     }
 
+    /** Short version line (the long vanilla one overlapped the copyright text with the UI font). */
+    @org.spongepowered.asm.mixin.injection.ModifyArg(method = "render", at = @At(value = "INVOKE",
+            target = "Lnet/minecraft/client/gui/DrawContext;drawTextWithShadow(Lnet/minecraft/client/font/TextRenderer;Ljava/lang/String;III)I"), index = 1)
+    private String duck$versionText(String original) {
+        return "Duck Launcher 1.21.4";
+    }
+
     @Redirect(method = "render", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/screen/SplashTextRenderer;render(Lnet/minecraft/client/gui/DrawContext;ILnet/minecraft/client/font/TextRenderer;I)V"))
     private void duck$splash(SplashTextRenderer splash, DrawContext ctx, int screenWidth, TextRenderer tr, int alpha) {
         MainMenu m = duck$menu();

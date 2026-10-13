@@ -6,13 +6,11 @@ import (
 	"runtime"
 )
 
-// Fixed versions this launcher installs.
 const (
-	MinecraftVersion = "1.21.4"
-	FabricAPIVersion = "0.119.4+1.21.4"
-	SodiumVersion    = "mc1.21.4-0.6.13-fabric"
-	LauncherName     = "DuckLauncher"
-	LauncherVersion  = "1.0.0"
+	// DuckVersion is the Minecraft version Duck Visual is built for.
+	DuckVersion     = "1.21.4"
+	LauncherName    = "DuckLauncher"
+	LauncherVersion = "1.1.0"
 )
 
 // BaseDir is where everything lives: %APPDATA%\.ducklauncher on Windows, ~/.ducklauncher elsewhere.
@@ -26,7 +24,16 @@ func BaseDir() string {
 	return filepath.Join(home, ".ducklauncher")
 }
 
-func GameDir() string      { return filepath.Join(BaseDir(), "minecraft") }
+// InstanceDir is the game directory for one version+loader. The Duck Visual instance keeps
+// the original "minecraft" folder so existing worlds/configs stay where they were.
+func InstanceDir(version, loader string) string {
+	if version == DuckVersion && loader == "fabric" {
+		return filepath.Join(BaseDir(), "minecraft")
+	}
+	return filepath.Join(BaseDir(), "instances", version+"-"+loader)
+}
+
+func GameDir() string      { return InstanceDir(DuckVersion, "fabric") }
 func LibrariesDir() string { return filepath.Join(BaseDir(), "libraries") }
 func AssetsDir() string    { return filepath.Join(BaseDir(), "assets") }
 func VersionsDir() string  { return filepath.Join(BaseDir(), "versions") }

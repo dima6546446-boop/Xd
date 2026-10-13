@@ -71,5 +71,11 @@ public class MainMenu extends Module {
         ctx.getMatrices().pop();
         String sub = "v" + DuckVisual.VERSION + "  ·  Minecraft 1.21.4  ·  Right Shift - menu";
         Render2D.centeredText(ctx, sub, screenWidth / 2f, y + 42, ColorUtil.withAlpha(0xFFA0A0AA, (int) (255 * alpha)));
+        ctx.getMatrices().push();
+        ctx.getMatrices().translate(screenWidth / 2f, y + 55, 0);
+        ctx.getMatrices().scale(0.75f, 0.75f, 1);
+        Render2D.centeredText(ctx, "\u041D\u0435 \u044F\u0432\u043B\u044F\u0435\u0442\u0441\u044F \u043F\u0440\u043E\u0434\u0443\u043A\u0442\u043E\u043C Mojang AB  \u00B7  by @dev_filatov",
+                0, 0, ColorUtil.withAlpha(0xFF707080, (int) (255 * alpha)));
+        ctx.getMatrices().pop();
     }
 }

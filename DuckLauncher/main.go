@@ -23,15 +23,17 @@ func main() {
 	core.DuckVisualJar = duckVisualJar
 	cli := flag.Bool("cli", false, "install and launch from the console")
 	name := flag.String("name", "", "offline nickname (with -cli)")
-	noSodium := flag.Bool("no-sodium", false, "do not install Sodium (with -cli)")
+	version := flag.String("version", "", "Minecraft version, e.g. 1.21.4 or 1.8.9 (with -cli)")
+	loader := flag.String("loader", "", "fabric or vanilla (with -cli)")
+	weak := flag.Bool("weak", false, "weak PC graphics preset for a new instance (with -cli)")
 	flag.Parse()
 	if *cli {
-		os.Exit(runCLI(*name, !*noSodium))
+		os.Exit(runCLI(*name, *version, *loader, *weak))
 	}
 	runUI()
 }
 
-func runCLI(name string, sodium bool) int {
+func runCLI(name, version, loader string, weak bool) int {
 	cfg := core.LoadConfig()
 	if name != "" {
 		acc, err := core.OfflineAccount(name)
@@ -41,10 +43,16 @@ func runCLI(name string, sodium bool) int {
 		}
 		cfg.Account = acc
 	}
-	cfg.Sodium = sodium
+	if version != "" {
+		cfg.Version = version
+	}
+	if loader != "" {
+		cfg.Loader = loader
+	}
+	cfg.WeakPC = cfg.WeakPC || weak
 	cfg.Save()
 	last, lastPct := "", int64(-1)
-	cmd, logPath, err := core.Prepare(cfg, func(stage string, done, total int64) {
+	cmd, logPath, err := core.Prepare(cfg, totalMemoryMB(), func(stage string, done, total int64) {
 		pct := int64(100)
 		if total > 0 {
 			pct = done * 100 / total

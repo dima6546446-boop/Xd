@@ -5,25 +5,62 @@ import (
 	"os"
 	"os/exec"
 	"path/filepath"
+	"strconv"
 	"strings"
 	"time"
 )
 
+// weakPreset is written into options.txt of a new instance when "weak PC" mode is on.
+var weakPreset = map[string]string{
+	"renderDistance": "6", "simulationDistance": "6", "graphicsMode": "0", "fancyGraphics": "false",
+	"ao": "false", "biomeBlendRadius": "0", "renderClouds": "\"false\"", "particles": "2",
+	"entityShadows": "false", "mipmapLevels": "0", "maxFps": "120", "enableVsync": "false",
+	"entityDistanceScaling": "0.75", "prioritizeChunkUpdates": "0",
+}
+
+// setOptions updates (or adds) keys in options.txt, keeping everything else the player set.
+func setOptions(path string, values map[string]string) {
+	b, _ := os.ReadFile(path)
+	lines := strings.Split(strings.ReplaceAll(string(b), "\r\n", "\n"), "\n")
+	done := map[string]bool{}
+	for i, l := range lines {
+		if k, _, ok := strings.Cut(l, ":"); ok {
+			if v, want := values[k]; want {
+				lines[i] = k + ":" + v
+				done[k] = true
+			}
+		}
+	}
+	for k, v := range values {
+		if !done[k] {
+			lines = append(lines, k+":"+v)
+		}
+	}
+	out := strings.TrimRight(strings.Join(lines, "\n"), "\n") + "\n"
+	os.WriteFile(path, []byte(strings.TrimLeft(out, "\n")), 0o644)
+}
+
 // Prepare installs everything needed and returns a ready-to-start command.
-func Prepare(cfg *Config, progress Progress) (*exec.Cmd, string, error) {
+func Prepare(cfg *Config, totalMemMB int, progress Progress) (*exec.Cmd, string, error) {
 	if cfg.Account == nil {
 		return nil, "", fmt.Errorf("сначала войди в аккаунт")
 	}
-	java, err := EnsureJava(progress)
+	if _, err := loadManifest(); err != nil {
+		return nil, "", fmt.Errorf("нет интернета: %w", err)
+	}
+	inst, err := Install(cfg.Version, cfg.Loader, progress)
 	if err != nil {
 		return nil, "", err
 	}
-	inst, err := Install(progress)
+	java, err := EnsureJava(inst.JavaMajor, progress)
 	if err != nil {
 		return nil, "", err
 	}
-	if err := EnsureMods(cfg.Sodium, progress); err != nil {
-		return nil, "", fmt.Errorf("mods: %w", err)
+	gameDir := InstanceDir(cfg.Version, cfg.Loader)
+	if cfg.Loader == "fabric" {
+		if err := EnsureMods(cfg.Version, gameDir, cfg.Mods, progress); err != nil {
+			return nil, "", fmt.Errorf("моды: %w", err)
+		}
 	}
 	var authlib string
 	if cfg.Account.Type == "ely" {
@@ -39,19 +76,46 @@ func Prepare(cfg *Config, progress Progress) (*exec.Cmd, string, error) {
 		progress("launch", 1, 1)
 	}
 
+	// options.txt: first launch preset, then language every time
+	os.MkdirAll(gameDir, 0o755)
+	opts := filepath.Join(gameDir, "options.txt")
+	if !fileOK(Task{Path: opts}) {
+		first := map[string]string{"onboardAccessibility": "false", "guiScale": "2", "skipMultiplayerWarning": "true"}
+		if cfg.WeakPC {
+			for k, v := range weakPreset {
+				first[k] = v
+			}
+		}
+		setOptions(opts, first)
+	}
+	if cfg.Lang != "" {
+		setOptions(opts, map[string]string{"lang": cfg.Lang})
+	}
+
+	memory := cfg.MemoryMB
+	if memory == 0 {
+		memory = AutoMemoryMB(totalMemMB)
+	}
+
 	sep := string(os.PathListSeparator)
+	userType := "legacy"
+	if cfg.Account.Type == "ely" {
+		userType = "mojang"
+	}
 	vars := map[string]string{
 		"auth_player_name":    cfg.Account.Name,
-		"version_name":        MinecraftVersion,
-		"game_directory":      GameDir(),
+		"version_name":        cfg.Version,
+		"game_directory":      gameDir,
 		"assets_root":         AssetsDir(),
+		"game_assets":         AssetsDir(),
 		"assets_index_name":   inst.Vanilla.AssetIndex.ID,
 		"auth_uuid":           cfg.Account.UUID,
 		"auth_access_token":   cfg.Account.AccessToken,
+		"auth_session":        "token:" + cfg.Account.AccessToken + ":" + cfg.Account.UUID,
 		"clientid":            "",
 		"auth_xuid":           "",
-		"user_type":           map[bool]string{true: "mojang", false: "legacy"}[cfg.Account.Type == "ely"],
-		"version_type":        "Duck Visual",
+		"user_type":           userType,
+		"version_type":        "Duck Launcher",
 		"natives_directory":   inst.Natives,
 		"launcher_name":       LauncherName,
 		"launcher_version":    LauncherVersion,
@@ -59,6 +123,8 @@ func Prepare(cfg *Config, progress Progress) (*exec.Cmd, string, error) {
 		"classpath_separator": sep,
 		"library_directory":   LibrariesDir(),
 		"user_properties":     "{}",
+		"resolution_width":    strconv.Itoa(cfg.Width),
+		"resolution_height":   strconv.Itoa(cfg.Height),
 	}
 	sub := func(s string) string {
 		for k, v := range vars {
@@ -66,11 +132,12 @@ func Prepare(cfg *Config, progress Progress) (*exec.Cmd, string, error) {
 		}
 		return s
 	}
+	features := map[string]bool{"has_custom_resolution": !cfg.Fullscreen}
 
-	var args []string
-	args = append(args, fmt.Sprintf("-Xmx%dm", cfg.MemoryMB), "-Xms512m",
-		"-XX:+UseG1GC", "-XX:+UnlockExperimentalVMOptions", "-XX:G1NewSizePercent=20",
-		"-XX:G1ReservePercent=20", "-XX:MaxGCPauseMillis=50", "-XX:G1HeapRegionSize=32M")
+	args := []string{fmt.Sprintf("-Xmx%dm", memory), "-Xms" + strconv.Itoa(min(memory, 1024)) + "m",
+		"-XX:+UseG1GC", "-XX:+UnlockExperimentalVMOptions", "-XX:G1NewSizePercent=20", "-XX:G1ReservePercent=20",
+		"-XX:MaxGCPauseMillis=50", "-XX:G1HeapRegionSize=16M", "-XX:+ParallelRefProcEnabled", "-XX:+DisableExplicitGC",
+		"-Dfile.encoding=UTF-8", "-Dduck.launcher=" + LauncherVersion}
 	if authlib != "" {
 		args = append(args, "-javaagent:"+authlib+"=ely.by")
 	}
@@ -80,34 +147,52 @@ func Prepare(cfg *Config, progress Progress) (*exec.Cmd, string, error) {
 	if extra := strings.TrimSpace(cfg.JVMArgs); extra != "" {
 		args = append(args, strings.Fields(extra)...)
 	}
-	for _, v := range []*VersionJSON{inst.Vanilla, inst.Fabric} {
+	profiles := []*VersionJSON{inst.Vanilla}
+	if inst.Fabric != nil {
+		profiles = append(profiles, inst.Fabric)
+	}
+	if len(inst.Vanilla.Arguments.JVM) == 0 {
+		// legacy versions describe no JVM arguments
+		args = append(args, "-Djava.library.path="+inst.Natives, "-cp", vars["classpath"])
+	}
+	for _, v := range profiles {
 		for _, a := range v.Arguments.JVM {
-			if RulesAllow(a.Rules) {
+			if RulesAllowFeatures(a.Rules, features) {
 				for _, x := range a.Values {
 					args = append(args, sub(x))
 				}
 			}
 		}
 	}
-	args = append(args, inst.Fabric.MainClass)
-	for _, v := range []*VersionJSON{inst.Vanilla, inst.Fabric} {
+	mainClass := inst.Vanilla.MainClass
+	if inst.Fabric != nil {
+		mainClass = inst.Fabric.MainClass
+	}
+	args = append(args, mainClass)
+	if inst.Vanilla.MinecraftArguments != "" {
+		for _, x := range strings.Fields(inst.Vanilla.MinecraftArguments) {
+			args = append(args, sub(x))
+		}
+		if !cfg.Fullscreen {
+			args = append(args, "--width", vars["resolution_width"], "--height", vars["resolution_height"])
+		}
+	}
+	for _, v := range profiles {
 		for _, a := range v.Arguments.Game {
-			if RulesAllow(a.Rules) {
+			if RulesAllowFeatures(a.Rules, features) {
 				for _, x := range a.Values {
 					args = append(args, sub(x))
 				}
 			}
 		}
+	}
+	if cfg.Fullscreen {
+		args = append(args, "--fullscreen")
 	}
 
-	os.MkdirAll(GameDir(), 0o755)
 	os.MkdirAll(LogsDir(), 0o755)
-	// first launch: skip the accessibility onboarding screen and start in Russian
-	if opts := filepath.Join(GameDir(), "options.txt"); !fileOK(Task{Path: opts}) {
-		os.WriteFile(opts, []byte("onboardAccessibility:false\nlang:ru_ru\nguiScale:2\n"), 0o644)
-	}
 	cmd := exec.Command(java, args...)
-	cmd.Dir = GameDir()
+	cmd.Dir = gameDir
 	logPath := filepath.Join(LogsDir(), "game-"+time.Now().Format("2006-01-02_15-04-05")+".log")
 	if f, err := os.Create(logPath); err == nil {
 		cmd.Stdout = f

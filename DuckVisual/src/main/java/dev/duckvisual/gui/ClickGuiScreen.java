@@ -64,6 +64,8 @@ public class ClickGuiScreen extends Screen {
     private static boolean paletteTab;
     private static boolean configsTab;
     private static boolean guideTab;
+    private static boolean creatorTab;
+    private float creatorAnim;
     private static Module guideFocus;
     private static float guideScroll;
     private float guideScrollAnim;
@@ -232,7 +234,7 @@ public class ClickGuiScreen extends Screen {
 
         float ty = y + 46;
         for (Category c : Category.values()) {
-            boolean sel = c == current && search.isEmpty() && !paletteTab && !configsTab && !guideTab;
+            boolean sel = c == current && search.isEmpty() && !paletteTab && !configsTab && !guideTab && !creatorTab;
             boolean hov = mx >= x + 6 && mx <= x + SIDEBAR - 6 && my >= ty && my <= ty + 22;
             float a = Animation.approach(tabAnim.getOrDefault(c, 0f), sel ? 1 : hov ? 0.4f : 0, 12);
             tabAnim.put(c, a);
@@ -253,6 +255,7 @@ public class ClickGuiScreen extends Screen {
                 paletteTab = false;
                 configsTab = false;
                 guideTab = false;
+                creatorTab = false;
                 search = "";
                 scrollAnim = scroll.getOrDefault(c, 0f);
             }));
@@ -261,7 +264,7 @@ public class ClickGuiScreen extends Screen {
 
         // palette tab
         {
-            boolean sel = paletteTab && !configsTab && !guideTab && search.isEmpty();
+            boolean sel = paletteTab && !configsTab && !guideTab && !creatorTab && search.isEmpty();
             boolean hov = mx >= x + 6 && mx <= x + SIDEBAR - 6 && my >= ty && my <= ty + 22;
             paletteAnim = Animation.approach(paletteAnim, sel ? 1 : hov ? 0.4f : 0, 12);
             float a = paletteAnim;
@@ -277,6 +280,8 @@ public class ClickGuiScreen extends Screen {
                 paletteTab = true;
                 configsTab = false;
                 guideTab = false;
+                creatorTab = false;
+                creatorTab = false;
                 search = "";
             }));
         }
@@ -284,7 +289,7 @@ public class ClickGuiScreen extends Screen {
 
         // configs tab
         {
-            boolean sel = configsTab && !guideTab && search.isEmpty();
+            boolean sel = configsTab && !guideTab && !creatorTab && search.isEmpty();
             boolean hov = mx >= x + 6 && mx <= x + SIDEBAR - 6 && my >= ty && my <= ty + 22;
             configsAnim = Animation.approach(configsAnim, sel ? 1 : hov ? 0.4f : 0, 12);
             float a = configsAnim;
@@ -299,6 +304,7 @@ public class ClickGuiScreen extends Screen {
                 configsTab = true;
                 paletteTab = false;
                 guideTab = false;
+                creatorTab = false;
                 search = "";
             }));
         }
@@ -306,7 +312,7 @@ public class ClickGuiScreen extends Screen {
 
         // guide tab: descriptions of every module
         {
-            boolean sel = guideTab;
+            boolean sel = guideTab && !creatorTab;
             boolean hov = mx >= x + 6 && mx <= x + SIDEBAR - 6 && my >= ty && my <= ty + 22;
             guideAnim = Animation.approach(guideAnim, sel ? 1 : hov ? 0.4f : 0, 12);
             float a = guideAnim;
@@ -318,6 +324,29 @@ public class ClickGuiScreen extends Screen {
             Render2D.centeredText(ctx, "?", x + 21.5f, ty + 7, sel ? 0xFF111111 : SUBTEXT);
             Render2D.text(ctx, "\u041E\u043F\u0438\u0441\u0430\u043D\u0438\u0435", x + 34, ty + 7, ColorUtil.lerp(SUBTEXT, TEXT, a));
             hits.add(new Hit(x + 6, ty, SIDEBAR - 12, 22, b -> openGuide(null)));
+        }
+        ty += 26;
+
+        // creator tab
+        {
+            boolean sel = creatorTab;
+            boolean hov = mx >= x + 6 && mx <= x + SIDEBAR - 6 && my >= ty && my <= ty + 22;
+            creatorAnim = Animation.approach(creatorAnim, sel ? 1 : hov ? 0.4f : 0, 12);
+            float a = creatorAnim;
+            if (a > 0.01f) {
+                Render2D.roundedRect(ctx, x + 6, ty, SIDEBAR - 12, 22, 5, ColorUtil.withAlpha(ColorUtil.theme(), (int) (40 * a)));
+                Render2D.roundedRect(ctx, x + 6, ty + 5, 2, 12, 1, ColorUtil.fade(ColorUtil.theme(), a));
+            }
+            Render2D.roundedRect(ctx, x + 14, ty + 4, 14, 14, 4, sel ? ColorUtil.theme() : 0xFF24242D);
+            Render2D.centeredText(ctx, "@", x + 21.5f, ty + 7, sel ? 0xFF111111 : SUBTEXT);
+            Render2D.text(ctx, "\u0421\u043E\u0437\u0434\u0430\u0442\u0435\u043B\u044C", x + 34, ty + 7, ColorUtil.lerp(SUBTEXT, TEXT, a));
+            hits.add(new Hit(x + 6, ty, SIDEBAR - 12, 22, b -> {
+                creatorTab = true;
+                guideTab = false;
+                paletteTab = false;
+                configsTab = false;
+                search = "";
+            }));
         }
 
         // search field
@@ -333,6 +362,10 @@ public class ClickGuiScreen extends Screen {
     // ------------------------------------------------------------------ content
 
     private void renderContent(DrawContext ctx, float x, float y, float w, float h, float mx, float my) {
+        if (creatorTab) {
+            renderCreator(ctx, x, y, w, h, mx, my);
+            return;
+        }
         if (guideTab) {
             renderGuide(ctx, x, y, w, h, mx, my);
             return;
@@ -386,8 +419,48 @@ public class ClickGuiScreen extends Screen {
         }
     }
 
+    private static final String TELEGRAM = "https://t.me/dev_filatov";
+
+    /** Credits: who made the client, Telegram link and the Mojang disclaimer. */
+    private void renderCreator(DrawContext ctx, float x, float y, float w, float h, float mx, float my) {
+        float cx = x + w / 2;
+        float cy = y + 40;
+        Render2D.glowDot(ctx, cx, cy + 22, 70, ColorUtil.withAlpha(ColorUtil.theme(), 60));
+        Watermark.duck(ctx, cx - 28, cy, 56);
+        ctx.getMatrices().push();
+        ctx.getMatrices().translate(cx, cy + 66, 0);
+        ctx.getMatrices().scale(2, 2, 1);
+        float tw = Render2D.width("Duck Visual");
+        Render2D.gradientText(ctx, "Duck Visual", -tw / 2, 0, 0);
+        ctx.getMatrices().pop();
+        Render2D.centeredText(ctx, "\u0421\u043E\u0437\u0434\u0430\u0442\u0435\u043B\u044C \u043A\u043B\u0438\u0435\u043D\u0442\u0430", cx, cy + 92, SUBTEXT);
+        ctx.getMatrices().push();
+        ctx.getMatrices().translate(cx, cy + 104, 0);
+        ctx.getMatrices().scale(1.5f, 1.5f, 1);
+        Render2D.centeredText(ctx, "filatov", 0, 0, TEXT);
+        ctx.getMatrices().pop();
+
+        // Telegram button
+        float bw = 170, bh = 26, bx = cx - bw / 2, by = cy + 128;
+        boolean hov = mx >= bx && mx <= bx + bw && my >= by && my <= by + bh;
+        Render2D.shadow(ctx, bx, by, bw, bh, 7, hov ? 8 : 5, ColorUtil.withAlpha(0xFF2AABEE, hov ? 140 : 80));
+        Render2D.roundedGradient(ctx, bx, by, bw, bh, 7, 0xFF37AEE2, 0xFF1E96C8, 0xFF1E96C8, 0xFF37AEE2);
+        // paper plane
+        Render2D.triangle(ctx, bx + 12, by + 13, bx + 26, by + 7, bx + 21, by + 19, 0xFFFFFFFF);
+        Render2D.centeredText(ctx, "Telegram  @dev_filatov", bx + bw / 2 + 8, by + 9, 0xFFFFFFFF);
+        hits.add(new Hit(bx, by, bw, bh, b -> net.minecraft.util.Util.getOperatingSystem().open(TELEGRAM)));
+
+        ctx.getMatrices().push();
+        ctx.getMatrices().translate(cx, y + h - 26, 0);
+        ctx.getMatrices().scale(0.75f, 0.75f, 1);
+        Render2D.centeredText(ctx, "Duck Visual / Duck Launcher \u043D\u0435 \u044F\u0432\u043B\u044F\u0435\u0442\u0441\u044F \u043F\u0440\u043E\u0434\u0443\u043A\u0442\u043E\u043C Mojang AB \u0438 \u043D\u0435 \u0441\u0432\u044F\u0437\u0430\u043D \u0441 Microsoft.", 0, 0, SUBTEXT);
+        Render2D.centeredText(ctx, "Minecraft \u2014 \u0442\u043E\u0432\u0430\u0440\u043D\u044B\u0439 \u0437\u043D\u0430\u043A Mojang AB.", 0, 11, SUBTEXT);
+        ctx.getMatrices().pop();
+    }
+
     private void openGuide(Module focus) {
         guideTab = true;
+        creatorTab = false;
         paletteTab = false;
         configsTab = false;
         guideFocus = focus;

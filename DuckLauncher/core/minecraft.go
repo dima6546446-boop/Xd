@@ -30,9 +30,11 @@ type Library struct {
 	Sha1      string `json:"sha1"`
 	Size      int64  `json:"size"`
 	Downloads *struct {
-		Artifact *Artifact `json:"artifact"`
+		Artifact    *Artifact            `json:"artifact"`
+		Classifiers map[string]*Artifact `json:"classifiers"`
 	} `json:"downloads"`
-	Rules []Rule `json:"rules"`
+	Natives map[string]string `json:"natives"` // legacy (<=1.18) native classifiers per OS
+	Rules   []Rule            `json:"rules"`
 }
 
 // Arg is either a plain string or {rules, value} in version json "arguments".
@@ -63,9 +65,13 @@ func (a *Arg) UnmarshalJSON(b []byte) error {
 }
 
 type VersionJSON struct {
-	ID        string `json:"id"`
-	MainClass string `json:"mainClass"`
-	Type      string `json:"type"`
+	ID                 string `json:"id"`
+	MainClass          string `json:"mainClass"`
+	Type               string `json:"type"`
+	MinecraftArguments string `json:"minecraftArguments"` // legacy (<1.13) single argument string
+	JavaVersion        struct {
+		MajorVersion int `json:"majorVersion"`
+	} `json:"javaVersion"`
 	Arguments struct {
 		Game []Arg `json:"game"`
 		JVM  []Arg `json:"jvm"`
@@ -103,8 +109,12 @@ func mojangOS() string {
 	return "linux"
 }
 
-// RulesAllow evaluates Mojang library/argument rules. Rules with feature flags never match (no demo, no quick play...).
-func RulesAllow(rules []Rule) bool {
+// RulesAllow evaluates Mojang library/argument rules with every feature flag off.
+func RulesAllow(rules []Rule) bool { return RulesAllowFeatures(rules, nil) }
+
+// RulesAllowFeatures evaluates rules; feature-gated rules match only for features set to true
+// (we use has_custom_resolution; demo / quick play stay off).
+func RulesAllowFeatures(rules []Rule, features map[string]bool) bool {
 	if len(rules) == 0 {
 		return true
 	}
@@ -119,8 +129,10 @@ func RulesAllow(rules []Rule) bool {
 				match = false
 			}
 		}
-		if len(r.Features) > 0 {
-			match = false
+		for f, want := range r.Features {
+			if features[f] != want {
+				match = false
+			}
 		}
 		if match {
 			allowed = r.Action == "allow"
@@ -162,83 +174,75 @@ func MavenPath(name string) string {
 	return group + "/" + p[1] + "/" + p[2] + "/" + file + ".jar"
 }
 
-// Install prepares vanilla + Fabric and returns the merged launch description.
+// Installed is everything Prepare needs to build the command line.
 type Installed struct {
+	Version   string
+	Loader    string
 	Vanilla   *VersionJSON
-	Fabric    *VersionJSON
+	Fabric    *VersionJSON // nil for vanilla
 	Classpath []string
 	Natives   string
 	LogConfig string
+	JavaMajor int
 }
 
-func Install(progress Progress) (*Installed, error) {
-	// --- vanilla version json
-	var manifest struct {
-		Versions []struct{ ID, URL string } `json:"versions"`
-	}
-	vdir := filepath.Join(VersionsDir(), MinecraftVersion)
-	vjsonPath := filepath.Join(vdir, MinecraftVersion+".json")
+func readJSON(path string, v any) bool {
+	b, err := os.ReadFile(path)
+	return err == nil && json.Unmarshal(b, v) == nil
+}
+
+// Install prepares a vanilla or Fabric instance of the given Minecraft version.
+func Install(version, loader string, progress Progress) (*Installed, error) {
+	vdir := filepath.Join(VersionsDir(), version)
+	vjsonPath := filepath.Join(vdir, version+".json")
 	var v VersionJSON
-	if b, err := os.ReadFile(vjsonPath); err == nil && json.Unmarshal(b, &v) == nil && v.ID != "" {
-		// cached
-	} else {
+	if !readJSON(vjsonPath, &v) || v.ID == "" {
 		if progress != nil {
 			progress("meta", 0, 1)
 		}
-		if err := getJSON("https://piston-meta.mojang.com/mc/game/version_manifest_v2.json", &manifest); err != nil {
-			return nil, fmt.Errorf("version manifest: %w", err)
-		}
-		url := ""
-		for _, m := range manifest.Versions {
-			if m.ID == MinecraftVersion {
-				url = m.URL
-			}
-		}
-		if url == "" {
-			return nil, fmt.Errorf("version %s not found", MinecraftVersion)
+		url, err := versionURL(version)
+		if err != nil {
+			return nil, fmt.Errorf("версия %s не найдена", version)
 		}
 		if err := DownloadAll("meta", []Task{{URL: url, Path: vjsonPath}}, 1, nil); err != nil {
 			return nil, err
 		}
-		b, _ := os.ReadFile(vjsonPath)
-		if err := json.Unmarshal(b, &v); err != nil {
-			return nil, err
+		if !readJSON(vjsonPath, &v) {
+			return nil, fmt.Errorf("bad version json for %s", version)
 		}
 	}
 
-	// --- fabric profile
-	fabricPath := filepath.Join(vdir, "fabric.json")
-	var fab VersionJSON
-	if b, err := os.ReadFile(fabricPath); err == nil && json.Unmarshal(b, &fab) == nil && fab.MainClass != "" {
-		// cached
-	} else {
-		var loaders []struct {
-			Loader struct {
-				Version string `json:"version"`
-				Stable  bool   `json:"stable"`
-			} `json:"loader"`
-		}
-		if err := getJSON("https://meta.fabricmc.net/v2/versions/loader/"+MinecraftVersion, &loaders); err != nil || len(loaders) == 0 {
-			return nil, fmt.Errorf("fabric loader list: %v", err)
-		}
-		loader := loaders[0].Loader.Version
-		for _, l := range loaders {
-			if l.Loader.Stable {
-				loader = l.Loader.Version
-				break
+	var fab *VersionJSON
+	if loader == "fabric" {
+		fabricPath := filepath.Join(vdir, "fabric.json")
+		fab = &VersionJSON{}
+		if !readJSON(fabricPath, fab) || fab.MainClass == "" {
+			var loaders []struct {
+				Loader struct {
+					Version string `json:"version"`
+					Stable  bool   `json:"stable"`
+				} `json:"loader"`
+			}
+			if err := getJSON("https://meta.fabricmc.net/v2/versions/loader/"+version, &loaders); err != nil || len(loaders) == 0 {
+				return nil, fmt.Errorf("Fabric не поддерживает %s", version)
+			}
+			lv := loaders[0].Loader.Version
+			for _, l := range loaders {
+				if l.Loader.Stable {
+					lv = l.Loader.Version
+					break
+				}
+			}
+			url := fmt.Sprintf("https://meta.fabricmc.net/v2/versions/loader/%s/%s/profile/json", version, lv)
+			if err := DownloadAll("meta", []Task{{URL: url, Path: fabricPath}}, 1, nil); err != nil {
+				return nil, err
+			}
+			if !readJSON(fabricPath, fab) {
+				return nil, fmt.Errorf("bad fabric profile")
 			}
 		}
-		url := fmt.Sprintf("https://meta.fabricmc.net/v2/versions/loader/%s/%s/profile/json", MinecraftVersion, loader)
-		if err := DownloadAll("meta", []Task{{URL: url, Path: fabricPath}}, 1, nil); err != nil {
-			return nil, err
-		}
-		b, _ := os.ReadFile(fabricPath)
-		if err := json.Unmarshal(b, &fab); err != nil {
-			return nil, err
-		}
 	}
 
-	// --- libraries (fabric first, vanilla second; skip vanilla duplicates of fabric artifacts)
 	var tasks []Task
 	var classpath []string
 	seen := map[string]bool{}
@@ -253,35 +257,52 @@ func Install(progress Progress) (*Installed, error) {
 		return name
 	}
 	var nativeJars []string
-	for _, l := range fab.Libraries {
-		k := key(l.Name)
-		if seen[k] {
-			continue
+	if fab != nil {
+		for _, l := range fab.Libraries {
+			k := key(l.Name)
+			if seen[k] {
+				continue
+			}
+			seen[k] = true
+			path := filepath.Join(LibrariesDir(), filepath.FromSlash(MavenPath(l.Name)))
+			repo := l.URL
+			if repo == "" {
+				repo = "https://maven.fabricmc.net/"
+			}
+			if !strings.HasSuffix(repo, "/") {
+				repo += "/"
+			}
+			tasks = append(tasks, Task{URL: repo + MavenPath(l.Name), Path: path, Sha1: l.Sha1, Size: l.Size})
+			classpath = append(classpath, path)
 		}
-		seen[k] = true
-		path := filepath.Join(LibrariesDir(), filepath.FromSlash(MavenPath(l.Name)))
-		repo := l.URL
-		if repo == "" {
-			repo = "https://maven.fabricmc.net/"
-		}
-		if !strings.HasSuffix(repo, "/") {
-			repo += "/"
-		}
-		tasks = append(tasks, Task{URL: repo + MavenPath(l.Name), Path: path, Sha1: l.Sha1, Size: l.Size})
-		classpath = append(classpath, path)
+	}
+	archBits := "64"
+	if runtime.GOARCH == "386" {
+		archBits = "32"
 	}
 	for _, l := range v.Libraries {
 		if !RulesAllow(l.Rules) || nativeForOtherArch(l.Name) {
 			continue
 		}
+		// legacy natives: separate classifier artifact, extracted but not on the classpath
+		if l.Natives != nil && l.Downloads != nil {
+			if cls, ok := l.Natives[mojangOS()]; ok {
+				cls = strings.ReplaceAll(cls, "${arch}", archBits)
+				if a := l.Downloads.Classifiers[cls]; a != nil {
+					path := filepath.Join(LibrariesDir(), filepath.FromSlash(a.Path))
+					tasks = append(tasks, Task{URL: a.URL, Path: path, Sha1: a.Sha1, Size: a.Size})
+					nativeJars = append(nativeJars, path)
+				}
+			}
+		}
+		if l.Downloads == nil || l.Downloads.Artifact == nil {
+			continue
+		}
 		k := key(l.Name)
 		if seen[k] {
 			continue
 		}
 		seen[k] = true
-		if l.Downloads == nil || l.Downloads.Artifact == nil {
-			continue
-		}
 		a := l.Downloads.Artifact
 		path := filepath.Join(LibrariesDir(), filepath.FromSlash(a.Path))
 		tasks = append(tasks, Task{URL: a.URL, Path: path, Sha1: a.Sha1, Size: a.Size})
@@ -290,7 +311,7 @@ func Install(progress Progress) (*Installed, error) {
 			nativeJars = append(nativeJars, path)
 		}
 	}
-	clientJar := filepath.Join(vdir, MinecraftVersion+".jar")
+	clientJar := filepath.Join(vdir, version+".jar")
 	c := v.Downloads.Client
 	tasks = append(tasks, Task{URL: c.URL, Path: clientJar, Sha1: c.Sha1, Size: c.Size})
 	classpath = append(classpath, clientJar)
@@ -305,7 +326,6 @@ func Install(progress Progress) (*Installed, error) {
 		return nil, fmt.Errorf("libraries: %w", err)
 	}
 
-	// --- natives
 	natives := filepath.Join(vdir, "natives")
 	os.MkdirAll(natives, 0o755)
 	for _, jar := range nativeJars {
@@ -314,7 +334,6 @@ func Install(progress Progress) (*Installed, error) {
 		}
 	}
 
-	// --- assets
 	idxPath := filepath.Join(AssetsDir(), "indexes", v.AssetIndex.ID+".json")
 	if err := DownloadAll("meta", []Task{{URL: v.AssetIndex.URL, Path: idxPath, Sha1: v.AssetIndex.Sha1, Size: v.AssetIndex.Size}}, 1, nil); err != nil {
 		return nil, fmt.Errorf("asset index: %w", err)
@@ -325,12 +344,8 @@ func Install(progress Progress) (*Installed, error) {
 			Size int64  `json:"size"`
 		} `json:"objects"`
 	}
-	b, err := os.ReadFile(idxPath)
-	if err != nil {
-		return nil, err
-	}
-	if err := json.Unmarshal(b, &idx); err != nil {
-		return nil, err
+	if !readJSON(idxPath, &idx) {
+		return nil, fmt.Errorf("bad asset index")
 	}
 	var assetTasks []Task
 	for _, o := range idx.Objects {
@@ -344,7 +359,12 @@ func Install(progress Progress) (*Installed, error) {
 	if err := DownloadAll("assets", assetTasks, 16, progress); err != nil {
 		return nil, fmt.Errorf("assets: %w", err)
 	}
-	return &Installed{Vanilla: &v, Fabric: &fab, Classpath: classpath, Natives: natives, LogConfig: logCfg}, nil
+	major := v.JavaVersion.MajorVersion
+	if major == 0 {
+		major = 8
+	}
+	return &Installed{Version: version, Loader: loader, Vanilla: &v, Fabric: fab, Classpath: classpath,
+		Natives: natives, LogConfig: logCfg, JavaMajor: major}, nil
 }
 
 func extractNatives(jar, dest string) error {
