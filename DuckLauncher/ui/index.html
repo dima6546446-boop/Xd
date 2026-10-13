@@ -176,6 +176,12 @@
         background: linear-gradient(135deg, #37aee2, #1e96c8); color: #fff; font-weight: 700; font-size: 16px;
         box-shadow: 0 10px 40px rgba(42,171,238,.35); transition: transform .12s, box-shadow .2s; }
   .tg:hover { transform: translateY(-2px); box-shadow: 0 14px 50px rgba(42,171,238,.5); }
+  .creator .links { display: flex; flex-wrap: wrap; justify-content: center; gap: 12px; margin-top: 10px; }
+  .creator .links .tg { margin-top: 0; }
+  .star { display: inline-flex; align-items: center; gap: 10px; padding: 13px 24px; border-radius: 14px; background: var(--grad); color: #1a1205;
+          font-weight: 700; font-size: 16px; box-shadow: 0 10px 40px rgba(255,150,30,.35); transition: transform .12s, box-shadow .2s; }
+  .star:hover { transform: translateY(-2px); box-shadow: 0 14px 50px rgba(255,150,30,.5); }
+  .chan { margin-top: 12px; color: var(--sub); font-size: 13px; cursor: pointer; } .chan:hover { color: var(--accent1); }
   .creator .legal2 { margin-top: 26px; color: #5d5d6a; font-size: 12px; line-height: 1.6; max-width: 520px; }
 
   /* login modal */
@@ -342,8 +348,12 @@
         <path d="M50 19 L62 23 L50 27 Z" fill="#ff8a1f"/><circle cx="43" cy="19" r="2.4" fill="#111"/></svg></div>
       <div style="color:var(--sub);letter-spacing:1.5px;font-size:12px">СОЗДАТЕЛЬ КЛИЕНТА</div>
       <h1><span>filatov</span></h1>
-      <p>Duck Visual и Duck Launcher. Пиши в Telegram — идеи, баги и предложения по новым функциям.</p>
+      <p>Duck Visual и Duck Launcher. Пиши в Telegram — идеи, баги и предложения по новым функциям. Если хочешь поддержать проект — поставь ⭐ на закреплённый пост в канале.</p>
+      <div class="links">
       <button class="tg" id="tgBtn"><svg width="20" height="20" viewBox="0 0 24 24" fill="#fff"><path d="M21.9 4.3 18.6 19.8c-.2 1.1-.9 1.4-1.8.9l-5-3.7-2.4 2.3c-.3.3-.5.5-1 .5l.4-5.1 9.2-8.3c.4-.4-.1-.6-.6-.2L6 13.4l-4.9-1.5c-1.1-.3-1.1-1.1.2-1.6L20.5 2.9c.9-.3 1.7.2 1.4 1.4z"/></svg>@dev_filatov</button>
+      <button class="star" id="starBtn">★ Поддержать звёздами</button>
+      </div>
+      <div class="chan" id="chanBtn">Канал с обновлениями: t.me/duckvisual</div>
       <div class="legal2">Duck Launcher и Duck Visual не являются продуктами Mojang AB и не связаны с Mojang AB или Microsoft.<br>Minecraft — товарный знак Mojang AB. Игровые файлы загружаются с официальных серверов Mojang.</div>
     </div>
   </section>
@@ -504,6 +514,8 @@ $('#ramAuto').onclick = () => { st.memoryMb = 0; $('#ram').value = st.autoMemory
 ['#jvm', '#width', '#height', '#lang'].forEach(id => $(id).onchange = save);
 $$('[data-open]').forEach(b => b.onclick = () => dlOpen(b.dataset.open));
 $('#tgBtn').onclick = () => dlOpenURL('https://t.me/dev_filatov');
+$('#starBtn').onclick = () => dlOpenURL('https://t.me/duckvisual/2');
+$('#chanBtn').onclick = () => dlOpenURL('https://t.me/duckvisual');
 
 /* ---------- version picker ---------- */
 function renderVersions() {

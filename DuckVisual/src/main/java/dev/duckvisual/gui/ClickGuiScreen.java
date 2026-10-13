@@ -420,6 +420,9 @@ public class ClickGuiScreen extends Screen {
     }
 
     private static final String TELEGRAM = "https://t.me/dev_filatov";
+    private static final String CHANNEL = "https://t.me/duckvisual";
+    private static final String SUPPORT = "https://t.me/duckvisual/2";
+    private static final String CHANNEL_LABEL = "Канал: t.me/duckvisual";
 
     /** Credits: who made the client, Telegram link and the Mojang disclaimer. */
     private void renderCreator(DrawContext ctx, float x, float y, float w, float h, float mx, float my) {
@@ -449,6 +452,20 @@ public class ClickGuiScreen extends Screen {
         Render2D.triangle(ctx, bx + 12, by + 13, bx + 26, by + 7, bx + 21, by + 19, 0xFFFFFFFF);
         Render2D.centeredText(ctx, "Telegram  @dev_filatov", bx + bw / 2 + 8, by + 9, 0xFFFFFFFF);
         hits.add(new Hit(bx, by, bw, bh, b -> net.minecraft.util.Util.getOperatingSystem().open(TELEGRAM)));
+
+        // support with Telegram Stars (opens the pinned post of the channel)
+        float sy = by + bh + 8;
+        boolean shov = mx >= bx && mx <= bx + bw && my >= sy && my <= sy + bh;
+        Render2D.shadow(ctx, bx, sy, bw, bh, 7, shov ? 8 : 5, ColorUtil.withAlpha(ColorUtil.theme(), shov ? 140 : 80));
+        Render2D.roundedGradient(ctx, bx, sy, bw, bh, 7, ColorUtil.theme(0), ColorUtil.theme(6), ColorUtil.theme(6), ColorUtil.theme(0));
+        Render2D.centeredText(ctx, "★  Поддержать звёздами", bx + bw / 2, sy + 9, 0xFF1A1104);
+        hits.add(new Hit(bx, sy, bw, bh, b -> net.minecraft.util.Util.getOperatingSystem().open(SUPPORT)));
+
+        float ly = sy + bh + 10;
+        float lw = Render2D.width(CHANNEL_LABEL);
+        boolean lhov = mx >= cx - lw / 2 && mx <= cx + lw / 2 && my >= ly - 2 && my <= ly + 10;
+        Render2D.centeredText(ctx, CHANNEL_LABEL, cx, ly, lhov ? TEXT : SUBTEXT);
+        hits.add(new Hit(cx - lw / 2, ly - 2, lw, 12, b -> net.minecraft.util.Util.getOperatingSystem().open(CHANNEL)));
 
         ctx.getMatrices().push();
         ctx.getMatrices().translate(cx, y + h - 26, 0);
